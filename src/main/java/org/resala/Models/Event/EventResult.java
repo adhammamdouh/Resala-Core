@@ -1,0 +1,33 @@
+package org.resala.Models.Event;
+
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table
+@Getter
+@Setter
+public class EventResult {
+    @Column(name = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int id;
+    @Column(name = "branch_id")
+    int branchId;
+    @Column(name = "response_percentage")
+    double responsePercentage;
+    @Column(name = "attendance_percentage")
+    double attendancePercentage;
+    @Column(name = "attracting_percentage")
+    double attractingPercentage;
+    @Column(name = "ensure_percentage")
+    double ensurePercentage;
+    @Column(name = "present_count")
+    int presentCount;
+    @Column(name = "calls_count")
+    int callsCount;
+}
