@@ -1,6 +1,13 @@
 package org.resala.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BranchDTO {
-    String name,reigon;
-    Long id;
+    int id;
+    String name;
+    String region;
+
 }

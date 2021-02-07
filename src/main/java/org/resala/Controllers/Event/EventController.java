@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/event")
@@ -28,9 +25,11 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
         return eventService.getAllEvents();
     }
 
+    @RequestMapping(value = "addEvent", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.addEvent + "')")
     @Override
-    public ResponseEntity<Object> insert(EventDTO obj) {
-        return null;
+    public ResponseEntity<Object> add(@RequestBody EventDTO obj) {
+        return eventService.create(obj);
     }
 
     @Override

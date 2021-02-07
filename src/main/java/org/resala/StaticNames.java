@@ -15,6 +15,7 @@ public interface StaticNames {
     String createVolunteer = "ROLE_CREATE_VOLUNTEER";
     String updateVolunteer = "ROLE_UPDATE_VOLUNTEER";
     String deleteVolunteer = "ROLE_DELETE_VOLUNTEER";
+    String addEvent="ROLE_ADD_EVENT";
     String dfhgdh="xfsdfh";
     String test="hgkjk";
 }

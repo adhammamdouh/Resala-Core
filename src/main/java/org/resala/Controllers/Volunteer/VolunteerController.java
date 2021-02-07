@@ -42,9 +42,9 @@ public class VolunteerController implements CommonController<VolunteerDTO>, Comm
     }
 
     @Override
-    @RequestMapping(value = "/createVolunteer", method = RequestMethod.POST)
+    @RequestMapping(value = "/addVolunteer", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.createVolunteer + "')")
-    public ResponseEntity<Object> insert(@RequestBody VolunteerDTO volunteerDTO) {
+    public ResponseEntity<Object> add(@RequestBody VolunteerDTO volunteerDTO) {
         return volunteerService.create(volunteerDTO);
     }
 
