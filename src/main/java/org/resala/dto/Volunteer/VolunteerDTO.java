@@ -1,15 +1,17 @@
 package org.resala.dto.Volunteer;
 
-import org.resala.Models.Address.Address;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
+import org.resala.dto.Address.AddressDTO;
 
+@Getter
+@Setter
 public class VolunteerDTO {
-    Long id;
-    long statusId;
-    long branchId;
-    long age;
-    long addressId;
-    long roleId;
-    long privilegeId;
+    int id;
+    int age;
+    AddressDTO address;
+    int branchId;
     String faculty;
     String nationalId;
     String university;
@@ -23,6 +25,6 @@ public class VolunteerDTO {
     String birthDate;
     boolean tShirt;
     boolean miniCamp;
-    Address address;
+
 
 }

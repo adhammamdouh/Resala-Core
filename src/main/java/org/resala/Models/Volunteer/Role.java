@@ -14,9 +14,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Role implements Serializable {
-    @Column(nullable = false)
+    @Column
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "name", nullable = false)
     String name;

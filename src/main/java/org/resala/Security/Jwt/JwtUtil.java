@@ -2,41 +2,50 @@ package org.resala.Security.Jwt;
 
 import io.jsonwebtoken.*;
 import org.resala.Models.MyUserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 
 import static java.util.Arrays.asList;
+import static org.springframework.security.config.Elements.JWT;
 
 @Service
 public class JwtUtil {
     private String SECRET_CODE = "DevOutLoudTeam111";
+    /// feb ,aug
 
-    public String generateToken(MyUserDetails user) {
+    public String generateToken(int branchId, Authentication authentication) {
         Map<String, Object> claims = new HashMap<>();
-        List<GrantedAuthority> authorities = new ArrayList<>(user.getAuthorities());
-        return createToken(claims, user.getUsername(), "user.getRole()", authorities);
+        return createToken(claims, branchId, authentication);
     }
 
-    private String createToken(Map<String, Object> claims, String userDetails, String role, List<GrantedAuthority> authorities) {
+    private String createToken(Map<String, Object> claims, int branchId, Authentication authentication) {
+        int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
+                LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
+        int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
+                Calendar.AUGUST : Calendar.FEBRUARY;
+
         return Jwts.builder().setClaims(claims)
-                .setSubject(userDetails)
-                .setAudience(authorities.toString())
-                .setIssuer(role)
+                .setSubject(authentication.getName())
+                .setAudience(authentication.getAuthorities().toString())
+                .setIssuer(String.valueOf(branchId))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 182))
+                .setExpiration(new Date(year, month, 1))
                 .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
     }
 
     public boolean validateToken(String token) {
         String userName = extractUserName(token);
         List<String> authorities = extractAuthorities(token);
-        String role = extractRole(token);
+        String role = extractId(token);
         Date expirationDate = extractExpirationDate(token);
         if (userName == null || role == null || authorities == null || expirationDate.before(new Date()))
             return false;
+
         return true;
     }
 
@@ -52,7 +61,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractRole(String token) {
+    public String extractId(String token) {
         return extractClaim(token, Claims::getIssuer);
     }
 
@@ -74,7 +83,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_CODE).parseClaimsJws(token).getBody();
     }
 

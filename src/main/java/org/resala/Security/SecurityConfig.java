@@ -1,6 +1,5 @@
 package org.resala.Security;
 
-import org.resala.Security.Filter.JWTAuthenticationFilter;
 import org.resala.Security.Jwt.AuthEntryPointJwt;
 import org.resala.Security.Filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/**").permitAll()
-                .anyRequest().fullyAuthenticated().and().addFilter(new JWTAuthenticationFilter(authenticationManager()));
+                .anyRequest().fullyAuthenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

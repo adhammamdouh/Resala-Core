@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface VolunteerRepo extends JpaRepository <Volunteer,Integer>{
-    List<Volunteer> findByBranch_id(@Param("branch_id") int branchId);
+    List<Volunteer> findByBranch_id(int branchId);
 }

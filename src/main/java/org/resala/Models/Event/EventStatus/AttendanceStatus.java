@@ -1,5 +1,7 @@
 package org.resala.Models.Event.EventStatus;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Event.Event;
@@ -10,10 +12,12 @@ import java.util.List;
 
 @Table
 @Entity(name = "attendance_status")
+@Getter
+@Setter
 public class AttendanceStatus {
     @Column(name = "attendanceStatus_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @ManyToOne(cascade = CascadeType.ALL)

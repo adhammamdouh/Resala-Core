@@ -1,6 +1,11 @@
 package org.resala.dto.Address;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CapitalDTO {
-    long id;
+    int id;
     String name;
 }

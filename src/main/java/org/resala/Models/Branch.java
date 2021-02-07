@@ -22,7 +22,7 @@ import java.util.List;
 public class Branch implements Serializable {
     @Column(nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "name")
     String name;

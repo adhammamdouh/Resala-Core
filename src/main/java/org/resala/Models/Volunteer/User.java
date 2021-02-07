@@ -15,9 +15,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class User implements Serializable {
-    @Column(name = "user_id", nullable = false)
+    @Column
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;

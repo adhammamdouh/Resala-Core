@@ -1,6 +1,8 @@
 package org.resala.Models.Call;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Event.Event;
@@ -10,10 +12,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "calls")
+@Getter
+@Setter
 public class Calls {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @ManyToOne(cascade = CascadeType.ALL)

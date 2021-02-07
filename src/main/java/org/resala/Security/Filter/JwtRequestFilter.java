@@ -33,6 +33,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         final String authorizationHeader;
+
+        String header = request.getHeader("Authorization");
         try {
             authorizationHeader = request.getHeader("Authorization");
 
@@ -42,10 +44,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         String username = null;
-        String role = null;
+        String id = null;
         String jwt;
         List<String> actions;
         Collection<GrantedAuthority> grantedAuth = new ArrayList<>();
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
@@ -58,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             }
             username = jwtUtil.extractUserName(jwt);
-            role = jwtUtil.extractRole(jwt);
+            id = jwtUtil.extractId(jwt);
             actions = jwtUtil.extractAuthorities(jwt);
             for (String action : actions) {
                 //System.out.println(action);
@@ -66,9 +69,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            ///move to login
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                            username, role, grantedAuth);
+                            username, id, grantedAuth);
 
             usernamePasswordAuthenticationToken
                     .setDetails(usernamePasswordAuthenticationToken);

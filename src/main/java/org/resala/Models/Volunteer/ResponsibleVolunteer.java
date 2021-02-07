@@ -1,17 +1,20 @@
 package org.resala.Models.Volunteer;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.resala.Exceptions.Committe.Committe;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "responsible_volunteer")
+@Getter
+@Setter
 public class ResponsibleVolunteer {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "personal_image_url")
     String personalImageUrl;

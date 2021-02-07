@@ -1,5 +1,7 @@
 package org.resala.Models.KPI;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Volunteer.ResponsibleVolunteer;
@@ -8,10 +10,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "responsible_volunteer_KPI")
+@Getter
+@Setter
 public class ResponsibleVolunteerKPI {
     @Column
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @OneToOne(cascade = CascadeType.ALL)

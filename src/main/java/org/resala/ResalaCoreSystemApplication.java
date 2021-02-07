@@ -1,18 +1,15 @@
 package org.resala;
 
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Repository.Address.AddressRepository;
-import org.resala.Repository.Address.CapitalRepository;
+import org.resala.Repository.Address.AddressRepo;
+import org.resala.Repository.Address.CapitalRepo;
 import org.resala.Repository.UserRepository;
 import org.resala.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.transaction.Transactional;
 
@@ -35,10 +32,10 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     }*/
 
     @Autowired
-    AddressRepository addressRepository;
+    AddressRepo addressRepo;
 
     @Autowired
-    CapitalRepository capitalRepository;
+    CapitalRepo capitalRepo;
     @Autowired
     UserRepository userRepository;
     @Autowired

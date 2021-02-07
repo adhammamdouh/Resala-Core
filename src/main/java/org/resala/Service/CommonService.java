@@ -7,7 +7,7 @@ public interface CommonService<T> {
 
     ResponseEntity<Object> delete(T obj);
 
-    ResponseEntity<Object> update(T oldObj, T newObj);
+    ResponseEntity<Object> update(T newObj);
 
     ResponseEntity<Object> get(int id);
 }

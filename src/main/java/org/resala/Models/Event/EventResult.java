@@ -14,7 +14,7 @@ import java.util.List;
 public class EventResult {
     @Column(name = "id")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "branch_id")
     int branchId;

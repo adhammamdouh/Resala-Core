@@ -23,7 +23,7 @@ public class EventService implements CommonService<EventDTO> {
     }
 
     @Override
-    public ResponseEntity<Object> update(EventDTO oldObj, EventDTO newObj) {
+    public ResponseEntity<Object> update(EventDTO newObj) {
         return null;
     }
 

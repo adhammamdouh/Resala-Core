@@ -24,7 +24,7 @@ import java.util.List;
 public class Event {
     @Column(name = "event_id" , insertable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "event_name" , updatable = true)
     String name;
