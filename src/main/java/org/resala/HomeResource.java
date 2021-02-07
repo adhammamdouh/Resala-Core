@@ -23,7 +23,7 @@ public class HomeResource {
 
     @GetMapping("/")
     public String home() {
-        return ("<h1>3ok4 sa32 streamer 404 hhlol</h1>");
+        return ("<h1>3ok4 sa32 streamer hhlol</h1>");
     }
 
     @GetMapping("/user")
