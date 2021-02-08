@@ -3,10 +3,12 @@ package org.resala.Controllers.Volunteer;
 
 import org.resala.Controllers.CommonBranchController;
 import org.resala.Controllers.CommonController;
+import org.resala.Models.Auth.Response;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,14 +24,14 @@ public class VolunteerController implements CommonController<VolunteerDTO>, Comm
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "')")
     @Override
     public ResponseEntity<Object> getAll() {
-        return volunteerService.getAllVolunteers();
+        return ResponseEntity.ok(new Response(volunteerService.getAll(), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getVolunteersByBranch/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "')")
     @Override
     public ResponseEntity<Object> getByBranchId(@PathVariable int branchId) {
-        return volunteerService.getVolunteersByBranch(branchId);
+        return ResponseEntity.ok(new Response(volunteerService.getVolunteersByBranch(branchId), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getVolunteersByBranch", method = RequestMethod.GET)
@@ -37,8 +39,8 @@ public class VolunteerController implements CommonController<VolunteerDTO>, Comm
     @Override
     public ResponseEntity<Object> getByMyBranchId() {
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        return ResponseEntity.ok(new Response(volunteerService.getVolunteersByBranch(Integer.parseInt(branchId)), HttpStatus.OK.value()));
 
-        return volunteerService.getVolunteersByBranch(Integer.parseInt(branchId));
     }
 
     @Override

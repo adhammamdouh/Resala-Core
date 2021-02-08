@@ -6,11 +6,12 @@ import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 import org.resala.Repository.Event.EventRepo;
 import org.resala.Service.BranchService;
+import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
+import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.Event.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EventService implements CommonService<EventDTO> {
+public class EventService implements CommonCRUDService<EventDTO>, CommonService<Event> {
     @Autowired
     EventRepo eventRepo;
     @Autowired
@@ -37,7 +38,7 @@ public class EventService implements CommonService<EventDTO> {
         Event event = modelMapper().map(obj, Event.class);
         event.setBranches(branches);
         eventRepo.save(event);
-        return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 
     @Override
@@ -51,16 +52,16 @@ public class EventService implements CommonService<EventDTO> {
     }
 
     @Override
-    public ResponseEntity<Object> get(int id) {
+    public Event get(int id) {
         return null;
     }
 
-    public ResponseEntity<Object> getEventsByBranchId(int branchId) {
-        return ResponseEntity.ok(eventRepo.findByBranches_id(branchId));
+    @Override
+    public List<Event> getAll() {
+        return eventRepo.findAll();
     }
 
-    public ResponseEntity<Object> getAllEvents() {
-        return ResponseEntity.ok(eventRepo.findAll());
+    public List<Event> getEventsByBranchId(int branchId) {
+        return eventRepo.findByBranches_id(branchId);
     }
-
 }

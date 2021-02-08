@@ -3,6 +3,7 @@ package org.resala.Service;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Branch;
 import org.resala.Repository.BranchRepo;
+import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class BranchService implements CommonService<BranchDTO> {
+public class BranchService implements CommonCRUDService<BranchDTO> ,CommonService<Branch> {
     @Autowired
     BranchRepo branchRepo;
 
@@ -34,15 +35,16 @@ public class BranchService implements CommonService<BranchDTO> {
     }
 
     @Override
-    public ResponseEntity<Object> get(int id) {
-        return null;
-    }
-
-    public Branch getBranchById(int id) {
+    public Branch get(int id) {
         Optional<Branch> optionalBranch = branchRepo.findById(id);
         if (!optionalBranch.isPresent())
-            throw new MyEntityNotFoundException("Branch Not Found");
+            throw new MyEntityNotFoundException("Branch "+ StaticNames.notFound);
         return optionalBranch.get();
+    }
+
+    @Override
+    public List<Branch> getAll() {
+        return null;
     }
 
     public List<Branch> getBranchByIds(List<Integer> ids) {
@@ -52,6 +54,12 @@ public class BranchService implements CommonService<BranchDTO> {
             throw new MyEntityNotFoundException("Branches with id's " + ids + " does not exist");
         }
         return branches;
+    }
+    public Branch getBranchByUserName(String userName){
+        Optional<Branch>optionalBranch=branchRepo.findByVolunteers_User_UserName(userName);
+        if (optionalBranch.isEmpty())
+            throw new MyEntityNotFoundException("UserName "+StaticNames.notFound);
+        return optionalBranch.get();
     }
 
 }

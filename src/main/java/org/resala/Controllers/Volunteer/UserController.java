@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody Request auth) throws Exception {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
-        String token = jwtUtil.generateToken(userService.getBranchId(),authentication);
+        String token = jwtUtil.generateToken(userService.getBranchId(auth.getUsername()),authentication);
         User loggedUser = userService.getUser(auth.getUsername());
         Map<String,Object>map=new HashMap<>();
         map.put("token",token);

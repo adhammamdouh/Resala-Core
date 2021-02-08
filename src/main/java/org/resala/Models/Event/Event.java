@@ -31,14 +31,17 @@ public class Event {
     @Column(name = "from_date")
     //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     Date fromDate;
     @Column(name = "to_date")
     //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     Date toDate;
     @Column(name = "calls_start_time")
     //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     Date callsStartTime;
     @Column(name = "script")
     String script;
@@ -61,9 +64,9 @@ public class Event {
             joinColumns = {@JoinColumn(name = "event_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "branch_id", nullable = false)}
     )
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "branch_id")
-    @JsonIdentityReference(alwaysAsId = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "branch_id")
+    //@JsonIdentityReference(alwaysAsId = true)
     private List<Branch> branches;
 
 }

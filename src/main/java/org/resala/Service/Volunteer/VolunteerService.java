@@ -12,6 +12,7 @@ import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Service.Address.CapitalService;
 import org.resala.Service.BranchService;
+import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
@@ -22,12 +23,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class VolunteerService implements CommonService<VolunteerDTO> {
+public class VolunteerService implements CommonCRUDService<VolunteerDTO>, CommonService<Volunteer> {
     @Autowired
     VolunteerRepo volunteerRepo;
     @Autowired
@@ -50,8 +52,8 @@ public class VolunteerService implements CommonService<VolunteerDTO> {
 
     @Override
     public ResponseEntity<Object> create(VolunteerDTO obj) {
-        Branch branch = branchService.getBranchById(obj.getBranchId());
-        Capital capital = capitalService.getCapitalId(obj.getAddress().getCapitalId());
+        Branch branch = branchService.get(obj.getBranchId());
+        Capital capital = capitalService.get(obj.getAddress().getCapitalId());
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatusByName(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
@@ -62,23 +64,23 @@ public class VolunteerService implements CommonService<VolunteerDTO> {
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 
     @Override
     public ResponseEntity<Object> delete(VolunteerDTO obj) {
-        Volunteer volunteer = getVolunteerById(obj.getId());
+        Volunteer volunteer = get(obj.getId());
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatusByName(StaticNames.deletedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response("Deleted Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(StaticNames.deletedSuccessfully, HttpStatus.OK.value()));
     }
 
     @Override
     public ResponseEntity<Object> update(VolunteerDTO newObj) {
-        Volunteer volunteer = getVolunteerById(newObj.getId());
-        Branch branch = branchService.getBranchById(newObj.getBranchId());
-        Capital capital = capitalService.getCapitalId(newObj.getAddress().getCapitalId());
+        Volunteer volunteer = get(newObj.getId());
+        Branch branch = branchService.get(newObj.getBranchId());
+        Capital capital = capitalService.get(newObj.getAddress().getCapitalId());
         Volunteer newVolunteer = modelMapper().map(newObj, Volunteer.class);
         newVolunteer.setId(volunteer.getId());
         newVolunteer.setBranch(branch);
@@ -87,27 +89,25 @@ public class VolunteerService implements CommonService<VolunteerDTO> {
         newVolunteer.setPrivileges(volunteer.getPrivileges());
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
         volunteerRepo.save(newVolunteer);
-        return ResponseEntity.ok(new Response("Updated Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
 
     @Override
-    public ResponseEntity<Object> get(int id) {
-        return ResponseEntity.ok(volunteerRepo.findById(id));
-    }
-
-    public ResponseEntity<Object> getAllVolunteers() {
-        return ResponseEntity.ok().body(volunteerRepo.findAll());
-
-    }
-
-    public ResponseEntity<Object> getVolunteersByBranch(int branchId) {
-        return ResponseEntity.ok().body(volunteerRepo.findByBranch_id(branchId));
-    }
-
-    public Volunteer getVolunteerById(int id) {
+    public Volunteer get(int id) {
         Optional<Volunteer> optionalVolunteer = volunteerRepo.findById(id);
         if (!optionalVolunteer.isPresent())
-            throw new MyEntityNotFoundException("Volunteer Not Found");
+            throw new MyEntityNotFoundException("Volunteer "+StaticNames.notFound);
         return optionalVolunteer.get();
     }
+
+    @Override
+    public List<Volunteer> getAll() {
+        return volunteerRepo.findAll();
+    }
+
+    public List<Volunteer> getVolunteersByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findByBranch_id(branchId);
+    }
+
 }

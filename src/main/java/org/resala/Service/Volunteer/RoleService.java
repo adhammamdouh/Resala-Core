@@ -3,6 +3,7 @@ package org.resala.Service.Volunteer;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Repository.Volunteer.RoleRepo;
+import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.RoleDTO;
@@ -10,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
-public class RoleService implements CommonService<RoleDTO> {
+public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Role> {
     @Autowired
     RoleRepo roleRepo;
     @Override
@@ -31,13 +33,19 @@ public class RoleService implements CommonService<RoleDTO> {
     }
 
     @Override
-    public ResponseEntity<Object> get(int id) {
+    public Role get(int id) {
         return null;
     }
+
+    @Override
+    public List<Role> getAll() {
+        return null;
+    }
+
     public Role getRoleByName(String name){
         Optional<Role> roleOptional=roleRepo.findByName(name);
         if(!roleOptional.isPresent())
-            throw  new MyEntityNotFoundException(name+" Role Not Found");
+            throw  new MyEntityNotFoundException(name+" Role "+ StaticNames.notFound);
         return roleOptional.get();
     }
 }
