@@ -28,6 +28,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class VolunteerService implements CommonCRUDService<VolunteerDTO>, CommonService<Volunteer> {
     @Autowired
@@ -60,11 +62,11 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         Volunteer volunteer = modelMapper().map(obj, Volunteer.class);
         volunteer.setBranch(branch);
         volunteer.getAddress().setCapital(capital);
-        volunteer.setPrivileges(Stream.of(privilege).collect(Collectors.toList()));
+        volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
     }
 
     @Override
@@ -73,7 +75,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatusByName(StaticNames.deletedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response(StaticNames.deletedSuccessfully, HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response("Deleted Successfully", HttpStatus.OK.value()));
     }
 
     @Override
@@ -98,6 +100,15 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         if (!optionalVolunteer.isPresent())
             throw new MyEntityNotFoundException("Volunteer "+StaticNames.notFound);
         return optionalVolunteer.get();
+    }
+
+    public List<Volunteer> getVolunteerByIds(List<Integer> ids) {
+        List<Volunteer> volunteers = volunteerRepo.findAllById(ids);
+        if (volunteers.size() != ids.size()) {
+            ids.removeAll(volunteers.stream().map(Volunteer::getId).collect(toList()));
+            throw new MyEntityNotFoundException("Volunteers with id's " + ids + " does not exist");
+        }
+        return volunteers;
     }
 
     @Override

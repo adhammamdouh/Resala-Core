@@ -4,18 +4,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table
 @Entity(name = "Call_type")
 @Getter
 @Setter
-public class CallType {
-    @Column(name = "callType_id")
+public class CallType implements Serializable {
+    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "callType_name",unique = true)
     String name;
+
+    public boolean equals(CallType callType){
+        return this.name.equals(callType.name);
+    }
 
 
 }

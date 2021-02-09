@@ -6,6 +6,7 @@ import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 import org.resala.Repository.Event.EventRepo;
 import org.resala.Service.BranchService;
+import org.resala.Service.Call.CallsService;
 import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
 import org.resala.StaticNames;
@@ -25,6 +26,9 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     EventRepo eventRepo;
     @Autowired
     BranchService branchService;
+    @Autowired
+    CallsService callsService;
+
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -38,6 +42,9 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         Event event = modelMapper().map(obj, Event.class);
         event.setBranches(branches);
         eventRepo.save(event);
+        if(obj.isShareable()){
+            callsService.createCalls(obj.getBranches(),event);
+        }
         return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 

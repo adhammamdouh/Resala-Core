@@ -17,11 +17,17 @@ public interface StaticNames {
     String createVolunteer = "ROLE_CREATE_VOLUNTEER";
     String updateVolunteer = "ROLE_UPDATE_VOLUNTEER";
     String deleteVolunteer = "ROLE_DELETE_VOLUNTEER";
-    String addEvent = "ROLE_ADD_EVENT";
+    String addEvent="ROLE_ADD_EVENT";
+    String assignCalls="ROLE_ASSIGN_CALLS";
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
     String deletedSuccessfully = "Deleted Successfully";
     String updatedSuccessfully = "Updated Successfully";
+    String callAssignedSuccessfully="Assigned successfully";
     //----------------------------------------------------------------------------------------------------------------------
     String notFound = "Not Found";
+    String etisalat="ETISALAT";
+    String vodavone="VODAVONE";
+    String orange="ORANGE";
+    String we="WE";
 }

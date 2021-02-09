@@ -1,5 +1,6 @@
 package org.resala.Service;
 
+import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Branch;
 import org.resala.Repository.BranchRepo;
@@ -15,23 +16,15 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class BranchService implements CommonCRUDService<BranchDTO> ,CommonService<Branch> {
+public class BranchService implements CommonCRUDService<BranchDTO>, CommonService<Branch>  {
     @Autowired
     BranchRepo branchRepo;
 
-    @Override
-    public ResponseEntity<Object> create(BranchDTO obj) {
-        return null;
-    }
 
-    @Override
-    public ResponseEntity<Object> delete(BranchDTO obj) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Object> update(BranchDTO newObj) {
-        return null;
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        return modelMapper;
     }
 
     @Override
@@ -62,4 +55,18 @@ public class BranchService implements CommonCRUDService<BranchDTO> ,CommonServic
         return optionalBranch.get();
     }
 
+    @Override
+    public ResponseEntity<Object> create(BranchDTO obj) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Object> delete(BranchDTO obj) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Object> update(BranchDTO newObj) {
+        return null;
+    }
 }

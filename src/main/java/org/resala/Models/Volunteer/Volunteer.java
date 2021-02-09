@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
+import org.resala.Models.Call.CallType;
 import org.resala.Models.Event.EventStatus.AttendanceStatus;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Privilege.Action;
@@ -99,11 +100,18 @@ public class Volunteer implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer")
     List<AttendanceStatus> attendanceStatus;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_status_id")
     VolunteerStatus volunteerStatus;
 
+    
 
     public Volunteer() {
+    }
+
+
+    public boolean equals(Volunteer v){
+        return (this.id==v.getId());
     }
 }

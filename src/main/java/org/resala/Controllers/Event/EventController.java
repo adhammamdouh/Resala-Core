@@ -27,7 +27,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
         return ResponseEntity.ok(new Response(eventService.getAll(), HttpStatus.OK.value()));
     }
 
-    @RequestMapping(value = "addEvent", method = RequestMethod.POST)
+    @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.addEvent + "')")
     @Override
     public ResponseEntity<Object> add(@RequestBody EventDTO obj) {
