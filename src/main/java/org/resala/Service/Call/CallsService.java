@@ -12,7 +12,9 @@ import org.resala.Service.Event.EventService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
+import org.resala.dto.Call.CallTypeDTO;
 import org.resala.dto.Event.EventDTO;
+import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,11 +53,18 @@ public class CallsService{
 
     }
 
-    public ResponseEntity<Object> assignCalls(List<Integer> volunteerId ,List<Integer> ids ,int branchId ,boolean equality){
-        List<CallType> callType=getCallType(ids);
-        List<Volunteer> volunteers =  getVolunteerById(volunteerId);
+    public ResponseEntity<Object> assignCalls(List<VolunteerDTO> volunteerDtoIds ,
+                                  List<CallTypeDTO> callTypeDtoNames , int branchId , boolean equality){
+
+        List<Volunteer> volunteers = new ArrayList<>();
+        List<CallType> callType = new ArrayList<>();
         List<Calls> calls=callsRepo.findAllByBranch_Id(branchId);
 
+        for(VolunteerDTO volunteerDTO : volunteerDtoIds) volunteers.add(
+                volunteerService.get(volunteerDTO.getId()));
+
+        for(CallTypeDTO callTypeDTO:callTypeDtoNames) callType.add(
+                callTypeService.getCallTypeById(callTypeDTO.getId()));
 
         List<Pair<Volunteer,Integer>> counts = new ArrayList<>();
         for(int i=0;i<volunteers.size();++i) counts.add(i,new Pair(volunteers.get(i),0));
@@ -80,7 +89,10 @@ public class CallsService{
             });     //Descending sort
 
 
-
+            for(var i : counts){
+                System.out.println("volunteer " +i.getKey().getId());
+                System.out.println("count "+i.getValue());
+            }
 
             Pair<Volunteer, Integer> pair= new Pair<>();
             for (Calls call : calls) {
@@ -99,11 +111,13 @@ public class CallsService{
                             call.setCaller(volunteers.get(idx));
 //                            System.out.println("call "+call.getId() +" caller setted to "+volunteers.get(idx).getId());
                             counts.set(idx, new Pair<>(pair.getKey(), pair.getValue() + 1));
+                            break;
                         }
                     }
                 }
             }
         }
+
         for(Calls call : calls){
             callsRepo.save(call);
         }
@@ -121,22 +135,17 @@ public class CallsService{
     }
 
     private void fillCallData(List<Volunteer> volunteers , Event event ,BranchDTO branchDTO) {
-        Calls call = new Calls();
         Branch branch = branchService.modelMapper().map(branchDTO,Branch.class);
         for(Volunteer volunteer : volunteers){
+            Calls call = new Calls();
             call.setBranch(branch);
             call.setReceiver(volunteer);
             call.setTimeUnEditableBefore(event.getCallsStartTime());
-            call.setCallType(callTypeService.getCallTypeByName(StaticNames.etisalat));  //HARD CODDED
+            call.setCallType(callTypeService.
+                    getCallTypeBasedOnVolunteerNumber(volunteer.getPhoneNumber()));
             call.setEvent(event);
             callsRepo.save(call);
         }
-        System.out.println("branch "+call.getBranch().getId());
-        System.out.println("volunteer "+call.getReceiver().getId());
-        System.out.println("time "+call.getTimeUnEditableBefore());
-        System.out.println("type "+call.getCallType().getId());
-        System.out.println("event "+call.getEvent().getId());
-
 
     }
 }
