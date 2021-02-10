@@ -70,6 +70,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
+        System.out.println(volunteer.isTShirt());
         Set<ConstraintViolation<Volunteer>> constraintViolations = getConstraintViolations(volunteer);
         if (constraintViolations.size() > 0) {
             throw new ConstraintViolationException(constraintViolations.stream().findFirst().get().getMessage());

@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
@@ -41,9 +42,6 @@ public class Volunteer implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     Address address;
-
-    /*@Column(name = "age", nullable = false)
-    int age;*/
     @Column(name = "faculty")
     @NotEmpty(message = "Please enter Faculty")
     String faculty;
@@ -71,16 +69,25 @@ public class Volunteer implements Serializable {
     @NotEmpty(message = "Please enter Phone Number")
     String phoneNumber;
     @Column(name = "join_date")
-    String joinDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Please Enter Join Date")
+    @Temporal(TemporalType.DATE)
+    Date joinDate;
     @Column(name = "birth_date")
-    String birthDate;
-    @Null(message = "T-Shirt Can't be null")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Please Enter Birth Date")
+    Date birthDate;
+
     @Column(name = "tShirt")
+    @NotNull(message = "T-Shirt Can't be null")
     boolean tShirt;
     @Column(name = "mini_camp")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//was bool
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//wrong insert
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date miniCamp;
+    @Temporal(TemporalType.TIMESTAMP)
+    //@NotNull(message = "Please Enter MiniCamp DateTime")
+    Date miniCamp;//add 2 hours ?!!!!
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;
@@ -97,9 +104,8 @@ public class Volunteer implements Serializable {
     private User user;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private Role role;
@@ -111,23 +117,20 @@ public class Volunteer implements Serializable {
     )
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Privilege> privileges;
-
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer")
     List<AttendanceStatus> attendanceStatus;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_status_id")
     VolunteerStatus volunteerStatus;
 
-    
 
     public Volunteer() {
     }
 
 
-    public boolean equals(Volunteer v){
-        return (this.id==v.getId());
+    public boolean equals(Volunteer v) {
+        return (this.id == v.getId());
     }
 }
