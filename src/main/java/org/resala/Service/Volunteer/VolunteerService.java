@@ -1,6 +1,7 @@
 package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.ConstraintViolationException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
@@ -23,9 +24,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -57,7 +62,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         Branch branch = branchService.get(obj.getBranchId());
         Capital capital = capitalService.get(obj.getAddress().getCapitalId());
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatusByName(StaticNames.activeState);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
         Volunteer volunteer = modelMapper().map(obj, Volunteer.class);
         volunteer.setBranch(branch);
@@ -65,6 +70,10 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
+        Set<ConstraintViolation<Volunteer>> constraintViolations = getConstraintViolations(volunteer);
+        if (constraintViolations.size() > 0) {
+            throw new ConstraintViolationException(constraintViolations.stream().findFirst().get().getMessage());
+        }
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
     }
@@ -72,7 +81,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     @Override
     public ResponseEntity<Object> delete(VolunteerDTO obj) {
         Volunteer volunteer = get(obj.getId());
-        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatusByName(StaticNames.deletedState);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.deletedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Deleted Successfully", HttpStatus.OK.value()));
@@ -98,7 +107,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     public Volunteer get(int id) {
         Optional<Volunteer> optionalVolunteer = volunteerRepo.findById(id);
         if (!optionalVolunteer.isPresent())
-            throw new MyEntityNotFoundException("Volunteer "+StaticNames.notFound);
+            throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
         return optionalVolunteer.get();
     }
 
@@ -121,4 +130,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         return volunteerRepo.findByBranch_id(branchId);
     }
 
+    private Set<ConstraintViolation<Volunteer>> getConstraintViolations(Volunteer volunteerEntity) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        return validator.validate(volunteerEntity);
+    }
 }

@@ -1,9 +1,12 @@
 package org.resala.Models.Volunteer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Entity
 @Table(name = "volunteer_status")
@@ -14,6 +17,10 @@ public class VolunteerStatus {
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
+    @NotEmpty(message = "Please Enter Volunteer Status Name")
     String name;
+    @OneToMany(mappedBy = "volunteerStatus")
+    @JsonBackReference
+    List<Volunteer> volunteers;
 }

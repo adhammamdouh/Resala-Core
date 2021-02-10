@@ -20,7 +20,7 @@ public class ExceptionHelper {
 
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException ex) {
-        LOGGER.error("User Not Found: ", ex.getMessage());
+        LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "User Name Not Found"), HttpStatus.NOT_FOUND);
     }
 
@@ -29,10 +29,21 @@ public class ExceptionHelper {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value = {DeActivateException.class})
+    public ResponseEntity<Object> handleDeActivateException(DeActivateException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(value = {BadCredentialsException.class})
     public ResponseEntity<Object> handleBadCredentialException(BadCredentialsException ex) {
-        LOGGER.error("Wrong User Name Or Password: ", ex.getMessage());
+        LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Wrong User Name Or Password"), HttpStatus.BAD_REQUEST);
     }
 

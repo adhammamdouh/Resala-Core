@@ -9,6 +9,7 @@ import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,8 +23,10 @@ public class Branch implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "name")
+    @NotEmpty(message = "Please Enter Branch Name")
     String name;
     @Column(name = "region")
+    @NotEmpty(message = "Please Enter Branch Region")
     String region;
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     @JsonBackReference

@@ -1,6 +1,7 @@
 package org.resala.Models.Volunteer;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -13,9 +14,13 @@ import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Repository.Volunteer.VolunteerRepo;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -37,34 +42,45 @@ public class Volunteer implements Serializable {
     @JoinColumn(name = "address_id")
     Address address;
 
-    @Column(name = "age", nullable = false)
-    int age;
-    @Column(name = "faculty", nullable = false)
+    /*@Column(name = "age", nullable = false)
+    int age;*/
+    @Column(name = "faculty")
+    @NotEmpty(message = "Please enter Faculty")
     String faculty;
-    @Column(name = "national_id", nullable = false)
+    @Column(name = "national_id")
+    @NotEmpty(message = "Please enter National Id")
     String nationalId;
-    @Column(name = "university", nullable = false)
+    @Column(name = "university")
+    @NotEmpty(message = "Please enter University")
     String university;
-    @Column(name = "region", nullable = false)
+    @Column(name = "region")
+    @NotEmpty(message = "Please enter Region")
     String region;
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
+    @NotEmpty(message = "Please enter First Name")
     String firstName;
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
+    @NotEmpty(message = "Please enter Last Name")
     String lastName;
-    @Column(name = "mid_name", nullable = false)
+    @Column(name = "mid_name")
+    @NotEmpty(message = "Please enter Mid Name")
     String midName;
-    @Column(name = "nick_name", nullable = false)
+    @Column(name = "nick_name")
     String nickName;
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
+    @NotEmpty(message = "Please enter Phone Number")
     String phoneNumber;
-    @Column(name = "join_date", nullable = false)
+    @Column(name = "join_date")
     String joinDate;
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     String birthDate;
-    @Column(name = "tShirt", nullable = false)
+    @Null(message = "T-Shirt Can't be null")
+    @Column(name = "tShirt")
     boolean tShirt;
-    @Column(name = "mini_camp", nullable = false)
-    boolean miniCamp;
+    @Column(name = "mini_camp")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//was bool
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date miniCamp;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;

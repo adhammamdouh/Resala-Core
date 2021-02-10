@@ -23,25 +23,16 @@ import java.util.Map;
 
 @RestController()
 public class UserController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
+
+    /*@Autowired
     @Qualifier("myUserDetailsService")
-    UserDetailsService userDetailsService;
-    @Autowired
-    JwtUtil jwtUtil;
+    UserDetailsService userDetailsService;*/
     @Autowired
     UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> loginUser(@RequestBody Request auth) throws Exception {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
-        String token = jwtUtil.generateToken(userService.getBranchId(auth.getUsername()),authentication);
-        User loggedUser = userService.getUser(auth.getUsername());
-        Map<String,Object>map=new HashMap<>();
-        map.put("token",token);
-        map.put("volunteer",loggedUser.getVolunteer());
-        return ResponseEntity.ok(new Response(map, HttpStatus.OK.value()));
+
+        return ResponseEntity.ok(new Response(userService.login(auth), HttpStatus.OK.value()));
     }
 }

@@ -43,10 +43,18 @@ public class VolunteerStatusService implements CommonCRUDService<VolunteerStatus
         return null;
     }
 
-    public VolunteerStatus getVolunteerStatusByName(String name){
+    public VolunteerStatus getVolunteerStatus(String name){
         Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findByName(name);
         if(!volunteerStatusOptional.isPresent())
             throw  new MyEntityNotFoundException(name+" State "+ StaticNames.notFound);
+        return volunteerStatusOptional.get();
+    }
+
+
+    public VolunteerStatus getVolunteerStatusByUserName(String userName){
+        Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findByVolunteers_User_UserName(userName);
+        if(!volunteerStatusOptional.isPresent())
+            throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
         return volunteerStatusOptional.get();
     }
 }
