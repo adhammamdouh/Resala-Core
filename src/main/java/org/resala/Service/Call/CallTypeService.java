@@ -1,6 +1,7 @@
 package org.resala.Service.Call;
 
 import org.aspectj.weaver.ast.Call;
+import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Volunteer.Volunteer;
@@ -23,9 +24,21 @@ public class CallTypeService {
     CallTypeRepo callTypeRepo;
 
 
+    public ModelMapper modelMapper(){
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        return modelMapper;
+    }
 
     public CallType getCallTypeByName(String networkName){
         Optional<CallType> callTypeOptional = callTypeRepo.findAllByName(networkName);
+        if(!callTypeOptional.isPresent()){
+            throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
+        }
+        return callTypeOptional.get();
+    }
+    public CallType getCallTypeById(int id){
+        Optional<CallType> callTypeOptional = callTypeRepo.findAllById(id);
         if(!callTypeOptional.isPresent()){
             throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
         }
@@ -39,6 +52,23 @@ public class CallTypeService {
             throw new MyEntityNotFoundException("callTypes with id's " + ids + " does not exist");
         }
         return callTypes;
+
+    }
+
+    public CallType getCallTypeBasedOnVolunteerNumber(String number){
+        number=number.substring(0,3);
+        switch (number){
+            case "010":
+                return getCallTypeByName(StaticNames.vodavone);
+            case "011":
+                return getCallTypeByName(StaticNames.etisalat);
+            case "012":
+                return getCallTypeByName(StaticNames.orange);
+            case "015":
+                return getCallTypeByName(StaticNames.we);
+            default:
+                throw new MyEntityNotFoundException("wrong phone number");
+        }
 
     }
 
