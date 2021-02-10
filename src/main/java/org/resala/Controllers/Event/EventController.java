@@ -34,14 +34,18 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
         return eventService.create(obj);
     }
 
+    @RequestMapping(value = "/deleteEvent", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + StaticNames.deleteEvent + "')")
     @Override
-    public ResponseEntity<Object> delete(EventDTO obj) {
-        return null;
+    public ResponseEntity<Object> delete(@RequestBody EventDTO obj) {
+        return eventService.delete(obj);
     }
 
+    @RequestMapping(value = "/updateEvent", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + StaticNames.updateEvent + "')")
     @Override
-    public ResponseEntity<Object> update(EventDTO newObj) {
-        return null;
+    public ResponseEntity<Object> update(@RequestBody EventDTO newObj) {
+        return eventService.update(newObj);
     }
 
     @RequestMapping(value = "/getEventsByBranch/{branchId}", method = RequestMethod.GET)

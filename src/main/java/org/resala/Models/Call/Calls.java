@@ -1,10 +1,7 @@
 package org.resala.Models.Call;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -34,20 +31,20 @@ public class Calls {
     Event event;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Volunteer.class)
+    @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "caller_id")
     Volunteer caller;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Volunteer.class)
+    @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "receiver_id", nullable = false)
 
     Volunteer receiver;
 
 
-    @ManyToOne()
-    @JoinColumn(name = "call_type_id",nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "call_type_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     CallType callType;
 
@@ -60,14 +57,15 @@ public class Calls {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     Date timeUnEditableBefore;
 
-    @ManyToOne()
-    @JoinColumn(name = "call_result_id",nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "call_result_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     CallResult callResult;
 
     @ManyToOne()
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonBackReference
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
+//    @JsonIdentityReference(alwaysAsId = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     Branch branch;
 

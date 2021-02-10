@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Table
-@Entity(name = "Call_type")
+@Entity(name = "call_type")
 @Getter
 @Setter
 public class CallType implements Serializable {
@@ -15,7 +15,7 @@ public class CallType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "callType_name",unique = true)
+    @Column(name = "name",unique = true)
     String name;
 
     public boolean equals(CallType callType){

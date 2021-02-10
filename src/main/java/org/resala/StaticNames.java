@@ -19,6 +19,8 @@ public interface StaticNames {
     String deleteVolunteer = "ROLE_DELETE_VOLUNTEER";
     String addEvent="ROLE_ADD_EVENT";
     String assignCalls="ROLE_ASSIGN_CALLS";
+    String deleteEvent = "ROLE_DELETE_EVENT";
+    String updateEvent = "ROLE_UPDATE_EVENT";
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
     String deletedSuccessfully = "Deleted Successfully";

@@ -57,7 +57,7 @@ public class CallsService{
         List<Calls> calls=callsRepo.findAllByBranch_Id(branchId);
 
 
-        List<Pair<Volunteer,Integer>> counts = new ArrayList<Pair<Volunteer,Integer>>();
+        List<Pair<Volunteer,Integer>> counts = new ArrayList<>();
         for(int i=0;i<volunteers.size();++i) counts.add(i,new Pair(volunteers.get(i),0));
 
         int callsCounter=calls.size()/volunteers.size();
@@ -114,35 +114,29 @@ public class CallsService{
 
     public void createCalls(List<BranchDTO> branches, Event event) {
         List<Volunteer> volunteers=new ArrayList<>();
-        Calls calls = new Calls();
         for(BranchDTO branch : branches){
             volunteers = volunteerService.getVolunteersByBranch(branch.getId());
             fillCallData(volunteers,event,branch);
         }
     }
 
-    public void fillCallData(List<Volunteer> volunteers , Event event ,BranchDTO branchDTO) {
+    private void fillCallData(List<Volunteer> volunteers , Event event ,BranchDTO branchDTO) {
         Calls call = new Calls();
         Branch branch = branchService.modelMapper().map(branchDTO,Branch.class);
         for(Volunteer volunteer : volunteers){
             call.setBranch(branch);
             call.setReceiver(volunteer);
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                call.setTimeUnEditableBefore(sdf.parse(event.getCallsStartTime().toString()));
-            }
-            catch (ParseException p){
-
-            }
+            call.setTimeUnEditableBefore(event.getCallsStartTime());
             call.setCallType(callTypeService.getCallTypeByName(StaticNames.etisalat));  //HARD CODDED
             call.setEvent(event);
+            callsRepo.save(call);
         }
         System.out.println("branch "+call.getBranch().getId());
         System.out.println("volunteer "+call.getReceiver().getId());
         System.out.println("time "+call.getTimeUnEditableBefore());
         System.out.println("type "+call.getCallType().getId());
         System.out.println("event "+call.getEvent().getId());
-        callsRepo.save(call);
+
 
     }
 }
