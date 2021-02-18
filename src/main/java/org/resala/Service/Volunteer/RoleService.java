@@ -48,4 +48,10 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
             throw  new MyEntityNotFoundException(name+" Role "+ StaticNames.notFound);
         return roleOptional.get();
     }
+    /*public Role getRoleByUserName(String userName){
+        Optional<Role> roleOptional=roleRepo.findByVolunteers_User_userName(userName);
+        if(!roleOptional.isPresent())
+            throw  new MyEntityNotFoundException("User Name "+ StaticNames.notFound);
+        return roleOptional.get();
+    }*/
 }

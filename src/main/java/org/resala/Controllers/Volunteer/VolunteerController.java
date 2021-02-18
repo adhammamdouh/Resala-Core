@@ -26,6 +26,11 @@ public class VolunteerController implements CommonController<VolunteerDTO>, Comm
     public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(new Response(volunteerService.getAll(), HttpStatus.OK.value()));
     }
+    @RequestMapping(value = "/getAllVolunteersTest", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "')")
+    public ResponseEntity<Object> getAlTestl() {
+        return ResponseEntity.ok(new Response(volunteerService.getProjection(), HttpStatus.OK.value()));
+    }
 
     @RequestMapping(value = "/getVolunteersByBranch/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "')")

@@ -6,7 +6,9 @@ import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Repository.BranchRepo;
 import org.resala.Repository.UserRepository;
+import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Security.Jwt.JwtUtil;
+import org.resala.Service.Volunteer.RoleService;
 import org.resala.Service.Volunteer.VolunteerStatusService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.UserDTO;
@@ -28,6 +30,10 @@ public class UserService {
     @Autowired
     BranchService branchService;
     @Autowired
+    RoleService roleService;
+    @Autowired
+    VolunteerRepo volunteerRepo;
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     JwtUtil jwtUtil;
@@ -47,10 +53,13 @@ public class UserService {
         VolunteerStatus volunteerStatus=volunteerStatusService.getVolunteerStatusByUserName(auth.getUsername());
         if(!volunteerStatus.getName().equals(StaticNames.activeState))
             throw new DeActivateException("This Volunteer State is "+volunteerStatus.getName());
+
         User loggedUser = getUser(auth.getUsername());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
-        map.put("volunteer",loggedUser.getVolunteer());
+        map.put("volunteer",volunteerRepo.getVolunteerBy(auth.getUsername()));
+//        map.put("volunteer",loggedUser.getVolunteer());
+        //map.put("Role",roleService.getRoleByUserName(auth.getUsername()));
         return map;
     }
 }

@@ -10,6 +10,7 @@ import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Projections.testName;
 import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Service.Address.CapitalService;
 import org.resala.Service.BranchService;
@@ -124,6 +125,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     @Override
     public List<Volunteer> getAll() {
         return volunteerRepo.findAll();
+    }
+    public List<Volunteer> getProjection(){
+        return volunteerRepo.findAllBy(Volunteer.class);
     }
 
     public List<Volunteer> getVolunteersByBranch(int branchId) {

@@ -22,10 +22,11 @@ public class Privilege {
     @Column(name = "name")
     String name;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "privilege_Action",
             joinColumns = {@JoinColumn(name = "privilege_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "action_id", nullable = false)}
     )
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Action> actions;
 }

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallType;
@@ -17,6 +16,9 @@ import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -84,7 +86,7 @@ public class Volunteer implements Serializable {
     boolean tShirt;
     @Column(name = "mini_camp")
     //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//wrong insert
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Africa/Cairo")
     @Temporal(TemporalType.TIMESTAMP)
     //@NotNull(message = "Please Enter MiniCamp DateTime")
     Date miniCamp;//add 2 hours ?!!!!
@@ -96,8 +98,8 @@ public class Volunteer implements Serializable {
     @JoinColumn(name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     //@JsonBackReference
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    //@JsonIdentityReference(alwaysAsId = true)
     public Branch branch;
     @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -106,22 +108,27 @@ public class Volunteer implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    //@JsonIdentityReference(alwaysAsId = true)
     private Role role;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
     @JoinTable(name = "volunteer_privileges",
             joinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "privilege_id", nullable = false)}
     )
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    //@JsonIdentityReference(alwaysAsId = true)
+
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Privilege> privileges;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer",fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<AttendanceStatus> attendanceStatus;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     VolunteerStatus volunteerStatus;
 
