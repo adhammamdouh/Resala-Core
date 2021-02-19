@@ -71,12 +71,12 @@ public class Volunteer implements Serializable {
     @NotEmpty(message = "Please enter Phone Number")
     String phoneNumber;
     @Column(name = "join_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    //@JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Please Enter Join Date")
     @Temporal(TemporalType.DATE)
     Date joinDate;
     @Column(name = "birth_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    //@JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Please Enter Birth Date")
     Date birthDate;
@@ -86,7 +86,7 @@ public class Volunteer implements Serializable {
     boolean tShirt;
     @Column(name = "mini_camp")
     //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//wrong insert
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Africa/Cairo")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Africa/Cairo")
     @Temporal(TemporalType.TIMESTAMP)
     //@NotNull(message = "Please Enter MiniCamp DateTime")
     Date miniCamp;//add 2 hours ?!!!!
@@ -97,6 +97,8 @@ public class Volunteer implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonBackReference
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     //@JsonIdentityReference(alwaysAsId = true)
@@ -108,6 +110,8 @@ public class Volunteer implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     //@JsonIdentityReference(alwaysAsId = true)
@@ -128,8 +132,9 @@ public class Volunteer implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer",fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<AttendanceStatus> attendanceStatus;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "volunteer_status_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     VolunteerStatus volunteerStatus;
 
 

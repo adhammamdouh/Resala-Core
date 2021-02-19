@@ -18,6 +18,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
@@ -46,20 +48,19 @@ public class UserService {
     public int getBranchId(String username){
         return branchService.getBranchByUserName(username).getId();
     }
+    //@Transactional
     public Object login(Request auth){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
+
         String token = jwtUtil.generateToken(getBranchId(auth.getUsername()),authentication);
         VolunteerStatus volunteerStatus=volunteerStatusService.getVolunteerStatusByUserName(auth.getUsername());
         if(!volunteerStatus.getName().equals(StaticNames.activeState))
             throw new DeActivateException("This Volunteer State is "+volunteerStatus.getName());
-
         User loggedUser = getUser(auth.getUsername());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
-        map.put("volunteer",volunteerRepo.getVolunteerBy(auth.getUsername()));
-//        map.put("volunteer",loggedUser.getVolunteer());
-        //map.put("Role",roleService.getRoleByUserName(auth.getUsername()));
+        map.put("volunteer",volunteerRepo.test(auth.getUsername()));
         return map;
     }
 }

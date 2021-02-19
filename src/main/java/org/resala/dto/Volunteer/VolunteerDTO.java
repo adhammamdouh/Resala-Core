@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.resala.dto.Address.AddressDTO;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Getter
@@ -24,12 +26,15 @@ public class VolunteerDTO {
     String midName;
     String nickName;
     String phoneNumber;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(value = TemporalType.DATE)
     Date joinDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+   // @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(value = TemporalType.DATE)
     Date birthDate;
     boolean tShirt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     Date miniCamp;
 
 

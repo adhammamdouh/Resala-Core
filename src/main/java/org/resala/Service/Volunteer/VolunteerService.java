@@ -10,6 +10,8 @@ import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Projections.VolunteerPublicAddressInfoProjection;
+import org.resala.Projections.VolunteerPublicInfoProjection;
 import org.resala.Projections.testName;
 import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Service.Address.CapitalService;
@@ -71,7 +73,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
-        System.out.println(volunteer.isTShirt());
         Set<ConstraintViolation<Volunteer>> constraintViolations = getConstraintViolations(volunteer);
         if (constraintViolations.size() > 0) {
             throw new ConstraintViolationException(constraintViolations.stream().findFirst().get().getMessage());
@@ -126,8 +127,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     public List<Volunteer> getAll() {
         return volunteerRepo.findAll();
     }
-    public List<Volunteer> getProjection(){
-        return volunteerRepo.findAllBy(Volunteer.class);
+
+    public List<VolunteerPublicInfoProjection> getProjection(){
+        return volunteerRepo.findAllBy(VolunteerPublicInfoProjection.class);
     }
 
     public List<Volunteer> getVolunteersByBranch(int branchId) {
