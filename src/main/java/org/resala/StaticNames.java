@@ -13,6 +13,7 @@ public interface StaticNames {
     String getAllEvents = "ROLE_GET_ALL_EVENTS";
     String getEventsByMyBranchId = "ROLE_GET_EVENTS_BY_MY_BRANCH_ID";
     String getAllVolunteers = "ROLE_GET_ALL_VOLUNTEERS";
+    String getAllVolunteersPublicInfo = "ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO";
     String getVolunteersByMyBranchId = "ROLE_GET_VOLUNTEERS_BY_MY_BRANCH_ID";
     String createVolunteer = "ROLE_CREATE_VOLUNTEER";
     String updateVolunteer = "ROLE_UPDATE_VOLUNTEER";

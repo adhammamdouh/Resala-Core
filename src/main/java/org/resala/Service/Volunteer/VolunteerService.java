@@ -128,7 +128,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         return volunteerRepo.findAll();
     }
 
-    public List<VolunteerPublicInfoProjection> getProjection(){
+    public List<VolunteerPublicInfoProjection> getAllPublicInfo(){
         return volunteerRepo.findAllBy(VolunteerPublicInfoProjection.class);
     }
 

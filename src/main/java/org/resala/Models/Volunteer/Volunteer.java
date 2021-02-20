@@ -23,6 +23,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -74,22 +75,22 @@ public class Volunteer implements Serializable {
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Please Enter Join Date")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date joinDate;
     @Column(name = "birth_date")
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Please Enter Birth Date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
 
     @Column(name = "tShirt")
     @NotNull(message = "T-Shirt Can't be null")
     boolean tShirt;
     @Column(name = "mini_camp")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//wrong insert
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Africa/Cairo")
-    @Temporal(TemporalType.TIMESTAMP)
-    //@NotNull(message = "Please Enter MiniCamp DateTime")
-    Date miniCamp;//add 2 hours ?!!!!
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    LocalDateTime miniCamp;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;
