@@ -42,7 +42,7 @@ public class Volunteer implements Serializable {
     int id;
 
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "address_id")
     Address address;
     @Column(name = "faculty")

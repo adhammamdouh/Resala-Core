@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Exceptions.NullException;
 import org.resala.dto.Address.AddressDTO;
+import org.resala.dto.BranchDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
@@ -18,7 +20,7 @@ public class VolunteerDTO {
     int id;
     int age;
     AddressDTO address;
-    int branchId;
+    BranchDTO branch;
     String faculty;
     String nationalId;
     String university;
@@ -39,5 +41,13 @@ public class VolunteerDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime miniCamp;
 
+    public void checkNullForCreation() {
+        if (address == null) {
+            throw new NullException("Address");
+        }
+        if (branch == null) {
+            throw new NullException("Branch");
+        }
+    }
 
 }
