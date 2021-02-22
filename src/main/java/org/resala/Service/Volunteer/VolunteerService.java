@@ -10,12 +10,12 @@ import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
-import org.resala.Projections.VolunteerPublicAddressInfoProjection;
 import org.resala.Projections.VolunteerPublicInfoProjection;
-import org.resala.Projections.testName;
 import org.resala.Repository.Volunteer.VolunteerRepo;
+import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
 import org.resala.Service.BranchService;
+import org.resala.Service.CheckConstraintService;
 import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Privilege.PrivilegeService;
@@ -27,13 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -52,6 +47,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     RoleService roleService;
     @Autowired
     VolunteerStatusService volunteerStatusService;
+    @Autowired
+    AddressService addressService;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -62,7 +59,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
 
     @Override
     public ResponseEntity<Object> create(VolunteerDTO obj) {
-        obj.checkNullForCreation();
+        obj.checkNull();
         Branch branch = branchService.get(obj.getBranch().getId());
         Capital capital = capitalService.get(obj.getAddress().getCapitalId());
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
@@ -75,6 +72,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
         checkConstraintViolations(volunteer);
+        addressService.checkConstraintViolations(volunteer.getAddress());
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
     }
@@ -90,7 +88,11 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
 
     @Override
     public ResponseEntity<Object> update(VolunteerDTO newObj) {
+        newObj.checkNull();
         Volunteer volunteer = get(newObj.getId());
+        if(newObj.getAddress().getId()!=volunteer.getAddress().getId()){
+            throw new ConstraintViolationException("You can't change your address id");
+        }
         Branch branch = branchService.get(newObj.getBranch().getId());
         Capital capital = capitalService.get(newObj.getAddress().getCapitalId());
         Volunteer newVolunteer = modelMapper().map(newObj, Volunteer.class);
@@ -101,6 +103,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         newVolunteer.setPrivileges(volunteer.getPrivileges());
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
         checkConstraintViolations(newVolunteer);
+        addressService.checkConstraintViolations(newVolunteer.getAddress());
         volunteerRepo.save(newVolunteer);
         return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
@@ -137,15 +140,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     public void checkConstraintViolations(Volunteer volunteer){
-        Set<ConstraintViolation<Volunteer>> constraintViolations = getConstraintViolations(volunteer);
-        if (constraintViolations.size() > 0) {
-            throw new ConstraintViolationException(constraintViolations.stream().findFirst().get().getMessage());
-        }
-    }
-
-    private Set<ConstraintViolation<Volunteer>> getConstraintViolations(Volunteer volunteer) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        return validator.validate(volunteer);
+        CheckConstraintService.checkConstraintViolations(volunteer,Volunteer.class);
     }
 }

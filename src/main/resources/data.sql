@@ -20,3 +20,6 @@ INSERT ignore INTO privilege (`id`, `name`) VALUES ('1', 'CEO');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('2', 'TEAM_LEADER');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('3', 'TEAM_MEMBER');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('4', 'NORMAL_VOLUNTEER');
+
+INSERT ignore INTO volunteer_status (`id`, `name`) VALUES ('1', 'ACTIVE');
+INSERT ignore INTO volunteer_status (`id`, `name`) VALUES ('2', 'DELETED');

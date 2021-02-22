@@ -18,7 +18,6 @@ import java.util.Date;
 @Setter
 public class VolunteerDTO {
     int id;
-    int age;
     AddressDTO address;
     BranchDTO branch;
     String faculty;
@@ -41,7 +40,7 @@ public class VolunteerDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime miniCamp;
 
-    public void checkNullForCreation() {
+    public void checkNull() {
         if (address == null) {
             throw new NullException("Address");
         }
