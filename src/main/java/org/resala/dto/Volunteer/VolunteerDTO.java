@@ -23,7 +23,6 @@ public class VolunteerDTO {
     String faculty;
     String nationalId;
     String university;
-    String region;
     String firstName;
     String lastName;
     String midName;

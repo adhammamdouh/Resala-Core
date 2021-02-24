@@ -54,9 +54,7 @@ public class Volunteer implements Serializable {
     @Column(name = "university")
     @NotEmpty(message = "Please enter University")
     String university;
-    @Column(name = "region")
-    @NotEmpty(message = "Please enter Region")
-    String region;
+
     @Column(name = "first_name")
     @NotEmpty(message = "Please enter First Name")
     String firstName;

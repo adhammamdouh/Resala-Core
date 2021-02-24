@@ -16,7 +16,6 @@ public interface VolunteerPublicInfoProjection {
     VolunteerPublicAddressInfoProjection getAddress();
     String getFaculty();
     String getUniversity();
-    String getRegion();
     //@Value("#{target.firstName}")
     String getFirstName();
     //@Value("#{target.lastName}")
