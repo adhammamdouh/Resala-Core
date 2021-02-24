@@ -18,17 +18,17 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     @Autowired
     PrivilegeRepo privilegeRepo;
     @Override
-    public ResponseEntity<Object> create(PrivilegeDTO obj) {
+    public ResponseEntity<Object> create(PrivilegeDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> delete(PrivilegeDTO obj) {
+    public ResponseEntity<Object> delete(PrivilegeDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> update(PrivilegeDTO newObj) {
+    public ResponseEntity<Object> update(PrivilegeDTO newDto) {
         return null;
     }
 

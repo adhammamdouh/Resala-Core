@@ -47,6 +47,7 @@ public class VolunteerDTO {
         if (branch == null) {
             throw new NullException("Branch");
         }
+        address.checkNull();
     }
 
 }

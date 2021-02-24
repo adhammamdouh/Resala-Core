@@ -18,17 +18,17 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
     @Autowired
     RoleRepo roleRepo;
     @Override
-    public ResponseEntity<Object> create(RoleDTO obj) {
+    public ResponseEntity<Object> create(RoleDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> delete(RoleDTO obj) {
+    public ResponseEntity<Object> delete(RoleDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> update(RoleDTO newObj) {
+    public ResponseEntity<Object> update(RoleDTO newDto) {
         return null;
     }
 

@@ -19,17 +19,17 @@ public class VolunteerStatusService implements CommonCRUDService<VolunteerStatus
     @Autowired
     VolunteerStatuesRepo volunteerStatuesRepo;
     @Override
-    public ResponseEntity<Object> create(VolunteerStatusDTO obj) {
+    public ResponseEntity<Object> create(VolunteerStatusDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> delete(VolunteerStatusDTO obj) {
+    public ResponseEntity<Object> delete(VolunteerStatusDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> update(VolunteerStatusDTO newObj) {
+    public ResponseEntity<Object> update(VolunteerStatusDTO newDto) {
         return null;
     }
 

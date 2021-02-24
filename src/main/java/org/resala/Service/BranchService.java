@@ -56,17 +56,17 @@ public class BranchService implements CommonCRUDService<BranchDTO>, CommonServic
     }
 
     @Override
-    public ResponseEntity<Object> create(BranchDTO obj) {
+    public ResponseEntity<Object> create(BranchDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> delete(BranchDTO obj) {
+    public ResponseEntity<Object> delete(BranchDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> update(BranchDTO newObj) {
+    public ResponseEntity<Object> update(BranchDTO newDto) {
         return null;
     }
 }

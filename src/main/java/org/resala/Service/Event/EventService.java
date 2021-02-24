@@ -35,26 +35,26 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         return modelMapper;
     }
     @Override
-    public ResponseEntity<Object> create(EventDTO obj) {
+    public ResponseEntity<Object> create(EventDTO dto) {
         List<Branch>branches=branchService.getBranchByIds(
-                obj.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
+                dto.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
         );
-        Event event = modelMapper().map(obj, Event.class);
+        Event event = modelMapper().map(dto, Event.class);
         event.setBranches(branches);
         eventRepo.save(event);
-        if(obj.isShareable()){
-            callsService.createCalls(obj.getBranches(),event);
+        if(dto.isShareable()){
+            callsService.createCalls(dto.getBranches(),event);
         }
         return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 
     @Override
-    public ResponseEntity<Object> delete(EventDTO obj) {
+    public ResponseEntity<Object> delete(EventDTO dto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Object> update(EventDTO newObj) {
+    public ResponseEntity<Object> update(EventDTO newDto) {
         return null;
     }
 

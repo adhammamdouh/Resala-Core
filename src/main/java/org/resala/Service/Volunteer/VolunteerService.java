@@ -58,14 +58,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> create(VolunteerDTO obj) {
-        obj.checkNull();
-        Branch branch = branchService.get(obj.getBranch().getId());
-        Capital capital = capitalService.get(obj.getAddress().getCapitalId());
+    public ResponseEntity<Object> create(VolunteerDTO dto) {
+        dto.checkNull();
+        Branch branch = branchService.get(dto.getBranch().getId());
+        Capital capital = capitalService.get(dto.getAddress().getCapital().getId());
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
-        Volunteer volunteer = modelMapper().map(obj, Volunteer.class);
+        Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
         volunteer.setBranch(branch);
         volunteer.getAddress().setCapital(capital);
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
@@ -78,8 +78,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> delete(VolunteerDTO obj) {
-        Volunteer volunteer = get(obj.getId());
+    public ResponseEntity<Object> delete(VolunteerDTO dto) {
+        Volunteer volunteer = get(dto.getId());
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.deletedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
@@ -87,17 +87,19 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> update(VolunteerDTO newObj) {
-        newObj.checkNull();
-        Volunteer volunteer = get(newObj.getId());
-        if(newObj.getAddress().getId()!=volunteer.getAddress().getId()){
+    public ResponseEntity<Object> update(VolunteerDTO newDto) {
+        newDto.checkNull();
+        Volunteer volunteer = get(newDto.getId());
+        /*if(newObj.getAddress().getId()!=volunteer.getAddress().getId()){
             throw new ConstraintViolationException("You can't change your address id");
-        }
-        Branch branch = branchService.get(newObj.getBranch().getId());
-        Capital capital = capitalService.get(newObj.getAddress().getCapitalId());
-        Volunteer newVolunteer = modelMapper().map(newObj, Volunteer.class);
+        }*/
+
+        Branch branch = branchService.get(newDto.getBranch().getId());
+        Capital capital = capitalService.get(newDto.getAddress().getCapital().getId());
+        Volunteer newVolunteer = modelMapper().map(newDto, Volunteer.class);
         newVolunteer.setId(volunteer.getId());
         newVolunteer.setBranch(branch);
+        newVolunteer.getAddress().setId(volunteer.getAddress().getId());
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
         newVolunteer.setPrivileges(volunteer.getPrivileges());
