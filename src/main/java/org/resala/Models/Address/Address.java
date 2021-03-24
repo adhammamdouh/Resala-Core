@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "address")
@@ -20,17 +22,22 @@ public class Address {
     /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_id")
     Volunteer volunteer;*/
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "capital_id")
+    @NotNull(message = "Please enter Capital")
     Capital capital;
     @Column(name = "additional_info")
     String additionalInfo;
     @Column(name = "apartment_number")
+    @NotEmpty(message = "Please enter ApartmentNumber")
     String apartmentNumber;
     @Column(name = "building_number")
+    @NotEmpty(message = "Please enter BuildingNumber")
     String buildingNumber;
     @Column(name = "street_name")
+    @NotEmpty(message = "Please enter StreetName")
     String streetName;
     @Column(name = "region_name")
+    @NotEmpty(message = "Please enter RegionName")
     String regionName;
 }

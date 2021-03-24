@@ -41,6 +41,12 @@ public class ExceptionHelper {
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = {NullException.class})
+    public ResponseEntity<Object> handleNullExceptionException(NullException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = {BadCredentialsException.class})
     public ResponseEntity<Object> handleBadCredentialException(BadCredentialsException ex) {
         LOGGER.error(ex.getMessage());

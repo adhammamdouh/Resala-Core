@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface VolunteerRepo extends JpaRepository <Volunteer,Integer>{
     List<Volunteer> findByBranch_id(int branchId);
     <T> List<T> findAllBy(Class<T>projection);
-    @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.role JOIN FETCH v.privileges JOIN FETCH v.user as u  WHERE u.userName=:userName")
-    Volunteer getVolunteerBy(@Param("userName")String userName);
+    @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.user as u WHERE u.userName=:userName")
+    Volunteer test(@Param("userName")String userName);
 
 }

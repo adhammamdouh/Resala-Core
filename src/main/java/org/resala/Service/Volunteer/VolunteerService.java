@@ -10,10 +10,12 @@ import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
-import org.resala.Projections.testName;
+import org.resala.Projections.VolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.VolunteerRepo;
+import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
 import org.resala.Service.BranchService;
+import org.resala.Service.CheckConstraintService;
 import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Privilege.PrivilegeService;
@@ -25,13 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -50,6 +47,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     RoleService roleService;
     @Autowired
     VolunteerStatusService volunteerStatusService;
+    @Autowired
+    AddressService addressService;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -59,30 +58,28 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> create(VolunteerDTO obj) {
-        Branch branch = branchService.get(obj.getBranchId());
-        Capital capital = capitalService.get(obj.getAddress().getCapitalId());
+    public ResponseEntity<Object> create(VolunteerDTO dto) {
+        dto.checkNull();
+        Branch branch = branchService.get(dto.getBranch().getId());
+        Capital capital = capitalService.get(dto.getAddress().getCapital().getId());
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
-        Volunteer volunteer = modelMapper().map(obj, Volunteer.class);
+        Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
         volunteer.setBranch(branch);
         volunteer.getAddress().setCapital(capital);
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
-        System.out.println(volunteer.isTShirt());
-        Set<ConstraintViolation<Volunteer>> constraintViolations = getConstraintViolations(volunteer);
-        if (constraintViolations.size() > 0) {
-            throw new ConstraintViolationException(constraintViolations.stream().findFirst().get().getMessage());
-        }
+        checkConstraintViolations(volunteer);
+        addressService.checkConstraintViolations(volunteer.getAddress());
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
     }
 
     @Override
-    public ResponseEntity<Object> delete(VolunteerDTO obj) {
-        Volunteer volunteer = get(obj.getId());
+    public ResponseEntity<Object> delete(VolunteerDTO dto) {
+        Volunteer volunteer = get(dto.getId());
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.deletedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
@@ -90,17 +87,25 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> update(VolunteerDTO newObj) {
-        Volunteer volunteer = get(newObj.getId());
-        Branch branch = branchService.get(newObj.getBranchId());
-        Capital capital = capitalService.get(newObj.getAddress().getCapitalId());
-        Volunteer newVolunteer = modelMapper().map(newObj, Volunteer.class);
+    public ResponseEntity<Object> update(VolunteerDTO newDto) {
+        newDto.checkNull();
+        Volunteer volunteer = get(newDto.getId());
+        /*if(newObj.getAddress().getId()!=volunteer.getAddress().getId()){
+            throw new ConstraintViolationException("You can't change your address id");
+        }*/
+
+        Branch branch = branchService.get(newDto.getBranch().getId());
+        Capital capital = capitalService.get(newDto.getAddress().getCapital().getId());
+        Volunteer newVolunteer = modelMapper().map(newDto, Volunteer.class);
         newVolunteer.setId(volunteer.getId());
         newVolunteer.setBranch(branch);
+        newVolunteer.getAddress().setId(volunteer.getAddress().getId());
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
         newVolunteer.setPrivileges(volunteer.getPrivileges());
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
+        checkConstraintViolations(newVolunteer);
+        addressService.checkConstraintViolations(newVolunteer.getAddress());
         volunteerRepo.save(newVolunteer);
         return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
@@ -126,8 +131,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
     public List<Volunteer> getAll() {
         return volunteerRepo.findAll();
     }
-    public List<Volunteer> getProjection(){
-        return volunteerRepo.findAllBy(Volunteer.class);
+
+    public List<VolunteerPublicInfoProjection> getAllPublicInfo(){
+        return volunteerRepo.findAllBy(VolunteerPublicInfoProjection.class);
     }
 
     public List<Volunteer> getVolunteersByBranch(int branchId) {
@@ -135,9 +141,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         return volunteerRepo.findByBranch_id(branchId);
     }
 
-    private Set<ConstraintViolation<Volunteer>> getConstraintViolations(Volunteer volunteerEntity) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        return validator.validate(volunteerEntity);
+    public void checkConstraintViolations(Volunteer volunteer){
+        CheckConstraintService.checkConstraintViolations(volunteer,Volunteer.class);
     }
 }
