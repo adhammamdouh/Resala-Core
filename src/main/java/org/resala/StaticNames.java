@@ -21,6 +21,7 @@ public interface StaticNames {
     String assignCalls="ROLE_ASSIGN_CALLS";
     String deleteEvent = "ROLE_DELETE_EVENT";
     String updateEvent = "ROLE_UPDATE_EVENT";
+    String getAssignedCalls="ROLE_GET_ASSIGNED_CALLS";
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
     String deletedSuccessfully = "Deleted Successfully";

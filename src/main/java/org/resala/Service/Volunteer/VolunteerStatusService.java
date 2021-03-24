@@ -53,8 +53,10 @@ public class VolunteerStatusService implements CommonCRUDService<VolunteerStatus
 
     public VolunteerStatus getVolunteerStatusByUserName(String userName){
         Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findByVolunteers_User_UserName(userName);
+        System.out.println("user name is "+userName);
         if(!volunteerStatusOptional.isPresent())
             throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
+        System.out.println("EEEEEEEEEEEEEEEE");
         return volunteerStatusOptional.get();
     }
 }

@@ -59,7 +59,7 @@ public class UserService {
         map.put("token",token);
         map.put("volunteer",volunteerRepo.getVolunteerBy(auth.getUsername()));
 //        map.put("volunteer",loggedUser.getVolunteer());
-        //map.put("Role",roleService.getRoleByUserName(auth.getUsername()));
+        map.put("Role",roleService.findByVolunteers_User_userName(auth.getUsername()));
         return map;
     }
 }

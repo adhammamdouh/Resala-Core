@@ -30,10 +30,6 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-/*@NamedQueries({
-        //@NamedQuery(name = "Volunteer.findById", query = "SELECT w FROM Volunteer w WHERE w.id = :id"),
-        @NamedQuery(name = "Volunteer.findByBranch", query = "SELECT v FROM Volunteer v WHERE v.branch.id = :branch_id")
-})*/
 public class Volunteer implements Serializable {
     @Column(nullable = false)
     @Id
@@ -86,7 +82,7 @@ public class Volunteer implements Serializable {
     boolean tShirt;
     @Column(name = "mini_camp")
     //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//wrong insert
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Africa/Cairo")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Temporal(TemporalType.TIMESTAMP)
     //@NotNull(message = "Please Enter MiniCamp DateTime")
     Date miniCamp;//add 2 hours ?!!!!
@@ -122,12 +118,13 @@ public class Volunteer implements Serializable {
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     //@JsonIdentityReference(alwaysAsId = true)
-
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Privilege> privileges;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer",fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<AttendanceStatus> attendanceStatus;
+
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     VolunteerStatus volunteerStatus;

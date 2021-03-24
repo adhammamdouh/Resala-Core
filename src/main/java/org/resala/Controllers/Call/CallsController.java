@@ -1,9 +1,10 @@
 package org.resala.Controllers.Call;
 
+import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Service.Call.CallsService;
+import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Call.CallTypeDTO;
-import org.resala.dto.Call.CallsDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.resala.dto.VolunteerToCallsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import java.util.List;
 public class CallsController {
     @Autowired
     CallsService callsService;
+    @Autowired
+    VolunteerService volunteerService;
 
     @RequestMapping(value = "/assignCalls/{equality}" , method = RequestMethod.POST)/////
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
@@ -29,9 +32,15 @@ public class CallsController {
         List<CallTypeDTO>  calls = new ArrayList<>();
 
         volunteers=data.getVolunteerIds();
-        calls=data.getCallIds();
+        calls=data.getCallTypeIds();
 
         return ResponseEntity.ok(callsService.assignCalls(volunteers,calls,branchId,equality));
+    }
+
+    @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('"+StaticNames.getAssignedCalls+"')")
+    public ResponseEntity<Object> getAssignCalls(@RequestBody VolunteerDTO volunteerDTO){
+        return ResponseEntity.ok(callsService.getAssignedCalls(volunteerDTO));
     }
 
 }

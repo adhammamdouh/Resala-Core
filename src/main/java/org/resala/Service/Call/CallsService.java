@@ -44,17 +44,8 @@ public class CallsService{
     BranchService branchService;
 
 
-    public List<CallType> getCallType(List<Integer> ids){
-        return callTypeService.getCallTypeByNames(ids);
-    }
-
-    public List<Volunteer> getVolunteerById(List<Integer> ids){
-        return volunteerService.getVolunteerByIds(ids);
-
-    }
-
     public ResponseEntity<Object> assignCalls(List<VolunteerDTO> volunteerDtoIds ,
-                                  List<CallTypeDTO> callTypeDtoNames , int branchId , boolean equality){
+                                  List<CallTypeDTO> callTypeDtoNames , int branchId , boolean equality) {
 
         List<Volunteer> volunteers = new ArrayList<>();
         List<CallType> callType = new ArrayList<>();
@@ -148,4 +139,10 @@ public class CallsService{
         }
 
     }
+
+    public List<Calls> getAssignedCalls(VolunteerDTO volunteerDTO){
+        Volunteer volunteer= volunteerService.get(volunteerDTO.getId());
+        return callsRepo.findByCaller(volunteer);
+    }
+
 }
