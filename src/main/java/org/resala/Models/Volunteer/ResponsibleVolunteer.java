@@ -16,6 +16,10 @@ public class ResponsibleVolunteer {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "volunteer_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    Volunteer myVolunteerInfo;
     @Column(name = "personal_image_url")
     String personalImageUrl;
     @Column(name = "resala_objective")
@@ -33,10 +37,7 @@ public class ResponsibleVolunteer {
     /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "current_commit_id")
     Committe committe;*/
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "volunteer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    Volunteer volunteer;
+
     @Column(name = "graduation_date")
     String GraduationDate;
     @Column(name = "graduation_number")

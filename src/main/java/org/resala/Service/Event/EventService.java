@@ -41,10 +41,10 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         );
         Event event = modelMapper().map(dto, Event.class);
         event.setBranches(branches);
-        eventRepo.save(event);
-        if(dto.isShareable()){
+        /*if(dto.isShareable()){
             callsService.createCalls(dto.getBranches(),event);
-        }
+        }*/
+        eventRepo.save(event);
         return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 
