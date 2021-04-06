@@ -1,19 +1,17 @@
 package org.resala.Models.Event;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Branch;
-import org.resala.Models.Event.EventStatus.AttendanceStatus;
-import org.resala.Models.Volunteer.Role;
+import org.resala.Models.Volunteer.VolunteerStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -22,41 +20,56 @@ import java.util.List;
 @Getter
 @Setter
 public class Event {
-    @Column(name = "event_id", insertable = false)
+    @Column(nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "name", updatable = true)
+
+    @Column(name = "name")
+    @NotEmpty(message = "Please enter Name")
     String name;
+
     @Column(name = "from_date")
-    //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull(message = "Please Enter From Date")
     Date fromDate;
+
     @Column(name = "to_date")
-    //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull(message = "Please Enter To Date")
     Date toDate;
+
     @Column(name = "calls_start_time")
-    //@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
     Date callsStartTime;
+
     @Column(name = "script")
+    @NotEmpty(message = "Please enter Script")
     String script;
+
     @Column(name = "description")
+    @NotEmpty(message = "Please enter Description")
     String description;
+
     @Column(name = "has_calls")
+    @NotNull(message = "Please enter if it has calls or not")
     boolean hasCalls;
+
+
     @Column(name = "shareable")
+    @NotNull(message = "Please enter if it is shareable or not")
     boolean shareable;
 
     /*@ManyToMany(cascade = CascadeType.ALL, mappedBy = "event")
     List<AttendanceStatus> attendanceStatus;*/
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "eventResult_Id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     EventResult eventResult;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -68,5 +81,10 @@ public class Event {
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "branch_id")
     //@JsonIdentityReference(alwaysAsId = true)
     private List<Branch> branches;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_status_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    EventStatus eventStatus;
 
 }

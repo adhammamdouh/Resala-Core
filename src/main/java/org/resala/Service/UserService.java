@@ -1,26 +1,21 @@
 package org.resala.Service;
 
-import org.resala.Exceptions.DeActivateException;
+import org.resala.Exceptions.ActiveStateException;
 import org.resala.Models.Auth.Request;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.VolunteerStatus;
-import org.resala.Repository.BranchRepo;
 import org.resala.Repository.UserRepository;
 import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Security.Jwt.JwtUtil;
 import org.resala.Service.Volunteer.RoleService;
+import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.Service.Volunteer.VolunteerStatusService;
 import org.resala.StaticNames;
-import org.resala.dto.Volunteer.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +29,7 @@ public class UserService {
     @Autowired
     RoleService roleService;
     @Autowired
-    VolunteerRepo volunteerRepo;
+    VolunteerService volunteerService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -55,13 +50,12 @@ public class UserService {
 
         String token = jwtUtil.generateToken(getBranchId(auth.getUsername()),authentication);
         VolunteerStatus volunteerStatus=volunteerStatusService.getVolunteerStatusByUserName(auth.getUsername());
-        if(!volunteerStatus.getName().equals(StaticNames.activeState))
-            throw new DeActivateException("This Volunteer State is "+volunteerStatus.getName());
-
-        User loggedUser = getUser(auth.getUsername());
+        if(volunteerStatus.getName().equals(StaticNames.archivedState))
+            throw new ActiveStateException("This Volunteer State is "+volunteerStatus.getName());
+        //User loggedUser = getUser(auth.getUsername());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
-        map.put("volunteer",volunteerRepo.test(auth.getUsername()));
+        map.put("volunteer",volunteerService.getByUserName(auth.getUsername()));
         return map;
     }
 }

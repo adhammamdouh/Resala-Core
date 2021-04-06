@@ -25,7 +25,7 @@ public class CapitalService implements CommonCRUDService<CapitalDTO>, CommonServ
     }
 
     @Override
-    public ResponseEntity<Object> delete(CapitalDTO dto) {
+    public ResponseEntity<Object> archive(CapitalDTO dto) {
         return null;
     }
 

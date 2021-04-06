@@ -23,7 +23,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     }
 
     @Override
-    public ResponseEntity<Object> delete(PrivilegeDTO dto) {
+    public ResponseEntity<Object> archive(PrivilegeDTO dto) {
         return null;
     }
 

@@ -1,9 +1,7 @@
-package org.resala.Models.Event.EventStatus;
+package org.resala.Models.Event.EventAttendStatus;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
