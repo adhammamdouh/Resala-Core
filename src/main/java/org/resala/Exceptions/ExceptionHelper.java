@@ -9,9 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
-
-import java.nio.file.AccessDeniedException;
 
 
 @ControllerAdvice
@@ -29,8 +26,8 @@ public class ExceptionHelper {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(value = {DeActivateException.class})
-    public ResponseEntity<Object> handleDeActivateException(DeActivateException ex) {
+    @ExceptionHandler(value = {ActiveStateException.class})
+    public ResponseEntity<Object> handleDeActivateException(ActiveStateException ex) {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }

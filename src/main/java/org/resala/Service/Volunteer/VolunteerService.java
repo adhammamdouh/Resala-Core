@@ -1,7 +1,7 @@
 package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
-import org.resala.Exceptions.ConstraintViolationException;
+import org.resala.Exceptions.ActiveStateException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
@@ -22,7 +22,6 @@ import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,21 +35,21 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class VolunteerService implements CommonCRUDService<VolunteerDTO>, CommonService<Volunteer> {
     @Autowired
-    VolunteerRepo volunteerRepo;
+    private VolunteerRepo volunteerRepo;
     @Autowired
-    BranchService branchService;
+    private BranchService branchService;
     @Autowired
-    CapitalService capitalService;
+    private CapitalService capitalService;
     @Autowired
-    PrivilegeService privilegeService;
+    private PrivilegeService privilegeService;
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
     @Autowired
-    VolunteerStatusService volunteerStatusService;
+    private VolunteerStatusService volunteerStatusService;
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
 
-    @Bean
+    //@Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -77,13 +76,37 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
     }
 
-    @Override
-    public ResponseEntity<Object> delete(VolunteerDTO dto) {
+
+
+    public ResponseEntity<Object> requestToArchive(VolunteerDTO dto) {
         Volunteer volunteer = get(dto.getId());
-        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.deletedState);
+        if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.activeState))
+            throw new ActiveStateException("This Volunteer State is "+volunteer.getVolunteerStatus().getName());
+        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.requestedToActiveState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response("Deleted Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response("Requested To Archive Successfully", HttpStatus.OK.value()));
+    }
+
+    public ResponseEntity<Object> declineToArchive(VolunteerDTO dto) {
+        Volunteer volunteer = get(dto.getId());
+        if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToActiveState))
+            throw new ActiveStateException("This Volunteer State is "+volunteer.getVolunteerStatus().getName());
+        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.activeState);
+        volunteer.setVolunteerStatus(volunteerStatus);
+        volunteerRepo.save(volunteer);
+        return ResponseEntity.ok(new Response("Declined to Archive Successfully", HttpStatus.OK.value()));
+    }
+
+    @Override
+    public ResponseEntity<Object> archive(VolunteerDTO dto) {
+        Volunteer volunteer = get(dto.getId());
+        if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToActiveState))
+            throw new ActiveStateException("This Volunteer State is "+volunteer.getVolunteerStatus().getName());
+        VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.archivedState);
+        volunteer.setVolunteerStatus(volunteerStatus);
+        volunteerRepo.save(volunteer);
+        return ResponseEntity.ok(new Response("Archived Successfully", HttpStatus.OK.value()));
     }
 
     @Override
@@ -117,6 +140,12 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
             throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
         return optionalVolunteer.get();
     }
+    public Volunteer getByUserName(String userName) {
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByUser_UserName(userName);
+        if (!optionalVolunteer.isPresent())
+            throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
+        return optionalVolunteer.get();
+    }
 
     public List<Volunteer> getVolunteerByIds(List<Integer> ids) {
         List<Volunteer> volunteers = volunteerRepo.findAllById(ids);
@@ -136,12 +165,77 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>, Common
         return volunteerRepo.findAllBy(VolunteerPublicInfoProjection.class);
     }
 
+
+    public List<Volunteer> getAllActive() {
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.activeState,Volunteer.class);
+    }
+
+    public List<VolunteerPublicInfoProjection> getAllActivePublicInfo(){
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.activeState,VolunteerPublicInfoProjection.class);
+    }
+
+    public List<Volunteer> getAllRequestedToArchive() {
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.requestedToActiveState,Volunteer.class);
+    }
+
+    public List<VolunteerPublicInfoProjection> getAllRequestedToArchivePublicInfo(){
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.requestedToActiveState,VolunteerPublicInfoProjection.class);
+    }
+
+
+    public List<Volunteer> getAllArchived() {
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState,Volunteer.class);
+    }
+
+    public List<VolunteerPublicInfoProjection> getAllArchivedPublicInfo(){
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState,VolunteerPublicInfoProjection.class);
+    }
+
+
+
+
     public List<Volunteer> getVolunteersByBranch(int branchId) {
         branchService.get(branchId);
-        return volunteerRepo.findByBranch_id(branchId);
+        return volunteerRepo.findByBranch_id(branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findByBranch_id(branchId,VolunteerPublicInfoProjection.class);
+    }
+
+
+
+    public List<Volunteer> getActiveVolunteersByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.activeState,branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getActiveVolunteersPublicInfoByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.activeState,branchId,VolunteerPublicInfoProjection.class);
+    }
+
+
+    public List<Volunteer> getRequestedToArchiveVolunteersByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.requestedToActiveState,branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getRequestedToArchiveVolunteersPublicInfoByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.requestedToActiveState,branchId,VolunteerPublicInfoProjection.class);
+    }
+
+    public List<Volunteer> getArchivedVolunteersByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.archivedState,branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getArchivedVolunteersPublicInfoByBranch(int branchId) {
+        branchService.get(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.archivedState,branchId,VolunteerPublicInfoProjection.class);
     }
 
     public void checkConstraintViolations(Volunteer volunteer){
         CheckConstraintService.checkConstraintViolations(volunteer,Volunteer.class);
     }
+
+
 }

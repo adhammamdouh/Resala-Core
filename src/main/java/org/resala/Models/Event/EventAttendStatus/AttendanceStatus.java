@@ -1,4 +1,4 @@
-package org.resala.Models.Event.EventStatus;
+package org.resala.Models.Event.EventAttendStatus;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Table
 @Entity(name = "attendance_status")

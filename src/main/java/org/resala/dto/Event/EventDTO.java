@@ -3,6 +3,7 @@ package org.resala.dto.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Exceptions.NullException;
 import org.resala.dto.BranchDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,15 +18,22 @@ import java.util.List;
 public class EventDTO {
     int id;
     String name;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date fromDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date toDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date callsStartTime;
     String script;
     String description;
     boolean hasCalls;
     boolean shareable;
     List<BranchDTO>branches;
+    public void checkNull(){
+        if (branches==null||branches.isEmpty())
+            throw new NullException("Branches");
+    }
 }

@@ -61,7 +61,7 @@ public class BranchService implements CommonCRUDService<BranchDTO>, CommonServic
     }
 
     @Override
-    public ResponseEntity<Object> delete(BranchDTO dto) {
+    public ResponseEntity<Object> archive(BranchDTO dto) {
         return null;
     }
 

@@ -15,10 +15,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VolunteerRepo extends JpaRepository <Volunteer,Integer>{
-    List<Volunteer> findByBranch_id(int branchId);
-    <T> List<T> findAllBy(Class<T>projection);
+public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
+    <T> List<T> findByBranch_id(int branchId, Class<T> projection);
+
+    <T> List<T> findAllBy(Class<T> projection);
+
+    Optional<Volunteer> findByUser_UserName(String userName);
+
+    <T> List<T> findAllByVolunteerStatus_name(String name, Class<T> projection);
+
+    <T> List<T> findAllByVolunteerStatus_nameAndBranch_id(String name, int branchId, Class<T> projection);
+    //-------------------------------------------------------
+    /*
     @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.user as u WHERE u.userName=:userName")
-    Volunteer test(@Param("userName")String userName);
+    Volunteer test(@Param("userName")String userName);//need to be change
+    */
 
 }

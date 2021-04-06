@@ -23,7 +23,7 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
     }
 
     @Override
-    public ResponseEntity<Object> delete(RoleDTO dto) {
+    public ResponseEntity<Object> archive(RoleDTO dto) {
         return null;
     }
 

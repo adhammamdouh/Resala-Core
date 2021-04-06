@@ -1,18 +1,14 @@
 package org.resala.Models.Volunteer;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
-import org.resala.Models.Call.CallType;
-import org.resala.Models.Event.EventStatus.AttendanceStatus;
+import org.resala.Models.Event.EventAttendStatus.AttendanceStatus;
 import org.resala.Models.KPI.VolunteerKPI;
-import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
-import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,7 +17,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
