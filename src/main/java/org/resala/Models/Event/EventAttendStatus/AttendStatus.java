@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class AttendStatus {
-    @Column(name = "attendStatus_id")
+    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "attendStatus_name")
+    @Column(name = "name")
     String name;
 }
