@@ -14,15 +14,15 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class AttendanceStatus {
-    @Column(name = "attendanceStatus_id")
+    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "volunteer_d")
+    @JoinColumn(name = "volunteer_id")
     Volunteer volunteer;
-    @Column(name = "attendanceStatus_comment")
+    @Column(name = "comment")
     String comment;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -31,7 +31,7 @@ public class AttendanceStatus {
     AttendStatus attendStatus;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "event_id")
+    @JoinColumn(name = "event_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Event event;
 
