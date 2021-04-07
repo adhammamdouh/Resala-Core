@@ -36,14 +36,12 @@ public interface StaticNames {
     String getAllArchivedVolunteersByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllActiveVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
     String getAllArchivedVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
-
-    String getAllEvents = "ROLE_GET_ALL_EVENTS";
-    String getEventsByMyBranchId = "ROLE_GET_EVENTS_BY_MY_BRANCH_ID";
     String addEvent="ROLE_ADD_EVENT";
     String archiveEvent = "ROLE_ARCHIVE_EVENT";
     String completeEvent = "ROLE_COMPLETE_EVENT";
     String updateEvent = "ROLE_UPDATE_EVENT";
     String getAssignedCalls="ROLE_GET_ASSIGNED_CALLS";
+    String submitAssignedCalls="ROLE_SUBMIT_ASSIGNED_CALLS";
     String getAllActiveEvents = "ROLE_GET_ALL_ACTIVE_EVENTS";
     String getAllArchivedEvents = "ROLE_GET_ALL_ARCHIVED_EVENTS";
     String getAllCompletedEvents = "ROLE_GET_ALL_COMPLETED_EVENTS";

@@ -25,6 +25,15 @@ public class Calls {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @Column
+    String invitationComment;
+
+    @Column
+    String feedBackComment;
+
+    @Column
+    String notAttendComment;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "event_id", nullable = false)
@@ -48,10 +57,27 @@ public class Calls {
     @OnDelete(action = OnDeleteAction.CASCADE)
     CallType callType;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "network_type_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    NetworkType networkType;
+
     @Column(name = "call_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date time;
+    Date invitationTime;
+
+    @Column(name = "call_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date feedBackTime;
+
+    @Column(name = "call_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date notAttendTime;
+
+
     @Column(name = "call_time_un_editable_before")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

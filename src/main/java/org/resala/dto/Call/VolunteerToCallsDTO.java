@@ -1,8 +1,9 @@
-package org.resala.dto;
+package org.resala.dto.Call;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.dto.Call.CallTypeDTO;
+import org.resala.dto.Call.NetworkTypeDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 public class VolunteerToCallsDTO {
     List<VolunteerDTO> volunteerIds;
-    List<CallTypeDTO> callTypeIds;
+    CallTypeDTO callTypeId;
+    List<NetworkTypeDTO> networkTypeIds;
 
 }
