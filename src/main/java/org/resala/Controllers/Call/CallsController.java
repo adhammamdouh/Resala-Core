@@ -34,17 +34,17 @@ public class CallsController {
         List<VolunteerDTO> volunteers = new ArrayList<>();
         List<NetworkTypeDTO>  calls = new ArrayList<>();
 
-        volunteers=data.getVolunteerIds();
-        calls=data.getNetworkTypeIds();
+        volunteers=data.getVolunteers();
+        calls=data.getNetworkTypes();
 
-        return ResponseEntity.ok(callsService.assignCalls(volunteers,calls,branchId,equality));
+        return ResponseEntity.ok(callsService.assignCalls(branchId,equality,data));
     }
 
     @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+StaticNames.getAssignedCalls+"')")
     public ResponseEntity<Object> getEventAssignCalls(@RequestBody VolunteerToCallsDTO data){
-        VolunteerDTO volunteerDTO = data.getVolunteerIds().get(0);
-        CallTypeDTO callTypeDTO = data.getCallTypeId();
+        VolunteerDTO volunteerDTO = data.getVolunteers().get(0);
+        CallTypeDTO callTypeDTO = data.getCallType();
         return ResponseEntity.ok(callsService.getAssignedCalls(volunteerDTO,callTypeDTO));
     }
 

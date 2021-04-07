@@ -1,16 +1,11 @@
 package org.resala.Service.Call;
 
-import org.aspectj.weaver.ast.Call;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Call.CallType;
-import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Repository.Call.CallTypeRepo;
-import org.resala.Service.CommonService;
 import org.resala.StaticNames;
-import org.resala.dto.Call.CallTypeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,14 +26,14 @@ public class CallTypeService {
     }
 
     public CallType getCallTypeByName(String networkName){
-        Optional<CallType> callTypeOptional = callTypeRepo.findAllByName(networkName);
+        Optional<CallType> callTypeOptional = callTypeRepo.findByName(networkName);
         if(!callTypeOptional.isPresent()){
             throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
         }
         return callTypeOptional.get();
     }
     public CallType getCallTypeById(int id){
-        Optional<CallType> callTypeOptional = callTypeRepo.findAllById(id);
+        Optional<CallType> callTypeOptional = callTypeRepo.findById(id);
         if(!callTypeOptional.isPresent()){
             throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
         }
@@ -59,7 +54,7 @@ public class CallTypeService {
         number=number.substring(0,3);
         switch (number){
             case "010":
-                return getCallTypeByName(StaticNames.vodavone);
+                return getCallTypeByName(StaticNames.vodafone);
             case "011":
                 return getCallTypeByName(StaticNames.etisalat);
             case "012":

@@ -61,7 +61,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
         return eventService.archive(obj);
     }
 
-    @RequestMapping(value = "/completeEvent", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/completeEvent", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + StaticNames.completeEvent + "')")
     public ResponseEntity<Object> complete(@RequestBody EventDTO obj) {
         return eventService.complete(obj);

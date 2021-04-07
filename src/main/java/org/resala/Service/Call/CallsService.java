@@ -1,5 +1,6 @@
 package org.resala.Service.Call;
 
+import org.aspectj.weaver.ast.Call;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
@@ -16,18 +17,16 @@ import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.Call.CallTypeDTO;
 import org.resala.dto.Call.NetworkTypeDTO;
-import org.resala.dto.Event.EventDTO;
+import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class CallsService{
+public class CallsService {
     @Autowired
     NetworkTypeService networkTypeService;
 
@@ -47,34 +46,37 @@ public class CallsService{
     BranchService branchService;
 
 
-    public ResponseEntity<Object> assignCalls(List<VolunteerDTO> volunteerDtoIds ,
-               List<NetworkTypeDTO> networkTypeDtoNames , int branchId , boolean equality) {
+    public ResponseEntity<Object> assignCalls(int branchId, boolean equality, VolunteerToCallsDTO data) {
+
+        List<VolunteerDTO> volunteerDtos = data.getVolunteers();
+        List<NetworkTypeDTO> networkTypeDtos = data.getNetworkTypes();
 
         List<Volunteer> volunteers = new ArrayList<>();
         List<NetworkType> networkType = new ArrayList<>();
-        List<Calls> calls=callsRepo.findAllByBranch_Id(branchId);
+        List<Calls> calls = callsRepo.findAllByBranch_IdAndEvent_id(branchId, data.getEventId());
 
-        for(VolunteerDTO volunteerDTO : volunteerDtoIds) volunteers.add(
-                volunteerService.get(volunteerDTO.getId()));
+        for (VolunteerDTO volunteerDTO : volunteerDtos)
+            volunteers.add(
+                    volunteerService.get(volunteerDTO.getId()));
 
-        for(NetworkTypeDTO networkTypeDTO:networkTypeDtoNames) networkType.add(
-                networkTypeService.getNetworkTypeById(networkTypeDTO.getId()));
+        for (NetworkTypeDTO networkTypeDTO : networkTypeDtos)
+            networkType.add(networkTypeService.getNetworkTypeById(networkTypeDTO.getId()));
 
-        List<Pair<Volunteer,Integer>> counts = new ArrayList<>();
-        for(int i=0;i<volunteers.size();++i) counts.add(i,new Pair(volunteers.get(i),0));
+        List<Pair<Volunteer, Integer>> counts = new ArrayList<>();
+        for (int i = 0; i < volunteers.size(); ++i) counts.add(i, new Pair(volunteers.get(i), 0));
 
-        int callsCounter=calls.size()/volunteers.size();
+        int callsCounter = calls.size() / volunteers.size();
 
-        for(int i=0;i<calls.size();++i){
-            for(int idx =0;idx<networkType.size();++idx){
-                if(calls.get(i).getCallType().equals(networkType.get(idx))){
+        for (int i = 0; i < calls.size(); ++i) {
+            for (int idx = 0; idx < networkType.size(); ++idx) {
+                if (calls.get(i).getCallType().equals(networkType.get(idx))) {
                     calls.get(i).setCaller(volunteers.get(idx));
-                    counts.set(idx,new Pair(counts.get(idx).getKey(),counts.get(idx).getValue()+1));
+                    counts.set(idx, new Pair(counts.get(idx).getKey(), counts.get(idx).getValue() + 1));
                 }
             }
         }
 
-        if(equality) {
+        if (equality) {
             Collections.sort(counts, new Comparator<Pair<Volunteer, Integer>>() {
                 @Override
                 public int compare(Pair<Volunteer, Integer> o1, Pair<Volunteer, Integer> o2) {
@@ -83,18 +85,18 @@ public class CallsService{
             });     //Descending sort
 
 
-            for(var i : counts){
-                System.out.println("volunteer " +i.getKey().getId());
-                System.out.println("count "+i.getValue());
+            for (var i : counts) {
+                System.out.println("volunteer " + i.getKey().getId());
+                System.out.println("count " + i.getValue());
             }
 
-            Pair<Volunteer, Integer> pair= new Pair<>();
+            Pair<Volunteer, Integer> pair = new Pair<>();
             for (Calls call : calls) {
                 boolean changeCaller = false;
                 for (int idx = 0; idx < counts.size(); ++idx) {
                     pair = counts.get(idx);
                     if (call.getCaller().equals(pair.getKey())) {
-                        if (pair.getValue() > callsCounter ) {
+                        if (pair.getValue() > callsCounter) {
                             changeCaller = true;
                             counts.set(idx, new Pair<>(pair.getKey(), pair.getValue() - 1));
                         } else {
@@ -112,7 +114,7 @@ public class CallsService{
             }
         }
 
-        for(Calls call : calls){
+        for (Calls call : calls) {
             callsRepo.save(call);
         }
 
@@ -121,49 +123,51 @@ public class CallsService{
 
 
     public void createCalls(List<BranchDTO> branches, Event event) {
-        List<Volunteer> volunteers=new ArrayList<>();
-        for(BranchDTO branch : branches){
+        List<Volunteer> volunteers = new ArrayList<>();
+        for (BranchDTO branch : branches) {
             volunteers = volunteerService.getVolunteersByBranch(branch.getId());
-            fillCallData(volunteers,event,branch);
+            fillCallData(volunteers, event, branch);
         }
     }
 
-    private void fillCallData(List<Volunteer> volunteers , Event event ,BranchDTO branchDTO) {
-        Branch branch = branchService.modelMapper().map(branchDTO,Branch.class);
-        for(Volunteer volunteer : volunteers){
+    private void fillCallData(List<Volunteer> volunteers, Event event, BranchDTO branchDTO) {
+        Branch branch = branchService.modelMapper().map(branchDTO, Branch.class);
+        for (Volunteer volunteer : volunteers) {
             Calls call = new Calls();
             call.setBranch(branch);
             call.setReceiver(volunteer);
             call.setTimeUnEditableBefore(event.getCallsStartTime());
-            call.setCallType(callTypeService.
-                    getCallTypeBasedOnVolunteerNumber(volunteer.getPhoneNumber()));
+            call.setNetworkType(networkTypeService.
+                    getNetworkTypeBasedOnVolunteerNumber(volunteer.getPhoneNumber()));
             call.setEvent(event);
+
+            call.setCallType(callTypeService.getCallTypeByName(StaticNames.invitation));
             callsRepo.save(call);
         }
 
     }
 
-    public List<Calls> getAssignedCalls(VolunteerDTO volunteerDTO,CallTypeDTO CallTypeDTO){
-        Volunteer volunteer= volunteerService.get(volunteerDTO.getId());
+    public List<Calls> getAssignedCalls(VolunteerDTO volunteerDTO, CallTypeDTO CallTypeDTO) {
+        Volunteer volunteer = volunteerService.get(volunteerDTO.getId());
         CallType callType = callTypeService.getCallTypeByName(CallTypeDTO.getName());
-        return callsRepo.findByCallerAndCallType(volunteer,callType);
+        return callsRepo.findByCallerAndCallType(volunteer, callType);
     }
 
 
-    public void submitAssignedCalls(int callsId, CallTypeDTO callTypeDTO, String comment, CallResult callResult){
-        Calls call=callsRepo.findById(callsId);
-        CallType callType=callTypeService.getCallTypeById(callTypeDTO.getId());
-        switch (callType.getName()){
-            case"invitation":
+    public void submitAssignedCalls(int callsId, CallTypeDTO callTypeDTO, String comment, CallResult callResult) {
+        Calls call = callsRepo.findById(callsId);
+        CallType callType = callTypeService.getCallTypeById(callTypeDTO.getId());
+        switch (callType.getName()) {
+            case StaticNames.invitation:
                 call.setInvitationComment(comment);
                 call.setCallResult(callResult);
                 call.setInvitationTime(new Date(System.currentTimeMillis()));
                 break;
-            case"feedBack":
+            case StaticNames.feedBack:
                 call.setFeedBackComment(comment);
                 call.setFeedBackTime(new Date(System.currentTimeMillis()));
                 break;
-            case"notAttend":
+            case StaticNames.notAttend:
                 call.setNotAttendComment(comment);
                 call.setNotAttendTime(new Date(System.currentTimeMillis()));
                 break;

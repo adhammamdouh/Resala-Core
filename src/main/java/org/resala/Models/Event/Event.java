@@ -78,6 +78,8 @@ public class Event {
             inverseJoinColumns = {@JoinColumn(name = "branch_id", nullable = false)}
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(message = "Branches can't be null")
+    @NotEmpty(message = "Branches can't be empty")
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "branch_id")
     //@JsonIdentityReference(alwaysAsId = true)
     private List<Branch> branches;

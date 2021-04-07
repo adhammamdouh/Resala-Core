@@ -2,7 +2,6 @@ package org.resala.Service.Call;
 
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityNotFoundException;
-import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Repository.Call.NetworkTypeRepo;
 import org.resala.StaticNames;
@@ -55,7 +54,7 @@ public class NetworkTypeService {
         number=number.substring(0,3);
         switch (number){
             case "010":
-                return getNetworkTypeByName(StaticNames.vodavone);
+                return getNetworkTypeByName(StaticNames.vodafone);
             case "011":
                 return getNetworkTypeByName(StaticNames.etisalat);
             case "012":

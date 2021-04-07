@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Capital {
-    @Column(name = "capital_id")
+    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;

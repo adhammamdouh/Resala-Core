@@ -36,6 +36,7 @@ public interface StaticNames {
     String getAllArchivedVolunteersByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllActiveVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
     String getAllArchivedVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+
     String addEvent="ROLE_ADD_EVENT";
     String archiveEvent = "ROLE_ARCHIVE_EVENT";
     String completeEvent = "ROLE_COMPLETE_EVENT";
@@ -51,18 +52,21 @@ public interface StaticNames {
 
     String assignCalls="ROLE_ASSIGN_CALLS";
 
-
-
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
-    String completedSuccessfully = "CompletedSuccessfully";
+    String completedSuccessfully = "Completed Successfully";
     String archivedSuccessfully = "Archived Successfully";
     String updatedSuccessfully = "Updated Successfully";
     String callAssignedSuccessfully="Assigned successfully";
     //----------------------------------------------------------------------------------------------------------------------
     String notFound = "Not Found";
+    //----------------------------------------------------------------------------------------------------------------------
     String etisalat="ETISALAT";
-    String vodavone="VODAVONE";
+    String vodafone ="VODAFONE";
     String orange="ORANGE";
     String we="WE";
+    //----------------------------------------------------------------------------------------------------------------------
+    String invitation="INVITATION";
+    String feedBack="FEEDBACK";
+    String notAttend="NOT_ATTEND";
 }

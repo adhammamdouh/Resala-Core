@@ -58,3 +58,39 @@ INSERT ignore INTO event_status (`id`, `name`) VALUES ('2', 'ARCHIVED');
 INSERT ignore INTO event_status (`id`, `name`) VALUES ('3', 'COMPLETED');
 
 
+INSERT ignore INTO network_type (`id`, `name`) VALUES ('1', 'ETISALAT');
+INSERT ignore INTO network_type (`id`, `name`) VALUES ('2', 'VODAFONE');
+INSERT ignore INTO network_type (`id`, `name`) VALUES ('3', 'ORANGE');
+INSERT ignore INTO network_type (`id`, `name`) VALUES ('4', 'WE');
+
+
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('1', 'INVITATION');
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('2', 'FEEDBACK');
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('3', 'NOT_ATTEND');
+
+
+INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('3', 'الجيزة');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('4', 'شبرا الخيمة	');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('5', 'بور سعيد');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('6', 'السويس');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('7', 'المحلة الكبرى');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('8', 'الاقصر');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('9', 'المنصورة');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('10', 'طنطا');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('11', 'اسيوط');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('12', 'الاسماعيلية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('13', 'الفيوم');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('14', 'الزقازيق');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('15', 'دمياط');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('16', 'اسوان');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('17', 'المنيا');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('18', 'دمنهور');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('19', 'بنى سويف');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('20', 'الغردقة');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('21', 'قنا');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('22', 'سوهاج');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('23', 'شبين الكوم');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('24', 'بنها');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('25', 'العريش');

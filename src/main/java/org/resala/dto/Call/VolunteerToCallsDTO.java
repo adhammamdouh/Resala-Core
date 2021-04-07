@@ -11,8 +11,9 @@ import java.util.List;
 @Setter
 @Getter
 public class VolunteerToCallsDTO {
-    List<VolunteerDTO> volunteerIds;
-    CallTypeDTO callTypeId;
-    List<NetworkTypeDTO> networkTypeIds;
+    int eventId;
+    List<VolunteerDTO> volunteers;
+    CallTypeDTO callType;
+    List<NetworkTypeDTO> networkTypes;
 
 }
