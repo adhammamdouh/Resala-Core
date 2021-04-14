@@ -33,7 +33,7 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
     }
 
     @Override
-    public Role get(int id) {
+    public Role getById(int id) {
         return null;
     }
 

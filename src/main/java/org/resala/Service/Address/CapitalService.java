@@ -35,7 +35,7 @@ public class CapitalService implements CommonCRUDService<CapitalDTO>, CommonServ
     }
 
     @Override
-    public Capital get(int id) {
+    public Capital getById(int id) {
         Optional<Capital> optionalCapital = capitalRepo.findById(id);
         if (!optionalCapital.isPresent())
             throw new MyEntityNotFoundException("Capital "+ StaticNames.notFound);

@@ -1,6 +1,5 @@
 package org.resala.Service.Call;
 
-import org.aspectj.weaver.ast.Call;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
@@ -57,7 +56,7 @@ public class CallsService {
 
         for (VolunteerDTO volunteerDTO : volunteerDtos)
             volunteers.add(
-                    volunteerService.get(volunteerDTO.getId()));
+                    volunteerService.getById(volunteerDTO.getId()));
 
         for (NetworkTypeDTO networkTypeDTO : networkTypeDtos)
             networkType.add(networkTypeService.getNetworkTypeById(networkTypeDTO.getId()));
@@ -148,7 +147,7 @@ public class CallsService {
     }
 
     public List<Calls> getAssignedCalls(VolunteerDTO volunteerDTO, CallTypeDTO CallTypeDTO) {
-        Volunteer volunteer = volunteerService.get(volunteerDTO.getId());
+        Volunteer volunteer = volunteerService.getById(volunteerDTO.getId());
         CallType callType = callTypeService.getCallTypeByName(CallTypeDTO.getName());
         return callsRepo.findByCallerAndCallType(volunteer, callType);
     }

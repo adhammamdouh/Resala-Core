@@ -88,10 +88,11 @@ public class Volunteer implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonBackReference
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -102,7 +103,7 @@ public class Volunteer implements Serializable {
     private User user;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -117,6 +118,7 @@ public class Volunteer implements Serializable {
             joinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "privilege_id", nullable = false)}
     )
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     //@JsonIdentityReference(alwaysAsId = true)
@@ -126,7 +128,7 @@ public class Volunteer implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer",fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<AttendanceStatus> attendanceStatus;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     VolunteerStatus volunteerStatus;

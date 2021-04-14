@@ -2,7 +2,7 @@ package org.resala.Models.Committe;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.resala.Models.Volunteer.ResponsibleVolunteer;
+import org.resala.Models.Volunteer.LeadVolunteer;
 
 import javax.persistence.*;
 
@@ -17,7 +17,7 @@ public class Committee {
     int id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "responsible_volunteer_id")
-    ResponsibleVolunteer responsibleVolunteer;
+    LeadVolunteer leadVolunteer;
     @Column(name = "committee_name")
     String name;
 }

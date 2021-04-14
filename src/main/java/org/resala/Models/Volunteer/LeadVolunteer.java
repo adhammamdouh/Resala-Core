@@ -1,17 +1,20 @@
 package org.resala.Models.Volunteer;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
-@Table(name = "responsible_volunteer")
+@Table(name = "lead_volunteer")
 @Getter
 @Setter
-public class ResponsibleVolunteer {
+public class LeadVolunteer implements Serializable {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,14 +37,12 @@ public class ResponsibleVolunteer {
     String nationalIdUrl;
     @Column(name = "doctor_meeting")
     String doctorMeeting;
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "current_commit_id")
-    Committe committe;*/
-
     @Column(name = "graduation_date")
-    String GraduationDate;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date graduationDate;
     @Column(name = "graduation_number")
-    int GraduationNumber;
+    int graduationNumber;
     @Column(name = "camp_48")
     boolean camp48;
     @Column(name = "graduated")

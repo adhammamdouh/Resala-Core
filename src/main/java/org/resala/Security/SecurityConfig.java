@@ -1,11 +1,13 @@
 package org.resala.Security;
 
+import org.resala.Models.Auth.Response;
 import org.resala.Security.Jwt.AuthEntryPointJwt;
 import org.resala.Security.Filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -49,6 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().fullyAuthenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        /*http
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, e) ->
+                {
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.getWriter().write(new Response(HttpStatus.FORBIDDEN.value(),""));
+                });*/
     }
 
     @Bean

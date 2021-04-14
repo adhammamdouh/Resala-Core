@@ -2,7 +2,7 @@ package org.resala.Models.Committe;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.resala.Models.Volunteer.ResponsibleVolunteer;
+import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Role;
 
 import javax.persistence.*;
@@ -18,7 +18,7 @@ public class PreviousCommittee {
     int id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false,name = "responsible_volunteer_id")
-    ResponsibleVolunteer responsibleVolunteer;
+    LeadVolunteer leadVolunteer;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false,name = "role_id")

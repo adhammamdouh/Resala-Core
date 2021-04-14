@@ -55,8 +55,8 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
         event.setBranches(branches);
         event.setEventStatus(eventStatus);
-        if(dto.isHasCalls()){
-            callsService.createCalls(dto.getBranches(),event);
+        if (dto.isHasCalls()) {
+            callsService.createCalls(dto.getBranches(), event);
         }
         checkConstraintViolations(event);
         eventRepo.save(event);
@@ -65,7 +65,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     @Override
     public ResponseEntity<Object> archive(EventDTO dto) {
-        Event event = get(dto.getId());
+        Event event = getById(dto.getId());
         if (!event.getEventStatus().getName().equals(StaticNames.activeState))
             throw new ActiveStateException("This Event State is " + event.getEventStatus().getName());
         EventStatus eventStatus = eventStatusService.getEventStatus(StaticNames.archivedState);
@@ -75,7 +75,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
     public ResponseEntity<Object> complete(EventDTO dto) {
-        Event event = get(dto.getId());
+        Event event = getById(dto.getId());
         if (!event.getEventStatus().getName().equals(StaticNames.activeState))
             throw new ActiveStateException("This Event State is " + event.getEventStatus().getName());
         EventStatus eventStatus = eventStatusService.getEventStatus(StaticNames.completedState);
@@ -88,7 +88,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     @Override
     public ResponseEntity<Object> update(EventDTO newDto) {
         newDto.checkNull();
-        Event event = get(newDto.getId());
+        Event event = getById(newDto.getId());
         if (!event.getEventStatus().getName().equals(StaticNames.activeState))
             throw new ActiveStateException("This Event State is " + event.getEventStatus().getName());
         List<Branch> branches = branchService.getBranchByIds(
@@ -104,7 +104,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
     @Override
-    public Event get(int id) {
+    public Event getById(int id) {
         Optional<Event> optionalEvent = eventRepo.findById(id);
         if (!optionalEvent.isPresent())
             throw new MyEntityNotFoundException("Event " + StaticNames.notFound);
@@ -120,29 +120,23 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         return eventRepo.findByBranches_id(branchId);
     }
 
-    public List<Event> getAllArchivedEvent() {
-        return eventRepo.findAllByEventStatus_name(StaticNames.archivedState);
+    public List<Event> getAllEventsByState(String state) {
+        return eventRepo.findAllByEventStatus_name(state);
     }
 
-    public List<Event> getAllActiveEvent() {
-        return eventRepo.findAllByEventStatus_name(StaticNames.activeState);
+    public List<Event> getAllEventsByShareableAndEventState(boolean shareable, String eventState) {
+        return eventRepo.findAllByShareableAndEventStatus_Name(shareable, eventState);
     }
 
-    public List<Event> getAllCompletedEvent() {
-        return eventRepo.findAllByEventStatus_name(StaticNames.completedState);
+    public List<Event> getAllEventsByShareableAndBranchIdAndEventState(boolean shareable, int branchId, String eventState) {
+        return eventRepo.findAllByShareableAndEventStatus_NameAndAndBranches_id(shareable, eventState, branchId);
     }
 
-    public List<Event> getAllArchivedEventByBranchId(int branchId) {
-        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, StaticNames.archivedState);
+
+    public List<Event> getAllEventByStateAndBranchId(String state,int branchId) {
+        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, state);
     }
 
-    public List<Event> getAllActiveEventByBranchId(int branchId) {
-        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, StaticNames.activeState);
-    }
-
-    public List<Event> getAllCompletedEventByBranchId(int branchId) {
-        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, StaticNames.completedState);
-    }
 
     public void checkConstraintViolations(Event event) {
         CheckConstraintService.checkConstraintViolations(event, Event.class);

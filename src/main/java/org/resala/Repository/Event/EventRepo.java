@@ -22,5 +22,8 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
     List<Event> findAllByBranches_idAndEventStatus_name(@Param("branch_id") int branchId, String name);
 
 
+    List<Event> findAllByShareableAndEventStatus_NameAndAndBranches_id(boolean isShareable,String name,@Param("branch_id") int branchId);
+    List<Event> findAllByShareableAndEventStatus_Name(boolean isShareable,String name);
     List<Event> findAllByEventStatus_nameAndBranchesIn(String name, List<Branch> branches);
+
 }

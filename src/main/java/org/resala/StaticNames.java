@@ -9,12 +9,11 @@ public interface StaticNames {
     //----------------------------------------------------------------------------------------------------------------------
     String activeState = "ACTIVE";
     String deletedState = "DELETED";
-    String requestedToActiveState ="REQUESTED_TO_ARCHIVE";
+    String requestedToArchiveState ="REQUESTED_TO_ARCHIVE";
     String archivedState = "ARCHIVED";
     String completedState = "COMPLETED";
     //----------------------------------------------------------------------------------------------------------------------
-    String getAllEvents = "ROLE_GET_ALL_EVENTS";
-    String getEventsByMyBranchId = "ROLE_GET_EVENTS_BY_MY_BRANCH_ID";
+
     String getAllVolunteers = "ROLE_GET_ALL_VOLUNTEERS";
     String getAllVolunteersPublicInfo = "ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO";
     String getVolunteersByMyBranchId = "ROLE_GET_VOLUNTEERS_BY_MY_BRANCH_ID";
@@ -37,6 +36,27 @@ public interface StaticNames {
     String getAllActiveVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
     String getAllArchivedVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
 
+
+    String getAllLeadVolunteers = "ROLE_GET_ALL_LEAD_VOLUNTEERS";
+    String getAllLeadVolunteersPublicInfo = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO";
+    String getLeadVolunteersByMyBranchId = "ROLE_GET_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
+    String getLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllActiveLeadVolunteers = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS";
+    String getAllArchivedLeadVolunteers = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS";
+    String getAllActiveLeadVolunteersPublicInfo = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_PUBLIC_INFO";
+    String getAllArchivedLeadVolunteersPublicInfo = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO";
+    String getAllRequestedToArchiveLeadVolunteers = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_LEAD_VOLUNTEERS";
+    String getAllRequestedToArchiveLeadVolunteersPublicInfo ="ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_LEAD_VOLUNTEERS_PUBLIC_INFO" ;
+    String getAllRequestedToArchiveLeadVolunteersByMyBranchId = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
+    String getAllRequestedToArchiveLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllActiveLeadVolunteersByMyBranchId = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
+    String getAllArchivedLeadVolunteersByMyBranchId = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
+    String getAllActiveLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllArchivedLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+
+
+    String getAllEvents = "ROLE_GET_ALL_EVENTS";
+    String getEventsByMyBranchId = "ROLE_GET_EVENTS_BY_MY_BRANCH_ID";
     String addEvent="ROLE_ADD_EVENT";
     String archiveEvent = "ROLE_ARCHIVE_EVENT";
     String completeEvent = "ROLE_COMPLETE_EVENT";
@@ -50,7 +70,15 @@ public interface StaticNames {
     String getAllArchivedEventsByMyBranchId = "ROLE_GET_ALL_ARCHIVED_EVENTS_BY_MY_BRANCH_ID";
     String getAllCompletedEventsByMyBranchId = "ROLE_GET_ALL_COMPLETED_EVENTS_BY_MY_BRANCH_ID";
 
+    String getAllActiveShareableEvents = "ROLE_GET_ALL_Active_Shareable_EVENTS";
+    String getAllActiveShareableEventsByMyBranchId = "ROLE_GET_ALL_Active_Shareable_EVENTS_BY_MY_BRANCH_ID";
+    String getAllCompletedShareableEvents = "ROLE_GET_ALL_Completed_Shareable_EVENTS";
+    String getAllCompletedShareableEventsByMyBranchId = "ROLE_GET_ALL_Completed_Shareable_EVENTS_BY_MY_BRANCH_ID";
+
     String assignCalls="ROLE_ASSIGN_CALLS";
+
+
+
 
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";

@@ -31,19 +31,59 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @RequestMapping(value = "/getAllArchivedEvents", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllArchivedEvents + "')")
     public ResponseEntity<Object> getAllArchived() {
-        return ResponseEntity.ok(new Response(eventService.getAllArchivedEvent(), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByState(StaticNames.archivedState), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getAllActiveEvents", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllActiveEvents + "')")
     public ResponseEntity<Object> getAllActive() {
-        return ResponseEntity.ok(new Response(eventService.getAllActiveEvent(), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByState(StaticNames.activeState), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getAllCompletedEvents", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllCompletedEvents + "')")
     public ResponseEntity<Object> getAllCompleted() {
-        return ResponseEntity.ok(new Response(eventService.getAllCompletedEvent(), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByState(StaticNames.completedState), HttpStatus.OK.value()));
+    }
+
+
+    @RequestMapping(value = "/getAllActiveShareableEvents", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllActiveShareableEvents + "')")
+    public ResponseEntity<Object> getAllActiveShareable() {
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndEventState(true, StaticNames.activeState), HttpStatus.OK.value()));
+    }
+
+    @RequestMapping(value = "/getAllActiveShareableEventsByBranch/{branchId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllActiveShareableEvents + "')")
+    public ResponseEntity<Object> getAllActiveShareableByBranchId(@PathVariable int branchId) {
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventState(true, branchId, StaticNames.activeState), HttpStatus.OK.value()));
+    }
+
+    @RequestMapping(value = "/getAllActiveShareableEventsByBranch", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllActiveShareableEventsByMyBranchId + "')")
+    public ResponseEntity<Object> getAllActiveShareableByMyBranchId() {
+        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventState(true, branchId, StaticNames.activeState), HttpStatus.OK.value()));
+    }
+
+
+    @RequestMapping(value = "/getAllCompletedShareableEvents", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllCompletedShareableEvents + "')")
+    public ResponseEntity<Object> getAllCompletedShareable() {
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndEventState(true, StaticNames.completedState), HttpStatus.OK.value()));
+    }
+
+    @RequestMapping(value = "/getAllCompletedShareableEventsByBranch/{branchId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllCompletedShareableEvents + "')")
+    public ResponseEntity<Object> getAllCompletedShareableByBranchId(@PathVariable int branchId) {
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventState(true, branchId, StaticNames.completedState), HttpStatus.OK.value()));
+    }
+
+    @RequestMapping(value = "/getAllCompletedShareableEventsByBranch", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getAllCompletedShareableEventsByMyBranchId + "')")
+    public ResponseEntity<Object> getAllCompletedShareableByMyBranchId() {
+        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+        return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventState(true, branchId, StaticNames.completedState), HttpStatus.OK.value()));
     }
 
 
@@ -94,7 +134,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @PreAuthorize("hasRole('" + StaticNames.getAllActiveEvents + "')")
     @Override
     public ResponseEntity<Object> getAllActiveByBranchId(@PathVariable int branchId) {
-        return ResponseEntity.ok(new Response(eventService.getAllActiveEventByBranchId(branchId), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.activeState, branchId), HttpStatus.OK.value()));
     }
 
 
@@ -103,7 +143,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @Override
     public ResponseEntity<Object> getAllActiveByMyBranchId() {
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        return ResponseEntity.ok(new Response(eventService.getAllActiveEventByBranchId(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.activeState, Integer.parseInt(branchId)), HttpStatus.OK.value()));
     }
 
 
@@ -111,7 +151,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @PreAuthorize("hasRole('" + StaticNames.getAllArchivedEvents + "')")
     @Override
     public ResponseEntity<Object> getAllArchivedByBranchId(@PathVariable int branchId) {
-        return ResponseEntity.ok(new Response(eventService.getAllArchivedEventByBranchId(branchId), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.archivedState, branchId), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getArchivedEventsByBranch", method = RequestMethod.GET)
@@ -119,14 +159,14 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @Override
     public ResponseEntity<Object> getAllArchivedByMyBranchId() {
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        return ResponseEntity.ok(new Response(eventService.getAllArchivedEventByBranchId(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.archivedState, Integer.parseInt(branchId)), HttpStatus.OK.value()));
     }
 
 
     @RequestMapping(value = "/getCompletedEventsByBranch/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllCompletedEvents + "')")
     public ResponseEntity<Object> getAllCompletedByBranchId(@PathVariable int branchId) {
-        return ResponseEntity.ok(new Response(eventService.getAllCompletedEventByBranchId(branchId), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.completedState, branchId), HttpStatus.OK.value()));
     }
 
 
@@ -134,7 +174,7 @@ public class EventController implements CommonController<EventDTO>, CommonBranch
     @PreAuthorize("hasRole('" + StaticNames.getAllCompletedEventsByMyBranchId + "')")
     public ResponseEntity<Object> getAllCompletedByMyBranchId() {
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        return ResponseEntity.ok(new Response(eventService.getAllCompletedEventByBranchId(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(eventService.getAllEventByStateAndBranchId(StaticNames.completedState, Integer.parseInt(branchId)), HttpStatus.OK.value()));
     }
 
 

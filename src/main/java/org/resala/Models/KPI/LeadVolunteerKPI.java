@@ -4,15 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.resala.Models.Volunteer.ResponsibleVolunteer;
+import org.resala.Models.Volunteer.LeadVolunteer;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "responsible_volunteer_KPI")
+@Table(name = "lead_volunteer_KPI")
 @Getter
 @Setter
-public class ResponsibleVolunteerKPI {
+public class LeadVolunteerKPI {
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class ResponsibleVolunteerKPI {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "responsible_volunteer_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    ResponsibleVolunteer responsibleVolunteer;
+    LeadVolunteer leadVolunteer;
     @Column(name = "present_count")
     int presentCount;
     @Column(name = "ensure_count")

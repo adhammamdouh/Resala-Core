@@ -33,7 +33,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     }
 
     @Override
-    public Privilege get(int id) {
+    public Privilege getById(int id) {
         return null;
     }
 

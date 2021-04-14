@@ -28,7 +28,7 @@ public class BranchService implements CommonCRUDService<BranchDTO>, CommonServic
     }
 
     @Override
-    public Branch get(int id) {
+    public Branch getById(int id) {
         Optional<Branch> optionalBranch = branchRepo.findById(id);
         if (!optionalBranch.isPresent())
             throw new MyEntityNotFoundException("Branch "+ StaticNames.notFound);
