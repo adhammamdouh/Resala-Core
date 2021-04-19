@@ -6,6 +6,7 @@ import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
+import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
@@ -16,6 +17,7 @@ import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
 import org.resala.Service.BranchService;
+import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CheckConstraintService;
 import org.resala.Service.CommonCRUDService;
 import org.resala.Service.CommonService;
@@ -27,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -49,6 +52,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
     private VolunteerStatusService volunteerStatusService;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    NetworkTypeService networkTypeService;
 
     //@Bean
     public ModelMapper modelMapper() {
@@ -65,12 +70,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
         VolunteerStatus volunteerStatus = volunteerStatusService.getVolunteerStatus(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
+        String phoneNumber = dto.getPhoneNumber();
         Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
         volunteer.setBranch(branch);
         volunteer.getAddress().setCapital(capital);
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
         volunteer.setRole(role);
         volunteer.setVolunteerStatus(volunteerStatus);
+        volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
         checkConstraintViolations(volunteer);
         addressService.checkConstraintViolations(volunteer.getAddress());
         volunteerRepo.save(volunteer);
@@ -174,6 +181,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
     }
 
 
+    public List<Volunteer> getAllArchived() {
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState,Volunteer.class);
+    }
+
+    public List<VolunteerPublicInfoProjection> getAllArchivedPublicInfo(){
+        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState,VolunteerPublicInfoProjection.class);
+    }
 
 
 
@@ -182,6 +196,21 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
         branchService.getById(branchId);
         return volunteerRepo.findByBranch_id(branchId,Volunteer.class);
     }
+
+    public List<Volunteer> getVolunteersByBranchAndNetworkType(List<Branch> branches,List<NetworkType> networkTypes) {
+        List<Volunteer> volunteers = new ArrayList<>();
+        for(Branch branch : branches){
+            for(NetworkType networkType : networkTypes){
+                System.out.println("branch is "+branch.getId());
+                System.out.println("network type is " + networkType.getName());
+                volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
+                        (branch,networkType,StaticNames.activeState));
+            }
+        }
+        return volunteers;
+    }
+
+
     public List<VolunteerProjection> getVolunteersProjectionByBranch(int branchId) {
         branchService.getById(branchId);
         return volunteerRepo.findByBranch_id(branchId,VolunteerProjection.class);
@@ -193,6 +222,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
 
 
 
+    public List<Volunteer> getActiveVolunteersByBranch(int branchId) {
+        branchService.getById(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.activeState,branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getActiveVolunteersPublicInfoByBranch(int branchId) {
+        branchService.getById(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.activeState,branchId,VolunteerPublicInfoProjection.class);
+    }
 
     public List<VolunteerProjection> getVolunteersByStateAndBranch(String state,int branchId) {
         branchService.getById(branchId);
@@ -203,6 +240,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO>{
         return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(state,branchId,VolunteerPublicInfoProjection.class);
     }
 
+    public List<Volunteer> getArchivedVolunteersByBranch(int branchId) {
+        branchService.getById(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.archivedState,branchId,Volunteer.class);
+    }
+    public List<VolunteerPublicInfoProjection> getArchivedVolunteersPublicInfoByBranch(int branchId) {
+        branchService.getById(branchId);
+        return volunteerRepo.findAllByVolunteerStatus_nameAndBranch_id(StaticNames.archivedState,branchId,VolunteerPublicInfoProjection.class);
+    }
 
     public void checkConstraintViolations(Volunteer volunteer){
         CheckConstraintService.checkConstraintViolations(volunteer,Volunteer.class);

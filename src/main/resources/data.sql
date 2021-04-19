@@ -31,7 +31,6 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('30', 'ROLE_GET_ALL_COMPLETED
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('31', 'ROLE_GET_ALL_ACTIVE_EVENTS_BY_MY_BRANCH_ID');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('32', 'ROLE_GET_ALL_ARCHIVED_EVENTS_BY_MY_BRANCH_ID');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('33', 'ROLE_GET_ALL_COMPLETED_EVENTS_BY_MY_BRANCH_ID');
-
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('34', 'ROLE_GET_ALL_Active_Shareable_EVENTS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_GET_ALL_Active_Shareable_EVENTS_BY_MY_BRANCH_ID');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('36', 'ROLE_GET_ALL_Completed_Shareable_EVENTS');
@@ -55,8 +54,8 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('52', 'ROLE_GET_ALL_ACTIVE_LE
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('53', 'ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID');
 
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('54', 'ROLE_ASSIGN_CALLS');
-
-
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('55', 'ROLE_GET_ASSIGNED_CALLS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('56', 'ROLE_SUBMIT_ASSIGNED_CALLS');
 
 
 

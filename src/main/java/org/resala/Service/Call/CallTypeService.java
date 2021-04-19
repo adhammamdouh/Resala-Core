@@ -40,31 +40,7 @@ public class CallTypeService {
         return callTypeOptional.get();
     }
 
-    public List<CallType> getCallTypeByNames(List<Integer> ids){
-        List<CallType> callTypes = callTypeRepo.findAllById(ids);
-        if (callTypes.size() != ids.size()) {
-            ids.removeAll(callTypes.stream().map(CallType::getId).collect(toList()));
-            throw new MyEntityNotFoundException("callTypes with id's " + ids + " does not exist");
-        }
-        return callTypes;
 
-    }
 
-    public CallType getCallTypeBasedOnVolunteerNumber(String number){
-        number=number.substring(0,3);
-        switch (number){
-            case "010":
-                return getCallTypeByName(StaticNames.vodafone);
-            case "011":
-                return getCallTypeByName(StaticNames.etisalat);
-            case "012":
-                return getCallTypeByName(StaticNames.orange);
-            case "015":
-                return getCallTypeByName(StaticNames.we);
-            default:
-                throw new MyEntityNotFoundException("wrong phone number");
-        }
-
-    }
 
 }

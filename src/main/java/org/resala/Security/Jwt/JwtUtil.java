@@ -28,7 +28,9 @@ public class JwtUtil {
                 LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
         int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
                 Calendar.AUGUST : Calendar.FEBRUARY;
-
+       /* TokenInfo tokenInfo= new TokenInfo(
+                branchId,authentication.getName(),authentication.getAuthorities(),
+                new Date(year, month, 1),new Date(System.currentTimeMillis()));*/
         return Jwts.builder().setClaims(claims)
                 .setSubject(authentication.getName())
                 .setAudience(authentication.getAuthorities().toString())

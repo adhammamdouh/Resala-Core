@@ -64,6 +64,9 @@ public class Event {
     @NotNull(message = "Please enter if it is shareable or not")
     boolean shareable;
 
+//    @Column
+//    boolean ended=false;
+
     /*@ManyToMany(cascade = CascadeType.ALL, mappedBy = "event")
     List<AttendanceStatus> attendanceStatus;*/
 

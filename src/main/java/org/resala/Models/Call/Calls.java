@@ -34,7 +34,7 @@ public class Calls {
     @Column
     String notAttendComment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "event_id", nullable = false)
     Event event;

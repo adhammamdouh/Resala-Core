@@ -10,5 +10,5 @@ public class SubmitCallDTO {
     int callId;
     CallTypeDTO callTypeDTO;
     String comment;
-    CallResult callResult;
+    CallResultDTO callResultDTO;
 }

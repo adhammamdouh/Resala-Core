@@ -1,5 +1,7 @@
 package org.resala.Repository.Volunteer;
 
+import org.resala.Models.Branch;
+import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     <T> List<T> findByBranch_id(int branchId, Class<T> projection);
+    public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_Name(
+            Branch branches,NetworkType networkTypes,String volunteerStatus);
 
     <T> List<T> findAllBy(Class<T> projection);
 

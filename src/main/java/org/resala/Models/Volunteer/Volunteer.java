@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
+import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.EventAttendStatus.AttendanceStatus;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Privilege.Privilege;
@@ -88,19 +89,22 @@ public class Volunteer implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "branch_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@JsonBackReference
-    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    //@JsonIdentityReference(alwaysAsId = true)
-    public Branch branch;
     @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Branch branch;
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "network_type_id" )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public NetworkType networkType;
+
 
 
     @ManyToOne(fetch = FetchType.EAGER)

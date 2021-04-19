@@ -85,7 +85,8 @@ public interface StaticNames {
     String completedSuccessfully = "Completed Successfully";
     String archivedSuccessfully = "Archived Successfully";
     String updatedSuccessfully = "Updated Successfully";
-    String callAssignedSuccessfully="Assigned successfully";
+    String assignedSuccessfully ="Assigned successfully";
+    String submittedSuccessfully="submitted Successfully";
     //----------------------------------------------------------------------------------------------------------------------
     String notFound = "Not Found";
     //----------------------------------------------------------------------------------------------------------------------

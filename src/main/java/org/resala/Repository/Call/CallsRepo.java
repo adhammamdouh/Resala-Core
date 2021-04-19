@@ -13,7 +13,8 @@ import java.util.List;
 public interface CallsRepo extends JpaRepository<Calls, Integer> {
     List<Calls> findAllByBranch_Id(int id);
     List<Calls> findAllByBranch_IdAndEvent_id(int branchId,int eventId);
-    List<Calls> findByCallerAndCallType(Volunteer volunteer, CallType CallType);
+    <T> List<T> findAllByCaller_IdAndCallType_IdAndEvent_Id
+            (int volunteerId,int CallTypeId,int eventIdn,Class<T> prijection);
 
     //public List<Calls> findByIds(List<Integer> callsId);
     Calls findById(int id);

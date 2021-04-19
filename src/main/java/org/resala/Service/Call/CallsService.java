@@ -1,5 +1,8 @@
 package org.resala.Service.Call;
 
+import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.MyEntityNotFoundException;
+import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
@@ -7,18 +10,20 @@ import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Models.Volunteer.VolunteerAssignedCallsToEvent;
 import org.resala.Pair;
+import org.resala.Projections.Calls.CallsPublicInfoProjection;
 import org.resala.Repository.Call.CallsRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Event.EventService;
+import org.resala.Service.Volunteer.VolunteerAssignedCallsToEventService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
-import org.resala.dto.BranchDTO;
-import org.resala.dto.Call.CallTypeDTO;
-import org.resala.dto.Call.NetworkTypeDTO;
-import org.resala.dto.Call.VolunteerToCallsDTO;
+import org.resala.dto.Call.*;
+import org.resala.dto.Event.EventDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,38 +49,67 @@ public class CallsService {
     @Autowired
     BranchService branchService;
 
+    @Autowired
+    VolunteerAssignedCallsToEventService volunteerAssignedCallsToEventService;
 
-    public ResponseEntity<Object> assignCalls(int branchId, boolean equality, VolunteerToCallsDTO data) {
+    @Autowired
+    CallResultService callResultService;
 
-        List<VolunteerDTO> volunteerDtos = data.getVolunteers();
-        List<NetworkTypeDTO> networkTypeDtos = data.getNetworkTypes();
 
-        List<Volunteer> volunteers = new ArrayList<>();
-        List<NetworkType> networkType = new ArrayList<>();
-        List<Calls> calls = callsRepo.findAllByBranch_IdAndEvent_id(branchId, data.getEventId());
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        return modelMapper;
+    }
 
-        for (VolunteerDTO volunteerDTO : volunteerDtos)
-            volunteers.add(
-                    volunteerService.getById(volunteerDTO.getId()));
 
-        for (NetworkTypeDTO networkTypeDTO : networkTypeDtos)
-            networkType.add(networkTypeService.getNetworkTypeById(networkTypeDTO.getId()));
+    public ResponseEntity<Object> assignCalls(List<VolunteerToCallsDTO> volunteerToCallsDTO) {
 
+        EventDTO eventDTO = volunteerToCallsDTO.get(0).getEvent();
+        for (VolunteerToCallsDTO volunteerDtos : volunteerToCallsDTO) {
+            VolunteerDTO volunteerDTO = volunteerDtos.getVolunteer();
+            List<NetworkTypeDTO> networkTypeDTO = volunteerDtos.getNetworkType();
+
+
+            volunteerAssignedCallsToEventService.update(volunteerDTO, eventDTO, networkTypeDTO);
+        }
+        return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
+    }
+
+    public ResponseEntity<Object> confirmAssignedCalls(boolean balanced ,EventDTO eventDTO) {
+
+        Event event = eventService.getById(eventDTO.getId());
+        List<Branch> branches=event.getBranches();
+
+        List<VolunteerAssignedCallsToEvent> volunteerAssignedCallsToEvents =
+                    volunteerAssignedCallsToEventService.getByEventId(event.getId());
+
+//        System.out.println("volunteerAssignedCallsToEvents size is " + volunteerAssignedCallsToEvents.size());
+//        System.out.println("branch size is "+branches.size());
         List<Pair<Volunteer, Integer>> counts = new ArrayList<>();
-        for (int i = 0; i < volunteers.size(); ++i) counts.add(i, new Pair(volunteers.get(i), 0));
+        List<Calls> calls = new ArrayList<>();
 
-        int callsCounter = calls.size() / volunteers.size();
+        int callersCount=0,callsCount=0;
 
-        for (int i = 0; i < calls.size(); ++i) {
-            for (int idx = 0; idx < networkType.size(); ++idx) {
-                if (calls.get(i).getCallType().equals(networkType.get(idx))) {
-                    calls.get(i).setCaller(volunteers.get(idx));
-                    counts.set(idx, new Pair(counts.get(idx).getKey(), counts.get(idx).getValue() + 1));
-                }
-            }
+        for(VolunteerAssignedCallsToEvent volunteerAssignedCallsToEvent : volunteerAssignedCallsToEvents){
+            Volunteer caller=volunteerAssignedCallsToEvent.getVolunteer();
+//            System.out.println("caller id is " + caller.getId());
+            List<NetworkType> networkType = volunteerAssignedCallsToEvent.getNetworkTypeList();
+//            System.out.println("network type size is " + networkType.size());
+            List<Volunteer> invitedVolunteers = volunteerService.
+                    getVolunteersByBranchAndNetworkType(branches,networkType);
+//            System.out.println("invited volunteers size is " + invitedVolunteers.size());
+            calls.addAll(fillCallData(caller,invitedVolunteers,event));
+
+            callersCount++;
+            callsCount+=invitedVolunteers.size();
+            counts.add(new Pair<>(caller,invitedVolunteers.size()));
         }
 
-        if (equality) {
+
+        int callsCounter = callsCount / callersCount + callersCount;
+
+        if(balanced){
             Collections.sort(counts, new Comparator<Pair<Volunteer, Integer>>() {
                 @Override
                 public int compare(Pair<Volunteer, Integer> o1, Pair<Volunteer, Integer> o2) {
@@ -84,12 +118,7 @@ public class CallsService {
             });     //Descending sort
 
 
-            for (var i : counts) {
-                System.out.println("volunteer " + i.getKey().getId());
-                System.out.println("count " + i.getValue());
-            }
-
-            Pair<Volunteer, Integer> pair = new Pair<>();
+            Pair<Volunteer, Integer> pair;
             for (Calls call : calls) {
                 boolean changeCaller = false;
                 for (int idx = 0; idx < counts.size(); ++idx) {
@@ -103,7 +132,7 @@ public class CallsService {
                         }
                     } else if (changeCaller) {
                         if (pair.getValue() < callsCounter) {
-                            call.setCaller(volunteers.get(idx));
+                            call.setCaller(pair.getKey());
 //                            System.out.println("call "+call.getId() +" caller setted to "+volunteers.get(idx).getId());
                             counts.set(idx, new Pair<>(pair.getKey(), pair.getValue() + 1));
                             break;
@@ -112,55 +141,60 @@ public class CallsService {
                 }
             }
         }
-
-        for (Calls call : calls) {
+//        System.out.println("size is " + calls.size());
+        for(Calls call:calls)
             callsRepo.save(call);
-        }
 
-        return ResponseEntity.ok(StaticNames.callAssignedSuccessfully);
+        return ResponseEntity.ok(new Response(StaticNames.assignedSuccessfully, HttpStatus.OK.value()));
     }
 
 
-    public void createCalls(List<BranchDTO> branches, Event event) {
-        List<Volunteer> volunteers = new ArrayList<>();
-        for (BranchDTO branch : branches) {
-            volunteers = volunteerService.getVolunteersByBranch(branch.getId());
-            fillCallData(volunteers, event, branch);
-        }
-    }
 
-    private void fillCallData(List<Volunteer> volunteers, Event event, BranchDTO branchDTO) {
-        Branch branch = branchService.modelMapper().map(branchDTO, Branch.class);
-        for (Volunteer volunteer : volunteers) {
+    private List<Calls> fillCallData(Volunteer caller , List<Volunteer> receivers, Event event) {
+        List<Calls> calls=new ArrayList<>();
+        for(Volunteer receiver:receivers) {
             Calls call = new Calls();
-            call.setBranch(branch);
-            call.setReceiver(volunteer);
+            call.setBranch(receiver.getBranch());
+            call.setReceiver(receiver);
             call.setTimeUnEditableBefore(event.getCallsStartTime());
             call.setNetworkType(networkTypeService.
-                    getNetworkTypeBasedOnVolunteerNumber(volunteer.getPhoneNumber()));
+                    getNetworkTypeBasedOnVolunteerNumber(receiver.getPhoneNumber()));
+            call.setCaller(caller);
             call.setEvent(event);
-
             call.setCallType(callTypeService.getCallTypeByName(StaticNames.invitation));
-            callsRepo.save(call);
+            calls.add(call);
         }
-
+        return calls;
     }
 
-    public List<Calls> getAssignedCalls(VolunteerDTO volunteerDTO, CallTypeDTO CallTypeDTO) {
-        Volunteer volunteer = volunteerService.getById(volunteerDTO.getId());
-        CallType callType = callTypeService.getCallTypeByName(CallTypeDTO.getName());
-        return callsRepo.findByCallerAndCallType(volunteer, callType);
+    public List<CallsPublicInfoProjection> getAssignedCalls(VolunteerToCallsDTO volunteerToCallsDTO) {
+        Volunteer volunteer = volunteerService.getById(volunteerToCallsDTO.getVolunteer().getId());
+        CallType callType = callTypeService.getCallTypeById(volunteerToCallsDTO.getCallType().getId());
+        Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
+
+//        if(event.isEnded()) throw new MyEntityNotFoundException("this event "+StaticNames.notFound);
+
+        return callsRepo.findAllByCaller_IdAndCallType_IdAndEvent_Id(
+                volunteer.getId(), callType.getId(),event.getId(), CallsPublicInfoProjection.class);
     }
 
 
-    public void submitAssignedCalls(int callsId, CallTypeDTO callTypeDTO, String comment, CallResult callResult) {
-        Calls call = callsRepo.findById(callsId);
+    public ResponseEntity<Object> submitAssignedCalls(SubmitCallDTO submitCallDTO) {
+
+        int callId=submitCallDTO.getCallId();
+        CallTypeDTO callTypeDTO=submitCallDTO.getCallTypeDTO();
+        String comment = submitCallDTO.getComment();
+        CallResultDTO callResultDto = submitCallDTO.getCallResultDTO();
+
+        CallResult callResult = callResultService.getById(callResultDto.getId());
+        Calls call = callsRepo.findById(callId);
         CallType callType = callTypeService.getCallTypeById(callTypeDTO.getId());
         switch (callType.getName()) {
             case StaticNames.invitation:
                 call.setInvitationComment(comment);
                 call.setCallResult(callResult);
                 call.setInvitationTime(new Date(System.currentTimeMillis()));
+                //call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
                 break;
             case StaticNames.feedBack:
                 call.setFeedBackComment(comment);
@@ -174,6 +208,7 @@ public class CallsService {
 
         callsRepo.save(call);
 
+        return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
 
 

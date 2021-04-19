@@ -55,9 +55,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
         event.setBranches(branches);
         event.setEventStatus(eventStatus);
-        if (dto.isHasCalls()) {
-            callsService.createCalls(dto.getBranches(), event);
-        }
+
         checkConstraintViolations(event);
         eventRepo.save(event);
         return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
@@ -132,11 +130,17 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         return eventRepo.findAllByShareableAndEventStatus_NameAndAndBranches_id(shareable, eventState, branchId);
     }
 
+    public List<Event> getAllArchivedEventByBranchId(int branchId) {
+        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, StaticNames.archivedState);
+    }
 
     public List<Event> getAllEventByStateAndBranchId(String state,int branchId) {
         return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, state);
     }
 
+    public List<Event> getAllCompletedEventByBranchId(int branchId) {
+        return eventRepo.findAllByBranches_idAndEventStatus_name(branchId, StaticNames.completedState);
+    }
 
     public void checkConstraintViolations(Event event) {
         CheckConstraintService.checkConstraintViolations(event, Event.class);
