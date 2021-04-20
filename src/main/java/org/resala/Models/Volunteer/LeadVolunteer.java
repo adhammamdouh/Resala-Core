@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.resala.Models.Committe.Committee;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,8 +16,8 @@ import java.util.Date;
 @Getter
 @Setter
 public class LeadVolunteer implements Serializable {
-    @Id
     @Column
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @OneToOne(cascade = CascadeType.ALL)
@@ -36,7 +37,7 @@ public class LeadVolunteer implements Serializable {
     @Column(name = "national_id_url")
     String nationalIdUrl;
     @Column(name = "doctor_meeting")
-    String doctorMeeting;
+    boolean doctorMeeting;
     @Column(name = "graduation_date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -44,9 +45,14 @@ public class LeadVolunteer implements Serializable {
     @Column(name = "graduation_number")
     int graduationNumber;
     @Column(name = "camp_48")
-    boolean camp48;
+    int camp48;
     @Column(name = "graduated")
     boolean graduated;
     @Column(name = "omra")
-    boolean omra;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date omra;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "committe_id")
+    Committee committee;
 }

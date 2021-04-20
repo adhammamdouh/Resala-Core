@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Event {
+public class Event implements Serializable {
     @Column(nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,12 +71,12 @@ public class Event {
     /*@ManyToMany(cascade = CascadeType.ALL, mappedBy = "event")
     List<AttendanceStatus> attendanceStatus;*/
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "eventResult_Id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     EventResult eventResult;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "event_branches",
             joinColumns = {@JoinColumn(name = "event_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "branch_id", nullable = false)}
@@ -87,7 +88,7 @@ public class Event {
     //@JsonIdentityReference(alwaysAsId = true)
     private List<Branch> branches;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     EventStatus eventStatus;

@@ -8,7 +8,7 @@ import org.resala.Models.Call.CallResult;
 @Getter
 public class SubmitCallDTO {
     int callId;
-    CallTypeDTO callTypeDTO;
+    CallTypeDTO callType;
     String comment;
-    CallResultDTO callResultDTO;
+    CallResultDTO callResult;
 }

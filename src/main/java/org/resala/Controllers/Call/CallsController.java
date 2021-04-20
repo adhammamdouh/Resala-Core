@@ -31,14 +31,14 @@ public class CallsController {
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
     public ResponseEntity<Object> assignCalls(@RequestBody List<VolunteerToCallsDTO> volunteerToCallsDTO){
 
-        return ResponseEntity.ok(callsService.assignCalls(volunteerToCallsDTO));
+        return callsService.assignCalls(volunteerToCallsDTO);
     }
 
     @RequestMapping(value = "/confirmAssignedCalls/{balanced}" , method = RequestMethod.POST)/////
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
     public ResponseEntity<Object> confirmAssignCalls(@PathVariable boolean balanced, @RequestBody EventDTO eventDTO){
 
-        return ResponseEntity.ok(callsService.confirmAssignedCalls(balanced, eventDTO));
+        return callsService.confirmAssignedCalls(balanced, eventDTO);
     }
 
     @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.GET)

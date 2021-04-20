@@ -88,9 +88,9 @@ INSERT ignore INTO network_type (`id`, `name`) VALUES ('3', 'ORANGE');
 INSERT ignore INTO network_type (`id`, `name`) VALUES ('4', 'WE');
 
 
-INSERT ignore INTO call_type (`id`, `name`) VALUES ('1', 'INVITATION');
-INSERT ignore INTO call_type (`id`, `name`) VALUES ('2', 'FEEDBACK');
-INSERT ignore INTO call_type (`id`, `name`) VALUES ('3', 'NOT_ATTEND');
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('1', 'دعوه');
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('2', 'تعليق');
+INSERT ignore INTO call_type (`id`, `name`) VALUES ('3', 'مكالمة الاكيد و مجاش');
 
 
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
@@ -118,3 +118,38 @@ INSERT ignore INTO capital (`id`, `name`) VALUES ('22', 'سوهاج');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('23', 'شبين الكوم');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('24', 'بنها');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('25', 'العريش');
+
+
+INSERT ignore INTO branch (`id`, `name`) VALUES ('1', 'حلوان');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('2', 'المعادى');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('3', 'المهندسين');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('4', 'فيصل');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('5', 'مصر الجديدة');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('6', 'مدينة نصر');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('7', 'اكتوبر');
+INSERT ignore INTO branch (`id`, `name`) VALUES ('8', 'الاسكندرية');
+
+
+INSERT ignore INTO committee (`id`, `name`) VALUES ('1', 'اسقف');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('2', 'مياه و بناء');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('3', 'عينى');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('4', 'مجددون');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('5', 'مسنين');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('6', 'اتش ار');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('7', 'تدريب');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('8', 'اتش ار متظوعين');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('9', 'استكشاف');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('10', 'براعم');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('11', 'محو اميه');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('12', 'اطعام');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('13', 'توعيه');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('14', 'دعايا');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('15', 'ميديا');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('16', 'مدير فرع');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('17', 'جوده و تطوير');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('18', 'نائب مدير تنفيذي');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('19', 'مدير تنفيذي');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('20', 'ولاد العم');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('21', 'مدير اداره');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('22', 'موظف');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('23', 'لجنه فنيه');

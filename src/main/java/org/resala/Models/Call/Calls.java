@@ -88,7 +88,7 @@ public class Calls {
     @OnDelete(action = OnDeleteAction.CASCADE)
     CallResult callResult;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
 //    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
 //    @JsonIdentityReference(alwaysAsId = true)

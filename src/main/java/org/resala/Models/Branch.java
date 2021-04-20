@@ -25,9 +25,6 @@ public class Branch implements Serializable {
     @Column(name = "name")
     @NotEmpty(message = "Please Enter Branch Name")
     String name;
-    @Column(name = "region")
-    @NotEmpty(message = "Please Enter Branch Region")
-    String region;
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Volunteer> volunteers;

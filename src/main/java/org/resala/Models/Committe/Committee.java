@@ -15,9 +15,6 @@ public class Committee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "responsible_volunteer_id")
-    LeadVolunteer leadVolunteer;
-    @Column(name = "committee_name")
+    @Column(name = "name")
     String name;
 }

@@ -95,7 +95,7 @@ public interface StaticNames {
     String orange="ORANGE";
     String we="WE";
     //----------------------------------------------------------------------------------------------------------------------
-    String invitation="INVITATION";
-    String feedBack="FEEDBACK";
-    String notAttend="NOT_ATTEND";
+    String invitation="دعوه";
+    String feedBack="تعليق";
+    String notAttend="مكالمة الاكيد و مجاش";
 }

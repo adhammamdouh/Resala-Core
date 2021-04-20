@@ -62,7 +62,7 @@ public class NetworkTypeService {
             case "015":
                 return getNetworkTypeByName(StaticNames.we);
             default:
-                throw new MyEntityNotFoundException("wrong phone number");
+                throw new MyEntityNotFoundException("Invalid phone number");
         }
 
     }

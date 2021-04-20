@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
+import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
@@ -32,13 +33,13 @@ import java.util.List;
         @NamedQuery(name = "Volunteer.findByBranch", query = "SELECT v FROM Volunteer v WHERE v.branch.id = :branch_id")
 })*/
 public class Volunteer implements Serializable {
-    @Column(nullable = false)
+    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     Address address;
     @Column(name = "faculty")
@@ -64,6 +65,7 @@ public class Volunteer implements Serializable {
     String nickName;
     @Column(name = "phone_number")
     @NotEmpty(message = "Please enter Phone Number")
+    @Phone
     String phoneNumber;
     @Column(name = "join_date")
     //@JsonFormat(pattern = "yyyy-MM-dd")
@@ -93,18 +95,17 @@ public class Volunteer implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Branch branch;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "network_type_id" )
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "network_type_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public NetworkType networkType;
-
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -129,10 +130,10 @@ public class Volunteer implements Serializable {
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Privilege> privileges;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<AttendanceStatus> attendanceStatus;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     VolunteerStatus volunteerStatus;

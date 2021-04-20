@@ -25,6 +25,7 @@ import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -79,7 +80,8 @@ public class CallsService {
     public ResponseEntity<Object> confirmAssignedCalls(boolean balanced ,EventDTO eventDTO) {
 
         Event event = eventService.getById(eventDTO.getId());
-        List<Branch> branches=event.getBranches();
+        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+        Branch branch=branchService.getById(branchId);
 
         List<VolunteerAssignedCallsToEvent> volunteerAssignedCallsToEvents =
                     volunteerAssignedCallsToEventService.getByEventId(event.getId());
@@ -97,7 +99,7 @@ public class CallsService {
             List<NetworkType> networkType = volunteerAssignedCallsToEvent.getNetworkTypeList();
 //            System.out.println("network type size is " + networkType.size());
             List<Volunteer> invitedVolunteers = volunteerService.
-                    getVolunteersByBranchAndNetworkType(branches,networkType);
+                    getVolunteersByBranchAndNetworkType(branch,networkType);
 //            System.out.println("invited volunteers size is " + invitedVolunteers.size());
             calls.addAll(fillCallData(caller,invitedVolunteers,event));
 
@@ -168,6 +170,7 @@ public class CallsService {
     }
 
     public List<CallsPublicInfoProjection> getAssignedCalls(VolunteerToCallsDTO volunteerToCallsDTO) {
+        volunteerToCallsDTO.checkNullForGetAssigned();
         Volunteer volunteer = volunteerService.getById(volunteerToCallsDTO.getVolunteer().getId());
         CallType callType = callTypeService.getCallTypeById(volunteerToCallsDTO.getCallType().getId());
         Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
@@ -182,9 +185,9 @@ public class CallsService {
     public ResponseEntity<Object> submitAssignedCalls(SubmitCallDTO submitCallDTO) {
 
         int callId=submitCallDTO.getCallId();
-        CallTypeDTO callTypeDTO=submitCallDTO.getCallTypeDTO();
+        CallTypeDTO callTypeDTO=submitCallDTO.getCallType();
         String comment = submitCallDTO.getComment();
-        CallResultDTO callResultDto = submitCallDTO.getCallResultDTO();
+        CallResultDTO callResultDto = submitCallDTO.getCallResult();
 
         CallResult callResult = callResultService.getById(callResultDto.getId());
         Calls call = callsRepo.findById(callId);
