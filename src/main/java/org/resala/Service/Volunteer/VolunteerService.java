@@ -196,14 +196,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return volunteerRepo.findByBranch_id(branchId, Volunteer.class);
     }
 
-    public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, List<NetworkType> networkTypes) {
+    public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, NetworkType networkType) {
         List<Volunteer> volunteers = new ArrayList<>();
-        for (NetworkType networkType : networkTypes) {
-            System.out.println("branch is " + branch.getId());
-            System.out.println("network type is " + networkType.getName());
+//            System.out.println("branch is " + branch.getId());
+//            System.out.println("network type is " + networkType.getName());
             volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
                     (branch, networkType, StaticNames.activeState));
-        }
+
 
         return volunteers;
     }

@@ -29,7 +29,7 @@ public class CallsController {
 
     @RequestMapping(value = "/assignCalls" , method = RequestMethod.POST)/////
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
-    public ResponseEntity<Object> assignCalls(@RequestBody List<VolunteerToCallsDTO> volunteerToCallsDTO){
+    public ResponseEntity<Object> assignCalls(@RequestBody VolunteerToCallsDTO volunteerToCallsDTO){
 
         return callsService.assignCalls(volunteerToCallsDTO);
     }

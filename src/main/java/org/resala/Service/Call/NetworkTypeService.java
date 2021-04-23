@@ -32,7 +32,7 @@ public class NetworkTypeService {
         return NetworkTypeOptional.get();
     }
 
-    public NetworkType getNetworkTypeById(int id){
+    public NetworkType getById(int id){
         Optional<NetworkType> NetworkTypeOptional = networkTypeRepo.findAllById(id);
         if(!NetworkTypeOptional.isPresent()){
             throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);

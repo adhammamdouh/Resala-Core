@@ -28,14 +28,14 @@ public class CallTypeService {
     public CallType getCallTypeByName(String networkName){
         Optional<CallType> callTypeOptional = callTypeRepo.findByName(networkName);
         if(!callTypeOptional.isPresent()){
-            throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
+            throw new MyEntityNotFoundException("call type "+ StaticNames.notFound);
         }
         return callTypeOptional.get();
     }
     public CallType getCallTypeById(int id){
         Optional<CallType> callTypeOptional = callTypeRepo.findById(id);
         if(!callTypeOptional.isPresent()){
-            throw new MyEntityNotFoundException("network type "+ StaticNames.notFound);
+            throw new MyEntityNotFoundException("call type "+ StaticNames.notFound);
         }
         return callTypeOptional.get();
     }

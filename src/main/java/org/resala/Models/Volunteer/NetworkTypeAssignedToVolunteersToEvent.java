@@ -12,20 +12,20 @@ import java.util.List;
 @Table
 @Setter
 @Getter
-public class VolunteerAssignedCallsToEvent {
+public class NetworkTypeAssignedToVolunteersToEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @ManyToMany()
-    @JoinTable(name = "volunteerAssignedCalls_networkType",
-            joinColumns = {@JoinColumn(name = "VolunteerAssignedCallsToEvent_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "networkType_id", nullable = false)})
-    List<NetworkType> networkTypeList;
+    @JoinTable(name = "network_type_assigned_to_volunteers",
+            joinColumns = {@JoinColumn(name = "NetworkTypeAssignedToVolunteersToEvent_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)})
+    List<Volunteer> volunteers;
 
     @ManyToOne()
-    @JoinColumn(name = "volunteer_id")
-    Volunteer volunteer;
+    @JoinColumn(name = "network_type_id")
+    NetworkType networkType;
 
     @ManyToOne()
     @JoinColumn(name = "event_id")
