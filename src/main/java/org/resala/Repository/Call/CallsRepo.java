@@ -1,5 +1,6 @@
 package org.resala.Repository.Call;
 
+import org.aspectj.weaver.ast.Call;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.Calls;
@@ -19,7 +20,7 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
 
     //public List<Calls> findByIds(List<Integer> callsId);
     Calls findById(int id);
-    int countAllByReceiver(Volunteer volunteer);
-    int countAllByReceiverAndAndCallResultAndRespond(Volunteer receiver, CallResult callResult,boolean respond);
-    int countAllByReceiverAndAndRespond(Volunteer receiver, boolean respond);
+    int countAllByReceiverAndCallResultNotOrCallResultNot(Volunteer volunteer, CallResult callResult, CallResult callResult2);
+    int countAllByReceiverAndCallResult(Volunteer receiver, CallResult callResult);
+    int countAllByReceiver(Volunteer receiver);
 }

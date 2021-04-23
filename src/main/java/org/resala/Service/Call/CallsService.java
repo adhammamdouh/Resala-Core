@@ -247,16 +247,17 @@ public class CallsService {
     }
 
     public int countByReceiver(Volunteer receiver){
-        return callsRepo.countAllByReceiver(receiver);
+        CallResult callResult = callResultService.getByName(StaticNames.didNotAnswer);
+        return callsRepo.countAllByReceiverAndCallResultNotOrCallResultNot(receiver,callResult,null);
     }
 
-    public int countByReceiverAndCallResult(Volunteer receiver,String callResultName,boolean respond){
+    public int countByReceiverAndCallResult(Volunteer receiver,String callResultName){
         CallResult callResult=callResultService.getByName(callResultName);
-        return callsRepo.countAllByReceiverAndAndCallResultAndRespond(receiver,callResult,respond);
+        return callsRepo.countAllByReceiverAndCallResult(receiver,callResult);
     }
 
-    public int countByReceiverAndRespond(Volunteer receiver,boolean respond){
-        return callsRepo.countAllByReceiverAndAndRespond(receiver,respond);
+    public int countByReceiverAndRespond(Volunteer receiver){
+        return callsRepo.countAllByReceiver(receiver);
     }
 
 

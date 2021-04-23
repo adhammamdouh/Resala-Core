@@ -23,7 +23,7 @@ public class VolunteerKPI {
     int ensureCount;
     @Column(name = "response_count",nullable = false)
     int responseCount;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "volunteer_id",nullable = false)
     Volunteer volunteer;
 }

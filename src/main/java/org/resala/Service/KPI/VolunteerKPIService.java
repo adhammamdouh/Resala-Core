@@ -43,9 +43,13 @@ public class VolunteerKPIService {
         }
         int presentCount=eventAttendanceService.countVolunteerAttendance(volunteer,StaticNames.attendedTheEvent);
         int callCount=callsService.countByReceiver(volunteer);
-        int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure,true);
-        int callResponseCount=callsService.countByReceiverAndRespond(volunteer,true);
-        volunteerKPI.setId(0);
+        int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
+        int callResponseCount=callsService.countByReceiverAndRespond(volunteer);
+//        volunteerKPI.setId(0);
+        System.out.println(presentCount);
+        System.out.println(callCount);
+        System.out.println(callEnsureCount);
+        System.out.println(callResponseCount);
         volunteerKPI.setVolunteer(volunteer);
         volunteerKPI.setPresentCount(presentCount);
         volunteerKPI.setCallsCount(callCount);
