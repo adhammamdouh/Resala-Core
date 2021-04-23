@@ -245,20 +245,18 @@ public class CallsService {
 
         return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
-
-    public int countByReceiver(Volunteer receiver){
-        CallResult callResult = callResultService.getByName(StaticNames.didNotAnswer);
-        return callsRepo.countAllByReceiverAndCallResultNotOrCallResultNot(receiver,callResult,null);
+    public int countByReceiverAndDoesNotCalled(Volunteer receiver){
+        CallResult callResult=callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByReceiverAndCallResultNot(receiver,callResult);
     }
-
     public int countByReceiverAndCallResult(Volunteer receiver,String callResultName){
         CallResult callResult=callResultService.getByName(callResultName);
         return callsRepo.countAllByReceiverAndCallResult(receiver,callResult);
     }
-
-    public int countByReceiverAndRespond(Volunteer receiver){
-        return callsRepo.countAllByReceiver(receiver);
+    public int countAllResponseByReceiver(Volunteer receiver){
+        CallResult callResult=callResultService.getByName(StaticNames.didNotAnswer);
+        CallResult callResult2=callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByReceiverAndCallResultNotAndCallResultNot(receiver,callResult,callResult2);
     }
-
 
 }

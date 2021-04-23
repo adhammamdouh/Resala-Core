@@ -2,6 +2,8 @@ package org.resala.Models.KPI;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
@@ -15,13 +17,13 @@ public class VolunteerKPI {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "calls_count",nullable = false)
+    @Column(name = "calls_count", nullable = false)
     int callsCount;
-    @Column(name = "present_count",nullable = false)
+    @Column(name = "present_count", nullable = false)
     int presentCount;
     @Column(name = "ensure_count",nullable = false)
     int ensureCount;
-    @Column(name = "response_count",nullable = false)
+    @Column(name = "response_count", nullable = false)
     int responseCount;
     @OneToOne()
     @JoinColumn(name = "volunteer_id",nullable = false)

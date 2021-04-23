@@ -105,5 +105,6 @@ public interface StaticNames {
     String callEnsure="اكد";
     String callNotEnsure="لم يؤكد";
     String didNotAnswer="لم يرد";
+    String doesNotCalled="لم يتم الاتصال بعد";
 
 }

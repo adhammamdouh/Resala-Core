@@ -8,7 +8,6 @@ import org.resala.Service.Call.CallsService;
 import org.resala.Service.Event.Attendance.EventAttendanceService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
-import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +41,9 @@ public class VolunteerKPIService {
             volunteerKPI=new VolunteerKPI();
         }
         int presentCount=eventAttendanceService.countVolunteerAttendance(volunteer,StaticNames.attendedTheEvent);
-        int callCount=callsService.countByReceiver(volunteer);
+        int callCount=callsService.countByReceiverAndDoesNotCalled(volunteer);
         int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
-        int callResponseCount=callsService.countByReceiverAndRespond(volunteer);
+        int callResponseCount=callsService.countAllResponseByReceiver(volunteer);
 //        volunteerKPI.setId(0);
         System.out.println(presentCount);
         System.out.println(callCount);
