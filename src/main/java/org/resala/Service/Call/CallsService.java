@@ -173,6 +173,7 @@ public class CallsService {
         List<Calls> calls = new ArrayList<>();
         int receiverCount = receivers.size();
         int callsPerCaller = (receiverCount + (callers.size() - 1)) / callers.size();
+        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
 
         for (int receiverIdx = 0, callerIdx = 0; receiverIdx < receiverCount; ++receiverIdx) {
 
@@ -191,6 +192,8 @@ public class CallsService {
             call.setNetworkType(receiver.getNetworkType());
             call.setCaller(caller);
             call.setEvent(event);
+            call.setCallResult(callResult);
+
 //            System.out.println("bte5 tany");
             call.setCallType(callTypeService.getCallTypeByName(StaticNames.invitation));
 //            System.out.println("map contains the caller  " + caller.getId());
