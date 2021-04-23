@@ -246,5 +246,18 @@ public class CallsService {
         return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
 
+    public int countByReceiver(Volunteer receiver){
+        return callsRepo.countAllByReceiver(receiver);
+    }
+
+    public int countByReceiverAndCallResult(Volunteer receiver,String callResultName,boolean respond){
+        CallResult callResult=callResultService.getByName(callResultName);
+        return callsRepo.countAllByReceiverAndAndCallResultAndRespond(receiver,callResult,respond);
+    }
+
+    public int countByReceiverAndRespond(Volunteer receiver,boolean respond){
+        return callsRepo.countAllByReceiverAndAndRespond(receiver,respond);
+    }
+
 
 }

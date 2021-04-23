@@ -20,7 +20,6 @@ import org.resala.Service.BranchService;
 import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CheckConstraintService;
 import org.resala.Service.CommonCRUDService;
-import org.resala.Service.CommonService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.VolunteerDTO;
@@ -200,8 +199,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         List<Volunteer> volunteers = new ArrayList<>();
 //            System.out.println("branch is " + branch.getId());
 //            System.out.println("network type is " + networkType.getName());
-            volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
-                    (branch, networkType, StaticNames.activeState));
+        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
+                (branch, networkType, StaticNames.activeState));
 
 
         return volunteers;
@@ -254,5 +253,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         CheckConstraintService.checkConstraintViolations(volunteer, Volunteer.class);
     }
 
+    public List<Volunteer> getAllNormal() {
+        return volunteerRepo.getAllNormal(Volunteer.class);
+    }
 
 }

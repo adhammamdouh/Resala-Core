@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CallResultRepo extends JpaRepository<CallResult, Integer> {
     Optional<CallResult> getById(int id);
+    Optional<CallResult>getByName(String name);
 }

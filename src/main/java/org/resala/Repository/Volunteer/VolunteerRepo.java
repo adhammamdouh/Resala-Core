@@ -2,6 +2,7 @@ package org.resala.Repository.Volunteer;
 
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
+import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,8 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.user as u WHERE u.userName=:userName")
     Volunteer test(@Param("userName")String userName);//need to be change
     */
-
+    <T>List<T> findAllByLeadVolunteer(LeadVolunteer leadVolunteer,Class<T> projection);
+    default <T>List<T> getAllNormal(Class<T> projection){
+        return findAllByLeadVolunteer(null,projection);
+    }
 }

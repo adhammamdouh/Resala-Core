@@ -8,7 +8,7 @@ import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
-import org.resala.Models.Event.EventAttendStatus.AttendanceStatus;
+import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Privilege.Privilege;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -132,13 +132,15 @@ public class Volunteer implements Serializable {
     private List<Privilege> privileges;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    List<AttendanceStatus> attendanceStatus;
+    List<EventAttendance> eventAttendances;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     VolunteerStatus volunteerStatus;
 
-
+    @OneToOne(mappedBy = "myVolunteerInfo",fetch = FetchType.EAGER)
+    @JsonBackReference
+    LeadVolunteer leadVolunteer;
     public Volunteer() {
     }
 

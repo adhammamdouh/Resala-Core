@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class CallResult {
-    @Column(name = "callResult_id")
+    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "callResult_name")
+    @Column(name = "name")
     String name;
 }

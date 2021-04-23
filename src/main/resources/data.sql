@@ -57,7 +57,7 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('54', 'ROLE_ASSIGN_CALLS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('55', 'ROLE_GET_ASSIGNED_CALLS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('56', 'ROLE_SUBMIT_ASSIGNED_CALLS');
 
-
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('57', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
@@ -92,6 +92,8 @@ INSERT ignore INTO call_type (`id`, `name`) VALUES ('1', 'دعوه');
 INSERT ignore INTO call_type (`id`, `name`) VALUES ('2', 'تعليق');
 INSERT ignore INTO call_type (`id`, `name`) VALUES ('3', 'مكالمة الاكيد و مجاش');
 
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('1', 'اكد');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('2', 'لم يؤكد');
 
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
@@ -153,3 +155,6 @@ INSERT ignore INTO committee (`id`, `name`) VALUES ('20', 'ولاد العم');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('21', 'مدير اداره');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('22', 'موظف');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('23', 'لجنه فنيه');
+
+INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('1', 'حضر');
+INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('2', 'لم يحضر');

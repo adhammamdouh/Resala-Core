@@ -33,7 +33,8 @@ public class Calls {
 
     @Column
     String notAttendComment;
-
+    @Column(columnDefinition = "boolean default false")
+    boolean respond;
     @ManyToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "event_id", nullable = false)

@@ -1,4 +1,4 @@
-package org.resala.Models.Event.EventAttendStatus;
+package org.resala.Models.Event.Attendance;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,10 +6,10 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "attendance_status")
 @Getter
 @Setter
-public class AttendStatus {
+public class AttendanceStatus {
     @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

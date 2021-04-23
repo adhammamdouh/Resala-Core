@@ -77,7 +77,7 @@ public interface StaticNames {
 
     String assignCalls="ROLE_ASSIGN_CALLS";
 
-
+    String makeEventAttendance="ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER";
 
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -98,4 +98,11 @@ public interface StaticNames {
     String invitation="دعوه";
     String feedBack="تعليق";
     String notAttend="مكالمة الاكيد و مجاش";
+    //----------------------------------------------------------------------------------------------------------------------
+    String attendedTheEvent="حضر";
+    String notAttendedTheEvent="لم يحضر";
+    //----------------------------------------------------------------------------------------------------------------------
+    String callEnsure="اكد";
+    String callNotEnsure="لم يؤكد";
+
 }

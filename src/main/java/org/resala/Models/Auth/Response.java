@@ -2,6 +2,7 @@ package org.resala.Models.Auth;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.resala.Service.DateTimeService;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,13 +18,14 @@ public class Response implements Serializable {
     private Object message;
 
     public Response(Object message, int status) {
-        timestamp = LocalDateTime.now();
+        timestamp = DateTimeService.getNow();
         this.status = status;
         this.message = message;
     }
+
     public Response(int status, String error) {
-        timestamp = LocalDateTime.now();
+        timestamp = DateTimeService.getNow();
         this.status = status;
-        this.error=error;
+        this.error = error;
     }
 }

@@ -21,4 +21,11 @@ public class CallResultService {
             throw new MyEntityNotFoundException("call result "+ StaticNames.notFound);
         return callResult.get();
     }
+
+    public CallResult getByName(String callResultName) {
+        Optional<CallResult> callResult= callResultRepo.getByName(callResultName);
+        if(!callResult.isPresent())
+            throw new MyEntityNotFoundException("call result "+ StaticNames.notFound);
+        return callResult.get();
+    }
 }

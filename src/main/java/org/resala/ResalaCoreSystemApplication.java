@@ -4,6 +4,7 @@ import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Repository.Address.AddressRepo;
 import org.resala.Repository.Address.CapitalRepo;
 import org.resala.Repository.UserRepository;
+import org.resala.Service.KPI.VolunteerKPIService;
 import org.resala.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -42,9 +43,11 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     UserRepository userRepository;
     @Autowired
     UserService userService;
-
+    @Autowired
+    VolunteerKPIService volunteerKPIService;
     @Override
     public void run(String... args) throws Exception {
+        volunteerKPIService.generateKPIsForAll();
         //System.out.println(userService.getUser("test").getVolunteer().getPrivileges());
 		/*Volunteer volunteer=new Volunteer();
 		List<Action>actions=new ArrayList<>();
@@ -108,6 +111,7 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
 //        else {
 //            System.out.println(volunteer.getAge());
 //        }
+
     }
 
     @Transactional

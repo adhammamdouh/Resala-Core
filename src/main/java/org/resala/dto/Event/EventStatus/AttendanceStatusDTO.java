@@ -1,9 +1,11 @@
 package org.resala.dto.Event.EventStatus;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AttendanceStatusDTO {
-    long id;
-    long volunteerId;
-    long eventId;
-    String attendStatusId;
-    String comment;
+    int id;
+    String name;
 }
