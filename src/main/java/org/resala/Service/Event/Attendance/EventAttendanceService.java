@@ -65,4 +65,9 @@ public class EventAttendanceService {
         AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceStatusName);
         return eventAttendanceRepo.countAllByVolunteerAndAttendanceStatus(volunteer,attendanceStatus);
     }
+
+    public int countPresentForCaller(Volunteer caller,String attendanceStatusName){
+        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceStatusName);
+        return eventAttendanceRepo.countPresentForLead(caller,attendanceStatus);
+    }
 }

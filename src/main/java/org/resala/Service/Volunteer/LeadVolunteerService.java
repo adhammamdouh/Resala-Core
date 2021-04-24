@@ -13,8 +13,8 @@ public class LeadVolunteerService {
     @Autowired
     LeadVolunteerRepo leadVolunteerRepo;
 
-    public List<LeadVolunteerProjection> getAll() {
-        return leadVolunteerRepo.findAllBy(LeadVolunteerProjection.class);
+    public <T>List<T> getAll(Class<T> projection) {
+        return leadVolunteerRepo.findAllBy(projection);
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllPublicInfo() {

@@ -4,6 +4,8 @@ import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -12,4 +14,9 @@ import java.util.Optional;
 public interface EventAttendanceRepo extends JpaRepository<EventAttendance, Integer> {
     Optional<EventAttendance> findAllByEvent_IdAndAndVolunteer_Id(int eventId, int volunteerId);
     int countAllByVolunteerAndAttendanceStatus(Volunteer volunteer, AttendanceStatus attendanceStatus);
+//    int countAllByAttendanceStatusAndVolunteer_CallerCalls_CallerA(AttendanceStatus attendanceStatus,Volunteer caller);
+    @Query("SELECT count(ea) FROM event_attendance As ea Join fetch Calls As c on " +
+            "ea.event.id = c.event.id and ea.volunteer.id = c.receiver.id  where " +
+            "c.caller= :caller and ea.attendanceStatus= :attendanceStatus")
+    int countPresentForLead(@Param("caller")Volunteer caller, @Param("attendanceStatus")AttendanceStatus attendanceStatus);
 }

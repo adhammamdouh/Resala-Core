@@ -7,6 +7,7 @@ import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
+import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.NetworkTypeAssignedToVolunteersToEvent;
@@ -248,7 +249,7 @@ public class CallsService {
 
         return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
-    public int countByReceiverAndDoesNotCalled(Volunteer receiver){
+    public int countByReceiverAndCalled(Volunteer receiver){
         CallResult callResult=callResultService.getByName(StaticNames.doesNotCalled);
         return callsRepo.countAllByReceiverAndCallResultNot(receiver,callResult);
     }
@@ -261,5 +262,19 @@ public class CallsService {
         CallResult callResult2=callResultService.getByName(StaticNames.doesNotCalled);
         return callsRepo.countAllByReceiverAndCallResultNotAndCallResultNot(receiver,callResult,callResult2);
     }
+
+
+
+
+    public int countByCallerAndCalled(Volunteer caller){
+        CallResult callResult=callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByCallerAndCallResultNot(caller,callResult);
+    }
+
+    public int countByCallerAndCallResult(Volunteer caller, String callResultName) {
+        CallResult callResult=callResultService.getByName(callResultName);
+        return callsRepo.countAllByCallerAndCallResult(caller,callResult);
+    }
+
 
 }

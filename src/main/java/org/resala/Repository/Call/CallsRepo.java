@@ -5,6 +5,7 @@ import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
+import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,8 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
     int countAllByReceiverAndCallResultNotAndCallResultNot(Volunteer volunteer, CallResult callResult, CallResult callResult2);
 
     int countAllByReceiverAndCallResult(Volunteer receiver, CallResult callResult);
+
+    int countAllByCallerAndCallResultNot(Volunteer volunteer, CallResult callResult);
+
+    int countAllByCallerAndCallResult(Volunteer caller, CallResult callResult);
 }

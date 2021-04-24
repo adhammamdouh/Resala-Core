@@ -3,6 +3,7 @@ package org.resala.Controllers.Volunteer;
 import org.resala.Controllers.CommonActiveBranchStateController;
 import org.resala.Controllers.CommonBranchController;
 import org.resala.Models.Auth.Response;
+import org.resala.Projections.LeadVolunteerProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class LeadVolunteerController implements CommonBranchController, CommonAc
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteers + "')")
     public ResponseEntity<Object> getAll() {
-        return ResponseEntity.ok(new Response(leadVolunteerService.getAll(), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerProjection.class), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/getAllPublicInfo", method = RequestMethod.GET)

@@ -1,4 +1,4 @@
-package org.resala.Repository;
+package org.resala.Repository.KPI;
 
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Volunteer.Volunteer;

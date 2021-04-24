@@ -3,7 +3,7 @@ package org.resala.Service.KPI;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Repository.VolunteerKPIRepo;
+import org.resala.Repository.KPI.VolunteerKPIRepo;
 import org.resala.Service.Call.CallsService;
 import org.resala.Service.Event.Attendance.EventAttendanceService;
 import org.resala.Service.Volunteer.VolunteerService;
@@ -41,14 +41,9 @@ public class VolunteerKPIService {
             volunteerKPI=new VolunteerKPI();
         }
         int presentCount=eventAttendanceService.countVolunteerAttendance(volunteer,StaticNames.attendedTheEvent);
-        int callCount=callsService.countByReceiverAndDoesNotCalled(volunteer);
+        int callCount=callsService.countByReceiverAndCalled(volunteer);
         int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
         int callResponseCount=callsService.countAllResponseByReceiver(volunteer);
-//        volunteerKPI.setId(0);
-//        System.out.println(presentCount);
-//        System.out.println(callCount);
-//        System.out.println(callEnsureCount);
-//        System.out.println(callResponseCount);
         volunteerKPI.setVolunteer(volunteer);
         volunteerKPI.setPresentCount(presentCount);
         volunteerKPI.setCallsCount(callCount);
