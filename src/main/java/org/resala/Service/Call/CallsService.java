@@ -7,8 +7,8 @@ import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
-import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Event;
+import org.resala.Models.Event.EventResult;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.NetworkTypeAssignedToVolunteersToEvent;
 import org.resala.Pair;
@@ -249,32 +249,54 @@ public class CallsService {
 
         return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
-    public int countByReceiverAndCalled(Volunteer receiver){
-        CallResult callResult=callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByReceiverAndCallResultNot(receiver,callResult);
-    }
-    public int countByReceiverAndCallResult(Volunteer receiver,String callResultName){
-        CallResult callResult=callResultService.getByName(callResultName);
-        return callsRepo.countAllByReceiverAndCallResult(receiver,callResult);
-    }
-    public int countAllResponseByReceiver(Volunteer receiver){
-        CallResult callResult=callResultService.getByName(StaticNames.didNotAnswer);
-        CallResult callResult2=callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByReceiverAndCallResultNotAndCallResultNot(receiver,callResult,callResult2);
+
+    public int countByReceiverAndCalled(Volunteer receiver) {
+        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByReceiverAndCallResultNot(receiver, callResult);
     }
 
+    public int countByReceiverAndCallResult(Volunteer receiver, String callResultName) {
+        CallResult callResult = callResultService.getByName(callResultName);
+        return callsRepo.countAllByReceiverAndCallResult(receiver, callResult);
+    }
+
+    public int countAllResponseByReceiver(Volunteer receiver) {
+        CallResult callResult = callResultService.getByName(StaticNames.didNotAnswer);
+        CallResult callResult2 = callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByReceiverAndCallResultNotAndCallResultNot(receiver, callResult, callResult2);
+    }
 
 
-
-    public int countByCallerAndCalled(Volunteer caller){
-        CallResult callResult=callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByCallerAndCallResultNot(caller,callResult);
+    public int countByCallerAndCalled(Volunteer caller) {
+        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByCallerAndCallResultNot(caller, callResult);
     }
 
     public int countByCallerAndCallResult(Volunteer caller, String callResultName) {
-        CallResult callResult=callResultService.getByName(callResultName);
-        return callsRepo.countAllByCallerAndCallResult(caller,callResult);
+        CallResult callResult = callResultService.getByName(callResultName);
+        return callsRepo.countAllByCallerAndCallResult(caller, callResult);
     }
 
+
+    public double getResponsePercentageByEventAndBranch(Event event, Branch branch) {
+
+        return countAllCalledByEventAndBranch(event, branch) /
+                (double) countAllByEventAndBranch(event, branch);
+    }
+
+    public int countAllByEventAndBranch(Event event, Branch branch) {
+        return callsRepo.countAllByEventAndBranch(event, branch);
+    }
+
+    public int countAllCalledByEventAndBranch(Event event, Branch branch) {
+        CallResult callResult1 = callResultService.getByName(StaticNames.didNotAnswer);
+        CallResult callResult2 = callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByEventAndBranchAndCallResultNotAndCallResultNot(event, branch, callResult1, callResult2);
+    }
+
+    public int countAllByEventAndBranchAndCallResult(Event event, Branch branch, CallResult callResult) {
+
+        return callsRepo.countAllByEventAndBranchAndCallResult(event, branch, callResult);
+    }
 
 }

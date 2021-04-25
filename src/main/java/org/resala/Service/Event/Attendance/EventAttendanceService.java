@@ -5,6 +5,7 @@ import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Exceptions.NeedToConfirmException;
 import org.resala.Models.Auth.Response;
+import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Attendance.EventAttendance;
@@ -12,6 +13,7 @@ import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Repository.Event.Attendance.EventAttendanceRepo;
 import org.resala.Service.Call.CallResultService;
+import org.resala.Service.Call.CallsService;
 import org.resala.Service.DateTimeService;
 import org.resala.Service.Event.EventService;
 import org.resala.Service.Volunteer.VolunteerService;
@@ -36,6 +38,8 @@ public class EventAttendanceService {
     AttendanceStatusService attendanceStatusService;
     @Autowired
     CallResultService callResultService;
+    @Autowired
+    CallsService callsService;
     private ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -108,4 +112,16 @@ public class EventAttendanceService {
     }
 
 
+    public double getAttendancePercentageByEventAndBranch(Event event, Branch branch) {
+        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(StaticNames.attendedTheEvent);
+        return countAllByEventAndBranch(event,branch,attendanceStatus)/(double)callsService.countAllCalledByEventAndBranch(event,branch);///////////
+    }
+    public int countAllByEventAndBranch(Event event,Branch branch,AttendanceStatus attendanceStatus){
+        return eventAttendanceRepo.countAllByEventAndEvent_BranchesAndAttendanceStatus(event,branch,attendanceStatus);
+    }
+
+
+    public int countAllByEventAndBranchAndCallResult(Event event ,Branch branch,CallResult callResult){
+        return countAllByEventAndBranchAndCallResult(event,branch,callResult);
+    }
 }

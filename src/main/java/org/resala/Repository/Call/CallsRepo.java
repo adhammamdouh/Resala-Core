@@ -1,11 +1,13 @@
 package org.resala.Repository.Call;
 
 import org.aspectj.weaver.ast.Call;
+import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Attendance.AttendanceStatus;
+import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -33,4 +35,8 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
     int countAllByCallerAndCallResultNot(Volunteer volunteer, CallResult callResult);
 
     int countAllByCallerAndCallResult(Volunteer caller, CallResult callResult);
+
+    int countAllByEventAndBranch(Event event, Branch branch);
+    int countAllByEventAndBranchAndCallResult(Event event, Branch branch,CallResult callResult);
+    int countAllByEventAndBranchAndCallResultNotAndCallResultNot(Event event,Branch branch,CallResult callResult1,CallResult callResult2);
 }

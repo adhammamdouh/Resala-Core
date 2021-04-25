@@ -3,6 +3,7 @@ package org.resala.Models.Event;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Models.Branch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,4 +31,10 @@ public class EventResult {
     int presentCount;
     @Column(name = "calls_count")
     int callsCount;
+    @ManyToOne()
+    @JoinColumn(name = "event_id")
+    Event event;
+    @ManyToOne()
+    @JoinColumn(name = "branch_id")
+    Branch branch;
 }
