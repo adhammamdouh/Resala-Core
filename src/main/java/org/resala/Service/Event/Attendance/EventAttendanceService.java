@@ -5,11 +5,13 @@ import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Exceptions.NeedToConfirmException;
 import org.resala.Models.Auth.Response;
+import org.resala.Models.Call.CallResult;
 import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Repository.Event.Attendance.EventAttendanceRepo;
+import org.resala.Service.Call.CallResultService;
 import org.resala.Service.DateTimeService;
 import org.resala.Service.Event.EventService;
 import org.resala.Service.Volunteer.VolunteerService;
@@ -32,7 +34,8 @@ public class EventAttendanceService {
     VolunteerService volunteerService;
     @Autowired
     AttendanceStatusService attendanceStatusService;
-
+    @Autowired
+    CallResultService callResultService;
     private ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -99,7 +102,9 @@ public class EventAttendanceService {
 
     public int countPresentForCaller(Volunteer caller, String attendanceStatusName) {
         AttendanceStatus attendanceStatus = attendanceStatusService.getByName(attendanceStatusName);
-        return eventAttendanceRepo.countPresentForLead(caller, attendanceStatus);
+        CallResult callResult1=callResultService.getByName(StaticNames.didNotAnswer);
+        CallResult callResult2=callResultService.getByName(StaticNames.didNotAnswer);
+        return eventAttendanceRepo.countPresentForLead(caller, attendanceStatus,callResult1,callResult2);
     }
 
 
