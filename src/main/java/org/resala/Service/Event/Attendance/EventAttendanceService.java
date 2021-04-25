@@ -40,15 +40,20 @@ public class EventAttendanceService {
         dto.checkNullForAttendance();
         Event event = eventService.getById(dto.getEvent().getId());
         Volunteer volunteer = volunteerService.getById(dto.getVolunteer().getId());
+        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceName);
         EventAttendance eventAttendance;
         try {
             eventAttendance = getByEventAndVolunteer(event.getId(), volunteer.getId());
+            if(eventAttendance.getAttendanceStatus().getName().equals(attendanceName)){
+
+            }else{//need to confirm
+
+            }
         } catch (MyEntityNotFoundException e) {
             eventAttendance = modelMapper().map(dto, EventAttendance.class);
         }
         eventAttendance.setEvent(event);
         eventAttendance.setVolunteer(volunteer);
-        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceName);
         eventAttendance.setAttendanceStatus(attendanceStatus);
         eventAttendance.setDateTime(DateTimeService.getNow());
         eventAttendanceRepo.save(eventAttendance);

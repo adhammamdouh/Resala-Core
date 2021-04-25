@@ -14,7 +14,6 @@ public class AuthorizePassword {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String pass = "test";
         System.out.println(encoder.encode(pass));
-        VolunteerKPIService volunteerKPIService=new VolunteerKPIService();
-        volunteerKPIService.generateKPIsForAll();
+
     }
 }

@@ -79,6 +79,7 @@ public interface StaticNames {
 
     String makeEventAttendance="ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER";
 
+    String createLeadVolunteer = "ROLE_CREATE_LEAD_VOLUNTEER";
 
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";

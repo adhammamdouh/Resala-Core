@@ -71,6 +71,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
         String phoneNumber = dto.getPhoneNumber();
         Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
+        volunteer.setId(0);
         volunteer.setBranch(branch);
         volunteer.getAddress().setCapital(capital);
         volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
@@ -81,7 +82,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         addressService.checkConstraintViolations(volunteer.getAddress());
         volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
         volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response("Created Successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
     }
 
 

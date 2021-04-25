@@ -59,6 +59,8 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('56', 'ROLE_SUBMIT_ASSIGNED_C
 
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('57', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
 
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('58', 'ROLE_CREATE_LEAD_VOLUNTEER');
+
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('3','TEAM_LEADER');

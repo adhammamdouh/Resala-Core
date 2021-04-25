@@ -18,8 +18,8 @@ public class LeadVolunteerKPI {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "responsible_volunteer_id")
+    @OneToOne()
+    @JoinColumn(name = "lead_volunteer_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     LeadVolunteer leadVolunteer;
     @Column(name = "present_count")

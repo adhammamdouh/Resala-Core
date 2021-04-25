@@ -21,6 +21,12 @@ public class ExceptionHelper {
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "User Name Not Found"), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {MyEntityFoundBeforeException.class})
+    public ResponseEntity<Object> handleEntityNotFoundException(MyEntityFoundBeforeException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = {MyEntityNotFoundException.class})
     public ResponseEntity<Object> handleEntityNotFoundException(MyEntityNotFoundException ex) {
         LOGGER.error(ex.getMessage());

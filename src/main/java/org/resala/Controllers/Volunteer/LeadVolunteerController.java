@@ -4,17 +4,17 @@ import org.resala.Controllers.CommonActiveBranchStateController;
 import org.resala.Controllers.CommonBranchController;
 import org.resala.Models.Auth.Response;
 import org.resala.Projections.LeadVolunteerProjection;
+import org.resala.Projections.LeadVolunteerPublicInfoProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
+import org.resala.dto.Volunteer.LeadVolunteerDTO;
+import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/leadVolunteer")
@@ -31,7 +31,7 @@ public class LeadVolunteerController implements CommonBranchController, CommonAc
     @RequestMapping(value = "/getAllPublicInfo", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteersPublicInfo + "')")
     public ResponseEntity<Object> getAllPublicInfo() {
-        return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfo(), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerPublicInfoProjection.class), HttpStatus.OK.value()));
     }
 
 
@@ -213,5 +213,11 @@ public class LeadVolunteerController implements CommonBranchController, CommonAc
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByBranchAndState(StaticNames.archivedState,Integer.parseInt(branchId)), HttpStatus.OK.value()));
 
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.createLeadVolunteer + "')")
+    public ResponseEntity<Object> add(@RequestBody LeadVolunteerDTO leadVolunteerDTO) {
+        return leadVolunteerService.create(leadVolunteerDTO);
     }
 }

@@ -52,7 +52,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         );
 
         Event event = modelMapper().map(dto, Event.class);
-
+        event.setId(0);
         event.setBranches(branches);
         event.setEventStatus(eventStatus);
 
