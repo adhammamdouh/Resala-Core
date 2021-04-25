@@ -21,10 +21,16 @@ public class ExceptionHelper {
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "User Name Not Found"), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {MyEntityFoundBeforeException.class})
-    public ResponseEntity<Object> handleEntityNotFoundException(MyEntityFoundBeforeException ex) {
+    @ExceptionHandler(value = {NeedToConfirmException.class})
+    public ResponseEntity<Object> handleNeedToConfirmException(NeedToConfirmException ex) {
         LOGGER.error(ex.getMessage());
-        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {MyEntityFoundBeforeException.class})
+    public ResponseEntity<Object> handleEntityFoundException(MyEntityFoundBeforeException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.FOUND.value(), ex.getMessage()), HttpStatus.FOUND);
     }
 
     @ExceptionHandler(value = {MyEntityNotFoundException.class})
@@ -35,7 +41,7 @@ public class ExceptionHelper {
     @ExceptionHandler(value = {ActiveStateException.class})
     public ResponseEntity<Object> handleDeActivateException(ActiveStateException ex) {
         LOGGER.error(ex.getMessage());
-        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Response(HttpStatus.GONE.value(), ex.getMessage()), HttpStatus.GONE);
     }
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
@@ -47,7 +53,7 @@ public class ExceptionHelper {
     @ExceptionHandler(value = {NullException.class})
     public ResponseEntity<Object> handleNullExceptionException(NullException ex) {
         LOGGER.error(ex.getMessage());
-        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Response(HttpStatus.PARTIAL_CONTENT.value(), ex.getMessage()), HttpStatus.PARTIAL_CONTENT);
     }
 
     @ExceptionHandler(value = {BadCredentialsException.class})

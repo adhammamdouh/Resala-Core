@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventAttendanceController {
     @Autowired
     EventAttendanceService eventAttendanceService;
-    @RequestMapping(value = "/attended",method = RequestMethod.PUT)
+    @RequestMapping(value = "/makeAttendance",method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + StaticNames.makeEventAttendance + "')")
-    public ResponseEntity<Object> makeAttendToVolunteer(@RequestBody EventAttendanceDTO eventAttendanceDTO) {
-        return eventAttendanceService.makeAttendToVolunteer(eventAttendanceDTO,StaticNames.attendedTheEvent);
+    public ResponseEntity<Object> makeAttendanceToVolunteer(@RequestBody EventAttendanceDTO eventAttendanceDTO) {
+        return eventAttendanceService.makeAttendanceToVolunteer(eventAttendanceDTO);
     }
-    @RequestMapping(value = "/notAttended",method = RequestMethod.PUT)
+
+    @RequestMapping(value = "/confirmMakeAttendance",method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + StaticNames.makeEventAttendance + "')")
-    public ResponseEntity<Object> makeNotAttendToVolunteer(@RequestBody EventAttendanceDTO eventAttendanceDTO) {
-        return eventAttendanceService.makeAttendToVolunteer(eventAttendanceDTO,StaticNames.notAttendedTheEvent);
+    public ResponseEntity<Object> confirmMakeAttendanceToVolunteer(@RequestBody EventAttendanceDTO eventAttendanceDTO) {
+        return eventAttendanceService.confirmMakeAttendanceToVolunteer(eventAttendanceDTO);
     }
 }

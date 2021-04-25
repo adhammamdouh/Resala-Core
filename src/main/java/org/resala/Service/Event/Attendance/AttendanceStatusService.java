@@ -20,4 +20,10 @@ public class AttendanceStatusService {
             throw new MyEntityNotFoundException("EventAttendance " + StaticNames.notFound);
         return attendanceStatusOptional.get();
     }
+    public AttendanceStatus getById(int id){
+        Optional<AttendanceStatus> attendanceStatusOptional = attendanceStatusRepo.findById(id);
+        if (!attendanceStatusOptional.isPresent())
+            throw new MyEntityNotFoundException("EventAttendance " + StaticNames.notFound);
+        return attendanceStatusOptional.get();
+    }
 }

@@ -30,5 +30,7 @@ public class EventAttendanceDTO {
             throw new NullException("Volunteer");
         if(event==null)
             throw new NullException("Event");
+        if(attendanceStatus==null)
+            throw new NullException("AttendanceStatus");
     }
 }

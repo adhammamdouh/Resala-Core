@@ -1,7 +1,9 @@
 package org.resala.Service.Event.Attendance;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
+import org.resala.Exceptions.NeedToConfirmException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Attendance.EventAttendance;
@@ -18,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -31,23 +32,47 @@ public class EventAttendanceService {
     VolunteerService volunteerService;
     @Autowired
     AttendanceStatusService attendanceStatusService;
+
     private ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         return modelMapper;
     }
-    public ResponseEntity<Object> makeAttendToVolunteer(EventAttendanceDTO dto, String attendanceName) {
+
+    public ResponseEntity<Object> makeAttendanceToVolunteer(EventAttendanceDTO dto) {
         dto.checkNullForAttendance();
         Event event = eventService.getById(dto.getEvent().getId());
         Volunteer volunteer = volunteerService.getById(dto.getVolunteer().getId());
-        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceName);
+        AttendanceStatus attendanceStatus = attendanceStatusService.getById(dto.getAttendanceStatus().getId());
         EventAttendance eventAttendance;
         try {
             eventAttendance = getByEventAndVolunteer(event.getId(), volunteer.getId());
-            if(eventAttendance.getAttendanceStatus().getName().equals(attendanceName)){
+            if (eventAttendance.getAttendanceStatus().getId() == dto.getAttendanceStatus().getId()) {
+                throw new MyEntityFoundBeforeException("Already " + attendanceStatus.getName());
+            } else {//need to confirm
+                throw new NeedToConfirmException("Need To Confirm");
+            }
+        } catch (MyEntityNotFoundException e) {
+            eventAttendance = modelMapper().map(dto, EventAttendance.class);
+        }
+        eventAttendance.setEvent(event);
+        eventAttendance.setVolunteer(volunteer);
+        eventAttendance.setAttendanceStatus(attendanceStatus);
+        eventAttendance.setDateTime(DateTimeService.getNow());
+        eventAttendanceRepo.save(eventAttendance);
+        return ResponseEntity.ok(new Response("Attendance Made Successfully", HttpStatus.OK.value()));
+    }
 
-            }else{//need to confirm
-
+    public ResponseEntity<Object> confirmMakeAttendanceToVolunteer(EventAttendanceDTO dto) {
+        dto.checkNullForAttendance();
+        Event event = eventService.getById(dto.getEvent().getId());
+        Volunteer volunteer = volunteerService.getById(dto.getVolunteer().getId());
+        AttendanceStatus attendanceStatus = attendanceStatusService.getById(dto.getAttendanceStatus().getId());
+        EventAttendance eventAttendance;
+        try {
+            eventAttendance = getByEventAndVolunteer(event.getId(), volunteer.getId());
+            if (eventAttendance.getAttendanceStatus().getId() == dto.getAttendanceStatus().getId()) {
+                throw new MyEntityFoundBeforeException("Already " + attendanceStatus.getName());
             }
         } catch (MyEntityNotFoundException e) {
             eventAttendance = modelMapper().map(dto, EventAttendance.class);
@@ -66,13 +91,16 @@ public class EventAttendanceService {
             throw new MyEntityNotFoundException("EventAttendance " + StaticNames.notFound);
         return eventAttendanceOptional.get();
     }
-    public int countVolunteerAttendance(Volunteer volunteer,String attendanceStatusName){
-        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceStatusName);
-        return eventAttendanceRepo.countAllByVolunteerAndAttendanceStatus(volunteer,attendanceStatus);
+
+    public int countVolunteerAttendance(Volunteer volunteer, String attendanceStatusName) {
+        AttendanceStatus attendanceStatus = attendanceStatusService.getByName(attendanceStatusName);
+        return eventAttendanceRepo.countAllByVolunteerAndAttendanceStatus(volunteer, attendanceStatus);
     }
 
-    public int countPresentForCaller(Volunteer caller,String attendanceStatusName){
-        AttendanceStatus attendanceStatus=attendanceStatusService.getByName(attendanceStatusName);
-        return eventAttendanceRepo.countPresentForLead(caller,attendanceStatus);
+    public int countPresentForCaller(Volunteer caller, String attendanceStatusName) {
+        AttendanceStatus attendanceStatus = attendanceStatusService.getByName(attendanceStatusName);
+        return eventAttendanceRepo.countPresentForLead(caller, attendanceStatus);
     }
+
+
 }
