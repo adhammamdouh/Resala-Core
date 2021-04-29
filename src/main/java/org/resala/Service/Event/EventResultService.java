@@ -53,12 +53,14 @@ public class EventResultService {
             AttendanceStatus attendanceStatus=attendanceStatusService.getByName(StaticNames.attendedTheEvent);
             int percentCount=eventAttendanceService.countAllByEventAndBranch(event,branch,attendanceStatus);
             ///need attracting
+            double attractingPercentage=callsService.getAttractingPercentage(event,branch);
             int callsCount=callsService.countAllCalledByEventAndBranch(event,branch);
             CallResult callResult=callResultService.getByName(StaticNames.callEnsure);
             double ensurePercentage=callsService.countAllByEventAndBranchAndCallResult(event,branch,callResult);
 
             eventResult.setResponsePercentage(responsePercentage);
             eventResult.setAttendancePercentage(attendancePercentage);
+            eventResult.setAttractingPercentage(attractingPercentage);
             eventResult.setPresentCount(percentCount);
             eventResult.setCallsCount(callsCount);
             eventResult.setEnsurePercentage(ensurePercentage);

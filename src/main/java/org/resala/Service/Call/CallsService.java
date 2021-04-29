@@ -299,4 +299,9 @@ public class CallsService {
         return callsRepo.countAllByEventAndBranchAndCallResult(event, branch, callResult);
     }
 
+    public double getAttractingPercentage(Event event, Branch branch) {
+        CallResult callResult = callResultService.getByName(StaticNames.firstTimeCall);
+        return countAllByEventAndBranchAndCallResult(event, branch,callResult) /
+                (double) countAllByEventAndBranch(event, branch);
+    }
 }

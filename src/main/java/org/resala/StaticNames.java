@@ -107,5 +107,6 @@ public interface StaticNames {
     String callNotEnsure="لم يؤكد";
     String didNotAnswer="لم يرد";
     String doesNotCalled="لم يتم الاتصال بعد";
+    String firstTimeCall="اول مره";
 
 }

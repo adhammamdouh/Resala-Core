@@ -17,8 +17,7 @@ public class EventResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "branch_id")
-    int branchId;
+
     @Column(name = "response_percentage")
     double responsePercentage;
     @Column(name = "attendance_percentage")

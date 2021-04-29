@@ -98,6 +98,7 @@ INSERT ignore INTO call_result (`id`, `name`) VALUES ('1', 'اكد');
 INSERT ignore INTO call_result (`id`, `name`) VALUES ('2', 'لم يؤكد');
 INSERT ignore INTO call_result (`id`, `name`) VALUES ('3', 'لم يرد');
 INSERT ignore INTO call_result (`id`, `name`) VALUES ('4', 'لم يتم الاتصال بعد');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('5', 'اول مره');
 
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
