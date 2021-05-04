@@ -3,6 +3,7 @@ package org.resala.Projections;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
+import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Volunteer.VolunteerStatus;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,8 @@ public interface VolunteerProjection {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime getMiniCamp();
+
+    VolunteerKPI getVolunteerKPI();
 
     Branch getBranch();
 

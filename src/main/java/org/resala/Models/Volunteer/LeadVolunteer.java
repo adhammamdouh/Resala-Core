@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Committe.Committee;
+import org.resala.Models.KPI.LeadVolunteerKPI;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -55,4 +56,7 @@ public class LeadVolunteer implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "committe_id")
     Committee committee;
+
+    @OneToOne(mappedBy = "leadVolunteer",fetch = FetchType.EAGER)
+    LeadVolunteerKPI leadVolunteerKPI;
 }

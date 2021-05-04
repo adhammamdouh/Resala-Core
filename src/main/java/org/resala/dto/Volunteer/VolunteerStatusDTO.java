@@ -1,6 +1,11 @@
 package org.resala.dto.Volunteer;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class VolunteerStatusDTO {
-    Long id;
+    int id;
     String name;
 }

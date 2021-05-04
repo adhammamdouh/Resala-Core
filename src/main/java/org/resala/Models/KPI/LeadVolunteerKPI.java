@@ -1,5 +1,6 @@
 package org.resala.Models.KPI;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -19,8 +20,8 @@ public class LeadVolunteerKPI {
     int id;
 
     @OneToOne()
-    @JoinColumn(name = "lead_volunteer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "lead_volunteer_id",nullable = false)
+    @JsonBackReference
     LeadVolunteer leadVolunteer;
     @Column(name = "present_count")
     int presentCount;

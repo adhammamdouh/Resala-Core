@@ -3,11 +3,14 @@ package org.resala.Service.Volunteer;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Models.Auth.Response;
+import org.resala.Models.Branch;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Projections.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.LeadVolunteerRepo;
+import org.resala.Service.BranchService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,10 @@ public class LeadVolunteerService {
     LeadVolunteerRepo leadVolunteerRepo;
     @Autowired
     VolunteerService volunteerService;
+    @Autowired
+    VolunteerStatusService volunteerStatusService;
+    @Autowired
+    BranchService branchService;
 
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -47,20 +54,26 @@ public class LeadVolunteerService {
     }
 
 
-    public List<LeadVolunteerProjection> getAllByBranchAndState(String stateName, int branchId) {
-        return leadVolunteerRepo.findAllByBranchAndState(branchId, stateName, LeadVolunteerProjection.class);
+    public List<LeadVolunteerProjection> getAllByStateAndBranch(int stateId, int branchId) {
+        Branch branch=branchService.getById(branchId);
+        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class);
     }
 
-    public List<LeadVolunteerPublicInfoProjection> getAllPublicInfoByBranchAndState(String stateName, int branchId) {
-        return leadVolunteerRepo.findAllByBranchAndState(branchId, stateName, LeadVolunteerPublicInfoProjection.class);
+    public List<LeadVolunteerPublicInfoProjection> getAllPublicInfoByStateAndBranch(int stateId, int branchId) {
+        Branch branch=branchService.getById(branchId);
+        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class);
     }
 
-    public List<LeadVolunteerProjection> getAllByState(String activeState) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus_Name(activeState, LeadVolunteerProjection.class);
+    public List<LeadVolunteerProjection> getAllByState(int stateId) {
+        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus(volunteerStatus, LeadVolunteerProjection.class);
     }
 
-    public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(String activeState) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus_Name(activeState, LeadVolunteerPublicInfoProjection.class);
+    public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(int stateId) {
+        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus(volunteerStatus, LeadVolunteerPublicInfoProjection.class);
     }
 
     public List<LeadVolunteerProjection> getLeadVolunteersProjectionByBranch(int branchId) {
@@ -71,8 +84,8 @@ public class LeadVolunteerService {
         return leadVolunteerRepo.findByMyVolunteerInfo_Branch_Id(branchId, LeadVolunteerPublicInfoProjection.class);
     }
 
-    public boolean checkFound(Volunteer volunteer){
-        Optional<LeadVolunteer>leadVolunteerOptional=leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
+    public boolean checkFound(Volunteer volunteer) {
+        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
         return leadVolunteerOptional.isPresent();
     }
 

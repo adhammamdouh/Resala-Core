@@ -14,10 +14,17 @@ import java.util.Optional;
 public class VolunteerStatusService{
     @Autowired
     VolunteerStatuesRepo volunteerStatuesRepo;
-    public VolunteerStatus getVolunteerStatus(String name){
+    public VolunteerStatus getByName(String name){
         Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findByName(name);
         if(!volunteerStatusOptional.isPresent())
             throw  new MyEntityNotFoundException(name+" State "+ StaticNames.notFound);
+        return volunteerStatusOptional.get();
+    }
+
+    public VolunteerStatus getById(int id){
+        Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findById(id);
+        if(!volunteerStatusOptional.isPresent())
+            throw  new MyEntityNotFoundException(id+" State "+ StaticNames.notFound);
         return volunteerStatusOptional.get();
     }
 
@@ -27,7 +34,6 @@ public class VolunteerStatusService{
         System.out.println("user name is "+userName);
         if(!volunteerStatusOptional.isPresent())
             throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
-        System.out.println("EEEEEEEEEEEEEEEE");
         return volunteerStatusOptional.get();
     }
 }

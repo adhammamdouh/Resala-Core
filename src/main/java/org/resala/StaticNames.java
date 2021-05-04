@@ -23,25 +23,39 @@ public interface StaticNames {
     String requestToArchiveVolunteer = "ROLE_REQUEST_TO_ARCHIVE_VOLUNTEER";
     String acceptToArchiveVolunteer = "ROLE_ACCEPT_TO_ARCHIVE_VOLUNTEER";
     String declineToArchiveVolunteer = "ROLE_DECLINE_TO_ARCHIVE_VOLUNTEER";
-    String getAllActiveVolunteers = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS";
+
+    String getAllVolunteersByState="ROLE_GET_ALL_VOLUNTEERS_BY_STATUS";
+    String getAllVolunteersPublicInfoByState="ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO_BY_STATUS";
+
+    /*String getAllActiveVolunteers = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS";
     String getAllArchivedVolunteers = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS";
     String getAllActiveVolunteersPublicInfo = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO";
     String getAllArchivedVolunteersPublicInfo = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO";
     String getAllRequestedToArchiveVolunteers = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS";
-    String getAllRequestedToArchiveVolunteersPublicInfo ="ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS_PUBLIC_INFO" ;
-    String getAllRequestedToArchiveVolunteersByMyBranchId = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS_BY_MY_BRANCH_ID";
+    String getAllRequestedToArchiveVolunteersPublicInfo ="ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS_PUBLIC_INFO" ;*/
+
+    String getAllVolunteersByStateAndMyBranch="ROLE_GET_ALL_VOLUNTEERS_BY_STATUS_AND_MY_BRANCH";
+    String getAllVolunteersPublicInfoByStateAndMyBranch="ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO_BY_STATUS_AND_MY_BRANCH";
+
+    /*String getAllRequestedToArchiveVolunteersByMyBranchId = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllRequestedToArchiveVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_REQUESTED_TO_ARCHIVE_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
     String getAllActiveVolunteersByMyBranchId = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllArchivedVolunteersByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllActiveVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
-    String getAllArchivedVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllArchivedVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";*/
 
 
     String getAllLeadVolunteers = "ROLE_GET_ALL_LEAD_VOLUNTEERS";
     String getAllLeadVolunteersPublicInfo = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO";
     String getLeadVolunteersByMyBranchId = "ROLE_GET_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
-    String getAllActiveLeadVolunteers = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS";
+
+    String getAllLeadVolunteersByState="ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE";
+    String getAllLeadVolunteersPublicInfoByState="ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE";
+    String getAllLeadVolunteersByStateAndMyBranchId = "ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH_ID";
+    String getAllLeadVolunteersPublicInfoByStateAndMyBranchId = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH_ID";
+
+    /*String getAllActiveLeadVolunteers = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS";
     String getAllArchivedLeadVolunteers = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS";
     String getAllActiveLeadVolunteersPublicInfo = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_PUBLIC_INFO";
     String getAllArchivedLeadVolunteersPublicInfo = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO";
@@ -52,7 +66,7 @@ public interface StaticNames {
     String getAllActiveLeadVolunteersByMyBranchId = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllArchivedLeadVolunteersByMyBranchId = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID";
     String getAllActiveLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
-    String getAllArchivedLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllArchivedLeadVolunteersPublicInfoByMyBranchId = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";*/
 
 
     String getAllEvents = "ROLE_GET_ALL_EVENTS";

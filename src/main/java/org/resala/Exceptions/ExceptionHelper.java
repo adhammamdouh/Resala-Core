@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,11 +16,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHelper.class);
 
-    @ExceptionHandler(value = {UsernameNotFoundException.class})
+    /*@ExceptionHandler(value = {UsernameNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException ex) {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "User Name Not Found"), HttpStatus.NOT_FOUND);
-    }
+    }*/
 
     @ExceptionHandler(value = {NeedToConfirmException.class})
     public ResponseEntity<Object> handleNeedToConfirmException(NeedToConfirmException ex) {
@@ -56,8 +57,8 @@ public class ExceptionHelper {
         return new ResponseEntity<>(new Response(HttpStatus.PARTIAL_CONTENT.value(), ex.getMessage()), HttpStatus.PARTIAL_CONTENT);
     }
 
-    @ExceptionHandler(value = {BadCredentialsException.class})
-    public ResponseEntity<Object> handleBadCredentialException(BadCredentialsException ex) {
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public ResponseEntity<Object> handleBadCredentialException(AuthenticationException ex) {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Wrong User Name Or Password"), HttpStatus.BAD_REQUEST);
     }

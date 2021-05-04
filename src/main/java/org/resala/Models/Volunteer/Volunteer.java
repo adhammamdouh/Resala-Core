@@ -89,7 +89,7 @@ public class Volunteer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime miniCamp;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "volunteer")
+    @OneToOne(mappedBy = "volunteer")
     VolunteerKPI volunteerKPI;
 
     @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)
@@ -139,6 +139,7 @@ public class Volunteer implements Serializable {
     @JoinColumn(name = "volunteer_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     VolunteerStatus volunteerStatus;
+
 
     @OneToOne(mappedBy = "myVolunteerInfo",fetch = FetchType.EAGER)
     @JsonBackReference

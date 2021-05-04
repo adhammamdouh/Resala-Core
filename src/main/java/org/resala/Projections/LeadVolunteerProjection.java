@@ -1,13 +1,14 @@
 package org.resala.Projections;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.resala.Models.Committe.Committee;
+import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.Volunteer;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.Date;
 
 public interface LeadVolunteerProjection {
     int getId();
@@ -19,13 +20,12 @@ public interface LeadVolunteerProjection {
     String getDreams();
     String getNationalIdUrl();
     String getDoctorMeeting();
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "current_commit_id")
-    Committe committe;*/
 
     String getGraduationDate();
     int getGraduationNumber();
-    boolean getCamp48();
+    int getCamp48();
     boolean getGraduated();
-    boolean getOmra();
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date getOmra();
+    LeadVolunteerKPI getLeadVolunteerKPI();
 }
