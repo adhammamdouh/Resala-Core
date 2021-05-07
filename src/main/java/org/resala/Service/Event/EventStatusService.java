@@ -15,10 +15,16 @@ import java.util.Optional;
 public class EventStatusService {
     @Autowired
     EventStatusRepo eventStatusRepo;
-    public EventStatus getEventStatus(String name){
+    public EventStatus getEventStatusByName(String name){
         Optional<EventStatus> eventStatus=eventStatusRepo.findByName(name);
         if(!eventStatus.isPresent())
             throw  new MyEntityNotFoundException(name+" State "+ StaticNames.notFound);
+        return eventStatus.get();
+    }
+    public EventStatus getEventStatusById(int id){
+        Optional<EventStatus> eventStatus=eventStatusRepo.findById(id);
+        if(!eventStatus.isPresent())
+            throw  new MyEntityNotFoundException(id+" State "+ StaticNames.notFound);
         return eventStatus.get();
     }
 }

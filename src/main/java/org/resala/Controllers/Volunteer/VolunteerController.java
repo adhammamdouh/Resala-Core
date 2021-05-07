@@ -2,8 +2,6 @@ package org.resala.Controllers.Volunteer;
 
 
 import org.resala.Controllers.AuthorizeController;
-import org.resala.Controllers.CommonActiveBranchStateController;
-import org.resala.Controllers.CommonBranchController;
 import org.resala.Controllers.CommonController;
 import org.resala.Models.Auth.Response;
 import org.resala.Service.Volunteer.VolunteerService;
@@ -28,7 +26,7 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "') or hasRole('" + StaticNames.getAllVolunteersPublicInfo + "')" +
-            "or hasRole('" + StaticNames.getVolunteersByMyBranchId + "') or hasRole('" + StaticNames.getVolunteersPublicInfoByMyBranchId + "')")
+            "or hasRole('" + StaticNames.getVolunteersByMyBranchId + "') or hasRole('" + StaticNames.getVolunteersPublicInfoByMyBranch + "')")
     @Override
     public ResponseEntity<Object> getAll() {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();

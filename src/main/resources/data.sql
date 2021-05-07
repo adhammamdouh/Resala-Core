@@ -1,7 +1,7 @@
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('1', 'ROLE_GET_ALL_VOLUNTEERS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('2', 'ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('3', 'ROLE_GET_VOLUNTEERS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('4', 'ROLE_GET_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('4', 'ROLE_GET_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('5', 'ROLE_CREATE_VOLUNTEER');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('6', 'ROLE_UPDATE_VOLUNTEER');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('7', 'ROLE_REQUEST_TO_ARCHIVE_VOLUNTEER');
@@ -14,42 +14,36 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('12', 'ROLE_GET_ALL_VOLUNTEER
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('13', 'ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO_BY_STATUS_AND_MY_BRANCH');
 
 
-
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('14', 'ROLE_GET_ALL_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('15', 'ROLE_GET_EVENTS_BY_MY_BRANCH_ID');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('15', 'ROLE_GET_EVENTS_BY_MY_BRANCH');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('16', 'ROLE_ADD_EVENT');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('17', 'ROLE_ARCHIVE_EVENT');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('18', 'ROLE_COMPLETE_EVENT');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('19', 'ROLE_UPDATE_EVENT');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('20', 'ROLE_GET_ALL_ACTIVE_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('21', 'ROLE_GET_ALL_ARCHIVED_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('22', 'ROLE_GET_ALL_COMPLETED_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('23', 'ROLE_GET_ALL_ACTIVE_EVENTS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('24', 'ROLE_GET_ALL_ARCHIVED_EVENTS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('25', 'ROLE_GET_ALL_COMPLETED_EVENTS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('26', 'ROLE_GET_ALL_Active_Shareable_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('27', 'ROLE_GET_ALL_Active_Shareable_EVENTS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('28', 'ROLE_GET_ALL_Completed_Shareable_EVENTS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('29', 'ROLE_GET_ALL_Completed_Shareable_EVENTS_BY_MY_BRANCH_ID');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('30', 'ROLE_GET_ALL_LEAD_VOLUNTEERS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('31', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('32', 'ROLE_GET_LEAD_VOLUNTEERS_BY_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('33', 'ROLE_GET_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('20', 'ROLE_GET_All_EVENTS_BY_STATE');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('21', 'ROLE_GET_All_SHAREABLE_EVENTS_BY_STATE');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('22', 'ROLE_GET_All_EVENTS_BY_STATE_AND_MY_BRANCH');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('23', 'ROLE_GET_All_SHAREABLE_EVENTS_BY_STATE_AND_MY_BRANCH');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('34', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('24', 'ROLE_GET_ALL_LEAD_VOLUNTEERS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('25', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('26', 'ROLE_GET_LEAD_VOLUNTEERS_BY_MY_BRANCH');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('27', 'ROLE_GET_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('36', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH_ID');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('37', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH_ID');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('28', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('29', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('38', 'ROLE_ASSIGN_CALLS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('39', 'ROLE_GET_ASSIGNED_CALLS');
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('40', 'ROLE_SUBMIT_ASSIGNED_CALLS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('30', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('31', 'ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('41', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('32', 'ROLE_ASSIGN_CALLS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('33', 'ROLE_GET_ASSIGNED_CALLS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('34', 'ROLE_SUBMIT_ASSIGNED_CALLS');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('42', 'ROLE_CREATE_LEAD_VOLUNTEER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
+
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_CREATE_LEAD_VOLUNTEER');
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
