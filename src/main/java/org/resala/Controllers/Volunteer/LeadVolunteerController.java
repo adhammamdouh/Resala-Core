@@ -1,9 +1,7 @@
 package org.resala.Controllers.Volunteer;
 
 import org.resala.Controllers.AuthorizeController;
-import org.resala.Controllers.CommonActiveBranchStateController;
 import org.resala.Models.Auth.Response;
-import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Projections.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteerPublicInfoProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
@@ -28,15 +26,13 @@ public class LeadVolunteerController {
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteers + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfo + "')" +
-            "or hasRole('" + StaticNames.getLeadVolunteersByMyBranchId + "') or hasRole('" + StaticNames.getLeadVolunteersPublicInfoByMyBranchId + "')")
+            "or hasRole('" + StaticNames.getLeadVolunteersByMyBranchId + "') or hasRole('" + StaticNames.getLeadVolunteersPublicInfoByMyBranch + "')")
     public ResponseEntity<Object> getAll() {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteers, authorities)){
-            System.out.println("Zzzz");
             return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerProjection.class), HttpStatus.OK.value()));
-
         }
-        else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteers, authorities))
+        else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfo, authorities))
             return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerPublicInfoProjection.class), HttpStatus.OK.value()));
 
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
@@ -55,7 +51,7 @@ public class LeadVolunteerController {
 
     @RequestMapping(value = "/getAllByState", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteersByState + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByState + "')" +
-            "or hasRole('" + StaticNames.getAllLeadVolunteersByStateAndMyBranchId + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByStateAndMyBranchId + "')")
+            "or hasRole('" + StaticNames.getAllLeadVolunteersByStateAndMyBranch + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByStateAndMyBranch + "')")
     public ResponseEntity<Object> getAllActive(@RequestBody VolunteerStatusDTO volunteerStatusDTO) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByState, authorities))
@@ -64,7 +60,7 @@ public class LeadVolunteerController {
             return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStatePublicInfo(volunteerStatusDTO.getId()), HttpStatus.OK.value()));
 
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByStateAndMyBranchId, authorities))
+        if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByStateAndMyBranch, authorities))
             return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));
         else
             return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));

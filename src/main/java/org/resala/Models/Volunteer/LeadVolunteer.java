@@ -11,6 +11,7 @@ import org.resala.Models.KPI.LeadVolunteerKPI;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "lead_volunteer")
@@ -57,6 +58,8 @@ public class LeadVolunteer implements Serializable {
     @JoinColumn(name = "committe_id")
     Committee committee;
 
-    @OneToOne(mappedBy = "leadVolunteer",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "leadVolunteer")
     LeadVolunteerKPI leadVolunteerKPI;
+
+
 }

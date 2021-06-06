@@ -19,10 +19,7 @@ public class LeadVolunteerKPI {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @OneToOne()
-    @JoinColumn(name = "lead_volunteer_id",nullable = false)
-    @JsonBackReference
-    LeadVolunteer leadVolunteer;
+
     @Column(name = "present_count")
     int presentCount;
     @Column(name = "ensure_count")
@@ -30,4 +27,8 @@ public class LeadVolunteerKPI {
     @Column(name = "calls_count")
     int callsCount;
 
+    @OneToOne()
+    @JoinColumn(name = "lead_volunteer_id",nullable = false)
+    @JsonBackReference
+    LeadVolunteer leadVolunteer;
 }

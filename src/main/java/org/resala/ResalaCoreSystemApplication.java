@@ -43,7 +43,7 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //volunteerKPIService.generateKPIsForAll();
-        leadVolunteerKPIService.generateKPIsForAll();
+//        leadVolunteerKPIService.generateKPIsForAll();
     }
 
     @Transactional

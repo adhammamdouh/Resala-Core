@@ -7,6 +7,7 @@ import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Projections.VolunteerProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     <T> List<T> findByBranch_id(int branchId, Class<T> projection);
     public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_Name(
             Branch branches,NetworkType networkTypes,String volunteerStatus);
-
+    @Query("SELECT v \n" +
+            "FROM Volunteer v")
     <T> List<T> findAllBy(Class<T> projection);
 
     Optional<Volunteer> findByUser_UserName(String userName);

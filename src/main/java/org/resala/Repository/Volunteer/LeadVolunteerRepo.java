@@ -5,13 +5,16 @@ import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface LeadVolunteerRepo extends JpaRepository<LeadVolunteer, Integer> {
-
+    @Query("SELECT l \n" +
+            "FROM LeadVolunteer l")
     <T> List<T> findAllBy(Class<T> projection);
+
     <T> List<T> findByMyVolunteerInfo_BranchAndMyVolunteerInfo_VolunteerStatus(Branch branch, VolunteerStatus volunteerStatus, Class<T> projection);
 
     default  <T> List<T>findAllByBranchAndState(Branch branch, VolunteerStatus volunteerStatus,Class<T> projection){
