@@ -61,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             }
             username = jwtUtil.extractUserName(jwt);
-            id = jwtUtil.extractId(jwt);
+            id = jwtUtil.extractBranchId(jwt);
             actions = jwtUtil.extractAuthorities(jwt);
             for (String action : actions) {
                 //System.out.println(action);

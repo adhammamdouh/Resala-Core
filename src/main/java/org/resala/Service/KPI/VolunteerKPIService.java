@@ -43,6 +43,7 @@ public class VolunteerKPIService {
         int callCount=callsService.countByReceiverAndCalled(volunteer);
         int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
         int callResponseCount=callsService.countAllResponseByReceiver(volunteer);
+
         volunteerKPI.setVolunteer(volunteer);
         volunteerKPI.setPresentCount(presentCount);
         volunteerKPI.setCallsCount(callCount);

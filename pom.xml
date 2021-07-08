@@ -8,6 +8,7 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>org.resala</groupId>
     <artifactId>ResalaCoreSystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -16,7 +17,10 @@
 
     <properties>
         <java.version>11</java.version>
+        <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
+        <azure.functions.maven.plugin.version>1.11.0</azure.functions.maven.plugin.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -33,6 +37,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -68,6 +73,7 @@
             <version>5.2.4.Final</version>
         </dependency>
         -->
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -145,8 +151,11 @@
 
     </dependencies>
 
-    <build>
 
+
+    </dependencies>
+
+    <build>
 
         <plugins>
 

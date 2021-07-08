@@ -1,7 +1,10 @@
 package org.resala.Security.Jwt;
 
 import io.jsonwebtoken.*;
+import org.resala.Exceptions.TokenException;
 import org.resala.Models.MyUserDetails;
+import org.resala.StaticNames;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -43,7 +46,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         String userName = extractUserName(token);
         List<String> authorities = extractAuthorities(token);
-        String role = extractId(token);
+        String role = extractBranchId(token);
         Date expirationDate = extractExpirationDate(token);
         if (userName == null || role == null || authorities == null || expirationDate.before(new Date()))
             return false;
@@ -63,7 +66,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractId(String token) {
+    public String extractBranchId(String token) {
         return extractClaim(token, Claims::getIssuer);
     }
 
@@ -86,7 +89,12 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_CODE).parseClaimsJws(token).getBody();
+//        try {
+            return Jwts.parser().setSigningKey(SECRET_CODE).parseClaimsJws(token).getBody();
+//        }
+//        catch (Exception e){
+//            throw new TokenException(StaticNames.invalidToken);
+//        }
     }
 
 }

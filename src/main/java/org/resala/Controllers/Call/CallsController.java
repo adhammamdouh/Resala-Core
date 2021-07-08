@@ -1,15 +1,13 @@
 package org.resala.Controllers.Call;
 
 import org.resala.Models.Call.CallResult;
+import org.resala.Models.Call.Calls;
 import org.resala.Service.Call.CallsService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
-import org.resala.dto.Call.CallTypeDTO;
-import org.resala.dto.Call.NetworkTypeDTO;
-import org.resala.dto.Call.SubmitCallDTO;
+import org.resala.dto.Call.*;
 import org.resala.dto.Event.EventDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
-import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,16 +41,16 @@ public class CallsController {
 
     @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+StaticNames.getAssignedCalls+"')")
-    public ResponseEntity<Object> getEventAssignCalls(@RequestBody VolunteerToCallsDTO volunteerToCallsDTO){
-        return ResponseEntity.ok(callsService.getAssignedCalls(volunteerToCallsDTO));
+    public ResponseEntity<Object> getEventAssignCalls(@RequestBody CallsDTO callsDTO){
+        return ResponseEntity.ok(callsService.getAssignedCalls(callsDTO));
     }
 
 
     @RequestMapping(value = "/submitAssignedCalls",method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+StaticNames.submitAssignedCalls+"')")
-    public ResponseEntity<Object> submitAssignedCalls(@RequestBody SubmitCallDTO submitCallDTO){
+    public ResponseEntity<Object> submitAssignedCalls(@RequestBody CallsDTO callsDTO){
 
-        return callsService.submitAssignedCalls(submitCallDTO);
+        return callsService.submitAssignedCalls(callsDTO);
     }
 
 }

@@ -144,7 +144,7 @@ public class CallsService {
         Map.Entry<Volunteer, Integer> entry = itr.next();
 
         for (Calls call : calls) {
-            System.out.println(entry.getKey().getId() + " " + entry.getValue());
+//            System.out.println(entry.getKey().getId() + " " + entry.getValue());
             while (entry.getValue() >= callsPerCaller) {
                 if (itr.hasNext())
                     entry = itr.next();
@@ -161,11 +161,7 @@ public class CallsService {
                 map.replace(call.getCaller(), map.get(call.getCaller()) - 1);
                 call.setCaller(entry.getKey());
             }
-
-
         }
-
-
     }
 
 
@@ -205,11 +201,11 @@ public class CallsService {
         return calls;
     }
 
-    public List<CallsPublicInfoProjection> getAssignedCalls(VolunteerToCallsDTO volunteerToCallsDTO) {
-        volunteerToCallsDTO.checkNullForGetAssigned();
-        Volunteer volunteer = volunteerService.getById(1);//volunteerToCallsDTO.getVolunteer().getId());
-        CallType callType = callTypeService.getCallTypeById(volunteerToCallsDTO.getCallType().getId());
-        Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
+    public List<CallsPublicInfoProjection> getAssignedCalls(CallsDTO callsDTO) {
+        //volunteerToCallsDTO.checkNullForGetAssigned();
+        Volunteer volunteer = volunteerService.getById(callsDTO.getCallerDTO().getId());
+        CallType callType = callTypeService.getCallTypeById(callsDTO.getCallTypeDTO().getId());
+        Event event = eventService.getById(callsDTO.getEventDTO().getId());
 
 //        if(event.isEnded()) throw new MyEntityNotFoundException("this event "+StaticNames.notFound);
 
@@ -218,12 +214,12 @@ public class CallsService {
     }
 
 
-    public ResponseEntity<Object> submitAssignedCalls(SubmitCallDTO submitCallDTO) {
+    public ResponseEntity<Object> submitAssignedCalls(CallsDTO callsDTO) {
 
-        int callId = submitCallDTO.getCallId();
-        CallTypeDTO callTypeDTO = submitCallDTO.getCallType();
-        String comment = submitCallDTO.getComment();
-        CallResultDTO callResultDto = submitCallDTO.getCallResult();
+        int callId = callsDTO.getId();
+        CallTypeDTO callTypeDTO = callsDTO.getCallTypeDTO();
+        String comment = callsDTO.getComment();
+        CallResultDTO callResultDto = callsDTO.getCallResultDTO();
 
         CallResult callResult = callResultService.getById(callResultDto.getId());
         Calls call = callsRepo.findById(callId);

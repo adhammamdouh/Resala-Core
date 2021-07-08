@@ -19,9 +19,6 @@ public class VolunteerToCallsDTO {
         if (event == null ) {
             throw new NullException("Event");
         }
-        if (networkTypeAssignedToVolunteersToEvents == null)
-            throw new NullException("networkTypeAssignedToVolunteersToEventDTO");
-
         if (callType == null)
             throw new NullException("CallType");
     }

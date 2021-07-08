@@ -23,6 +23,11 @@ public class Response implements Serializable {
         this.message = message;
     }
 
+    public Response( int status) {
+        timestamp = DateTimeService.getNow();
+        this.status = status;
+    }
+
     public Response(int status, String error) {
         timestamp = DateTimeService.getNow();
         this.status = status;

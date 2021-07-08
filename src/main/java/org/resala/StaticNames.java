@@ -27,6 +27,7 @@ public interface StaticNames {
     String getAllVolunteersByState="ROLE_GET_ALL_VOLUNTEERS_BY_STATUS";
     String getAllVolunteersPublicInfoByState="ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO_BY_STATUS";
 
+
     /*String getAllActiveVolunteers = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS";
     String getAllArchivedVolunteers = "ROLE_GET_ALL_ARCHIVED_VOLUNTEERS";
     String getAllActiveVolunteersPublicInfo = "ROLE_GET_ALL_ACTIVE_VOLUNTEERS_PUBLIC_INFO";
@@ -54,6 +55,9 @@ public interface StaticNames {
     String getAllLeadVolunteersPublicInfoByState="ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE";
     String getAllLeadVolunteersByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH";
     String getAllLeadVolunteersPublicInfoByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH";
+    String getLeadVolunteersPublicInfoByMyBranchId="ROLE_GET_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_MY_BRANCH_ID";
+    String getAllLeadVolunteersByStateAndMyBranchId="ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_BRANCH_ID";
+    String getAllLeadVolunteersPublicInfoByStateAndMyBranchId="ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH_ID";
 
     /*String getAllActiveLeadVolunteers = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS";
     String getAllArchivedLeadVolunteers = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS";
@@ -109,6 +113,7 @@ public interface StaticNames {
     String submittedSuccessfully="submitted Successfully";
     //----------------------------------------------------------------------------------------------------------------------
     String notFound = "Not Found";
+    String invalidToken= "Invalid Token yasta";
     //----------------------------------------------------------------------------------------------------------------------
     String etisalat="ETISALAT";
     String vodafone ="VODAFONE";
