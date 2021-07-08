@@ -51,6 +51,9 @@ public class LeadVolunteerKPIService {
         leadVolunteerKPI.setCallsCount(callCount);
         leadVolunteerKPI.setEnsureCount(callEnsureCount);
         leadVolunteerKPIRepo.save(leadVolunteerKPI);
+        if (leadVolunteer.getLeadVolunteerKPI()==null){
+            leadVolunteerService.setNewKPI(leadVolunteer,getByLeadVolunteer(leadVolunteer));
+        }
     }
 
     public LeadVolunteerKPI getByLeadVolunteer(LeadVolunteer leadVolunteer) {

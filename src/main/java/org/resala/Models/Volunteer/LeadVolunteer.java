@@ -22,7 +22,7 @@ public class LeadVolunteer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "volunteer_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Volunteer myVolunteerInfo;
@@ -58,7 +58,8 @@ public class LeadVolunteer implements Serializable {
     @JoinColumn(name = "committe_id")
     Committee committee;
 
-    @OneToOne(mappedBy = "leadVolunteer")
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "lead_kpi_id")
     LeadVolunteerKPI leadVolunteerKPI;
 
 

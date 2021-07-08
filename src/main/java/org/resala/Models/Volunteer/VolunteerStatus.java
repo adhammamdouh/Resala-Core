@@ -20,7 +20,7 @@ public class VolunteerStatus {
     @Column(name = "name", nullable = false)
     @NotEmpty(message = "Please Enter Volunteer Status Name")
     String name;
-    @OneToMany(mappedBy = "volunteerStatus",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "volunteerStatus",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonBackReference
     List<Volunteer> volunteers;
 }

@@ -29,7 +29,6 @@ public class VolunteerKPIService {
     public void generateKPIsForAll(){
         List<Volunteer>volunteers=volunteerService.getAllNormal();
         for (Volunteer volunteer : volunteers){
-            System.out.println(volunteer.getId());
             update(volunteer);
         }
     }
@@ -50,6 +49,10 @@ public class VolunteerKPIService {
         volunteerKPI.setEnsureCount(callEnsureCount);
         volunteerKPI.setResponseCount(callResponseCount);
         volunteerKPIRepo.save(volunteerKPI);
+        if (volunteer.getVolunteerKPI()==null){
+            volunteerService.setNewKPI(volunteer,getByVolunteer(volunteer));
+        }
+
     }
     public VolunteerKPI getByVolunteer(Volunteer volunteer){
         Optional<VolunteerKPI> volunteerKPIOptional=volunteerKPIRepo.findByVolunteer(volunteer);

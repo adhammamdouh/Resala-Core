@@ -7,6 +7,7 @@ import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
+import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
@@ -244,4 +245,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return volunteerRepo.getAllNormal(Volunteer.class);
     }
 
+    public void setNewKPI(Volunteer volunteer,VolunteerKPI kpi) {
+        volunteer.setVolunteerKPI(kpi);
+        volunteerRepo.save(volunteer);
+    }
 }

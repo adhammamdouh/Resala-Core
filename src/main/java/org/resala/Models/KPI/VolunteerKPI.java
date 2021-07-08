@@ -26,8 +26,9 @@ public class VolunteerKPI {
     int ensureCount;
     @Column(name = "response_count", nullable = false)
     int responseCount;
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "volunteer_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     Volunteer volunteer;
 }

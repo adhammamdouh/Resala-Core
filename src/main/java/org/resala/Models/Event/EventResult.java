@@ -30,10 +30,10 @@ public class EventResult {
     int presentCount;
     @Column(name = "calls_count")
     int callsCount;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     Event event;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id")
     Branch branch;
 }

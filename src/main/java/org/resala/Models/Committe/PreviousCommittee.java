@@ -24,7 +24,7 @@ public class PreviousCommittee {
     @JoinColumn(nullable = false,name = "role_id")
     Role role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(nullable = false,name = "committee_id")
     Committee committee;
 

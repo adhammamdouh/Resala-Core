@@ -17,17 +17,17 @@ public class NetworkTypeAssignedToVolunteersToEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "network_type_assigned_to_volunteers",
             joinColumns = {@JoinColumn(name = "NetworkTypeAssignedToVolunteersToEvent_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)})
     List<Volunteer> volunteers;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "network_type_id")
     NetworkType networkType;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     Event event;
 }
