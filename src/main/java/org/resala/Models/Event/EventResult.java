@@ -37,5 +37,6 @@ public class EventResult {
     Event event;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id")
+//    @JsonBackReference
     Branch branch;
 }

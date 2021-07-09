@@ -53,13 +53,14 @@ public class EventResultService {
             int callsCount = callsService.countAllCalledByEventAndBranch(event, branch);
             CallResult callResult = callResultService.getByName(StaticNames.callEnsure);
             double ensurePercentage = callsService.countAllByEventAndBranchAndCallResult(event, branch, callResult);
-
             eventResult.setResponsePercentage(responsePercentage);
             eventResult.setAttendancePercentage(attendancePercentage);
             eventResult.setAttractingPercentage(attractingPercentage);
             eventResult.setPresentCount(percentCount);
             eventResult.setCallsCount(callsCount);
             eventResult.setEnsurePercentage(ensurePercentage);
+            eventResult.setEvent(event);
+            eventResult.setBranch(branch);
             eventResultRepo.save(eventResult);
         }
     }
