@@ -3,6 +3,7 @@ package org.resala.Repository.Event;
 import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 
+import org.resala.Models.Event.EventResult;
 import org.resala.Models.Event.EventStatus;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,5 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
     List<Event> findAllByShareableAndEventStatus(boolean isShareable,EventStatus eventStatus);
     List<Event> findAllByEventStatus_nameAndBranchesIn(String name, List<Branch> branches);
 
+    List<Event>findAllByEventStatusAndEventResult(EventStatus eventStatus, EventResult eventResult);
 }

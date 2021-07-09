@@ -33,30 +33,26 @@ public class EventResultService {
     CallResultService callResultService;
     @Autowired
     AttendanceStatusService attendanceStatusService;
+
     public void generateKPIsForAll() {
-        List<Event>events=eventService.getAll();
-        for (Event event:events){
+        List<Event> events = eventService.getAllByStatusAndResult(StaticNames.completedState, null);
+        for (Event event : events) {
             update(event);
         }
     }
+
     public void update(Event event) {
-        for (Branch branch:event.getBranches()){
-            EventResult eventResult;
-            try {
-                eventResult=getByEventAndBranch(event,branch);
-                continue;
-            }catch (MyEntityNotFoundException ex){
-                eventResult=new EventResult();
-            }
-            double responsePercentage=callsService.getResponsePercentageByEventAndBranch(event,branch);
-            double attendancePercentage=eventAttendanceService.getAttendancePercentageByEventAndBranch(event,branch);///////
-            AttendanceStatus attendanceStatus=attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-            int percentCount=eventAttendanceService.countAllByEventAndBranch(event,branch,attendanceStatus);
+        for (Branch branch : event.getBranches()) {
+            EventResult eventResult = new EventResult();
+            double responsePercentage = callsService.getResponsePercentageByEventAndBranch(event, branch);
+            double attendancePercentage = eventAttendanceService.getAttendancePercentageByEventAndBranch(event, branch);///////
+            AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
+            int percentCount = eventAttendanceService.countAllByEventAndBranch(event, branch, attendanceStatus);
             ///need attracting
-            double attractingPercentage=callsService.getAttractingPercentage(event,branch);
-            int callsCount=callsService.countAllCalledByEventAndBranch(event,branch);
-            CallResult callResult=callResultService.getByName(StaticNames.callEnsure);
-            double ensurePercentage=callsService.countAllByEventAndBranchAndCallResult(event,branch,callResult);
+            double attractingPercentage = callsService.getAttractingPercentage(event, branch);
+            int callsCount = callsService.countAllCalledByEventAndBranch(event, branch);
+            CallResult callResult = callResultService.getByName(StaticNames.callEnsure);
+            double ensurePercentage = callsService.countAllByEventAndBranchAndCallResult(event, branch, callResult);
 
             eventResult.setResponsePercentage(responsePercentage);
             eventResult.setAttendancePercentage(attendancePercentage);
@@ -67,10 +63,11 @@ public class EventResultService {
             eventResultRepo.save(eventResult);
         }
     }
-    public EventResult getByEventAndBranch(Event event,Branch branch){
-        Optional<EventResult>eventResultOptional=eventResultRepo.getByEventAndBranch(event,branch);
-        if(!eventResultOptional.isPresent())
-            throw new MyEntityNotFoundException("EventResult "+StaticNames.notFound);
+
+    public EventResult getByEventAndBranch(Event event, Branch branch) {
+        Optional<EventResult> eventResultOptional = eventResultRepo.getByEventAndBranch(event, branch);
+        if (!eventResultOptional.isPresent())
+            throw new MyEntityNotFoundException("EventResult " + StaticNames.notFound);
         return eventResultOptional.get();
     }
 

@@ -71,10 +71,10 @@ public class Event implements Serializable {
     /*@ManyToMany(cascade = CascadeType.ALL, mappedBy = "event")
     List<AttendanceStatus> attendanceStatus;*/
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "eventResult_Id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    EventResult eventResult;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "event")
+//    @JoinColumn(name = "eventResult_Id")
+
+    List<EventResult> eventResult;
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "event_branches",

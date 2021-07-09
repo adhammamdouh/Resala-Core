@@ -91,8 +91,11 @@ public class Volunteer implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "kpi_id")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     VolunteerKPI volunteerKPI;
+    @OneToOne(mappedBy="volunteer")
+    public VolunteerKPI getVolunteerKPI(){
+        return volunteerKPI;
+    }
 
     @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

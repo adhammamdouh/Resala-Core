@@ -1,5 +1,4 @@
 package org.resala.Service.KPI;
-
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Volunteer.Volunteer;
@@ -10,10 +9,8 @@ import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class VolunteerKPIService {
     @Autowired
@@ -24,8 +21,6 @@ public class VolunteerKPIService {
     VolunteerService volunteerService;
     @Autowired
     CallsService callsService;
-
-
     public void generateKPIsForAll(){
         List<Volunteer>volunteers=volunteerService.getAllNormal();
         for (Volunteer volunteer : volunteers){
@@ -43,7 +38,6 @@ public class VolunteerKPIService {
         int callCount=callsService.countByReceiverAndCalled(volunteer);
         int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
         int callResponseCount=callsService.countAllResponseByReceiver(volunteer);
-
         volunteerKPI.setVolunteer(volunteer);
         volunteerKPI.setPresentCount(presentCount);
         volunteerKPI.setCallsCount(callCount);
