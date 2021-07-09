@@ -244,10 +244,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     public List<Volunteer> getAllNormal() {
         return volunteerRepo.getAllNormal(Volunteer.class);
     }
-    public void setNewKPI(Volunteer volunteer, VolunteerKPI kpi) {
-        volunteer.setVolunteerKPI(kpi);
-        volunteerRepo.save(volunteer);
-    }
 
     public void setNewKPI(Volunteer volunteer,VolunteerKPI kpi) {
         volunteer.setVolunteerKPI(kpi);

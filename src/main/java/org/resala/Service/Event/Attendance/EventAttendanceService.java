@@ -115,7 +115,7 @@ public class EventAttendanceService {
 
     public double getAttendancePercentageByEventAndBranch(Event event, Branch branch) {
         AttendanceStatus attendanceStatus=attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-        return countAllByEventAndBranch(event,branch,attendanceStatus)/((double)callsService.countAllCalledByEventAndBranch(event,branch)+1);///////////
+        return countAllByEventAndBranch(event,branch,attendanceStatus)/(double)callsService.countAllCalledByEventAndBranch(event,branch);///////////
     }
     public int countAllByEventAndBranch(Event event,Branch branch,AttendanceStatus attendanceStatus){
         return eventAttendanceRepo.countAllByEventAndEvent_BranchesAndAttendanceStatus(event,branch,attendanceStatus);

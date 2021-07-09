@@ -27,7 +27,7 @@ public class LeadVolunteerKPI {
     @Column(name = "calls_count")
     int callsCount;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lead_volunteer_id",nullable = false,referencedColumnName = "id")
     @JsonBackReference
     LeadVolunteer leadVolunteer;

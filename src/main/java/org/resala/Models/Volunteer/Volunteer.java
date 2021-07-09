@@ -89,11 +89,15 @@ public class Volunteer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime miniCamp;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "kpi_id")
     VolunteerKPI volunteerKPI;
+    @OneToOne(mappedBy="volunteer")
+    public VolunteerKPI getVolunteerKPI(){
+        return volunteerKPI;
+    }
 
-    @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
@@ -110,7 +114,7 @@ public class Volunteer implements Serializable {
     public NetworkType networkType;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -142,9 +146,10 @@ public class Volunteer implements Serializable {
     VolunteerStatus volunteerStatus;
 
 
-    @OneToOne(mappedBy = "myVolunteerInfo",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "myVolunteerInfo", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JsonBackReference
     LeadVolunteer leadVolunteer;
+
     public Volunteer() {
     }
 

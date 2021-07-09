@@ -89,10 +89,7 @@ public class LeadVolunteerService {
         Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
         return leadVolunteerOptional.isPresent();
     }
-    public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
-        leadVolunteer.setLeadVolunteerKPI(kpi);
-        leadVolunteerRepo.save(leadVolunteer);
-    }
+
 
     public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
         leadVolunteer.setLeadVolunteerKPI(kpi);
