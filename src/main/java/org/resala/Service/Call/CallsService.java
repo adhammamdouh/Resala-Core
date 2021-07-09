@@ -277,7 +277,7 @@ public class CallsService {
     public double getResponsePercentageByEventAndBranch(Event event, Branch branch) {
 
         return countAllCalledByEventAndBranch(event, branch) /
-                (double) countAllByEventAndBranch(event, branch);
+                ((double) countAllByEventAndBranch(event, branch)+1);
     }
 
     public int countAllByEventAndBranch(Event event, Branch branch) {
@@ -298,6 +298,6 @@ public class CallsService {
     public double getAttractingPercentage(Event event, Branch branch) {
         CallResult callResult = callResultService.getByName(StaticNames.firstTimeCall);
         return countAllByEventAndBranchAndCallResult(event, branch,callResult) /
-                (double) countAllByEventAndBranch(event, branch);
+                ((double) countAllByEventAndBranch(event, branch)+1);
     }
 }
