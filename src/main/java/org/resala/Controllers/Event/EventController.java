@@ -79,10 +79,16 @@ public class EventController implements CommonController<EventDTO> {
     @PreAuthorize("hasRole('" + StaticNames.getAllEventsByState + "') or hasRole('" + StaticNames.getAllShareableEventsByState + "' )")
     public ResponseEntity<Object> getAllByStateAndBranchId(@RequestBody EventStatuesDTO eventStatuesDTO,@PathVariable int branchId) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
-        if (AuthorizeController.contain(StaticNames.getAllEventsByState, authorities))
+        if (AuthorizeController.contain(StaticNames.getAllEventsByState, authorities)){
+
             return ResponseEntity.ok(new Response(eventService.getAllByStateIdAndBranchId(eventStatuesDTO.getId(),branchId), HttpStatus.OK.value()));
-        else
+
+        }
+        else{
+            System.out.println("ZzzZZZzzzzzz");
             return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventStateId(true, branchId,eventStatuesDTO.getId()), HttpStatus.OK.value()));
+
+        }
     }
 
     /*@RequestMapping(value = "/getAllActiveShareableEventsByBranch", method = RequestMethod.GET)
