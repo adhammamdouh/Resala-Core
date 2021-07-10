@@ -7,6 +7,7 @@ import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
+import org.resala.Models.Event.EventResult;
 import org.resala.Models.Event.EventStatus;
 import org.resala.Repository.Event.EventRepo;
 import org.resala.Service.BranchService;
@@ -153,4 +154,8 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
 
+    public List<Event> getAllByStatusAndResult(String eventStatusName, EventResult eventResult) {
+        EventStatus eventStatus=eventStatusService.getEventStatusByName(eventStatusName);
+        return eventRepo.findAllByEventStatusAndEventResult(eventStatus,eventResult);
+    }
 }

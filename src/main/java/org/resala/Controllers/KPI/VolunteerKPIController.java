@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VolunteerKPIController {
     @Autowired
     VolunteerKPIService volunteerKPIService;
-    @RequestMapping(value = "/generateKPIs", method = RequestMethod.GET)
+    @RequestMapping(value = "/generateKPIs", method = RequestMethod.POST)
     public ResponseEntity<Object> generateKPIs() {
         volunteerKPIService.generateKPIsForAll();
         return ResponseEntity.ok(new Response("KPIs Generated Successfully", HttpStatus.OK.value()));

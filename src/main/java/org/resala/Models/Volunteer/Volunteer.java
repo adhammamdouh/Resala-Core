@@ -89,7 +89,8 @@ public class Volunteer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime miniCamp;
 
-    @OneToOne(mappedBy = "volunteer")
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "kpi_id")
     VolunteerKPI volunteerKPI;
 
     @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)

@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
+import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
@@ -89,5 +90,8 @@ public class LeadVolunteerService {
         return leadVolunteerOptional.isPresent();
     }
 
-
+    public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
+        leadVolunteer.setLeadVolunteerKPI(kpi);
+        leadVolunteerRepo.save(leadVolunteer);
+    }
 }

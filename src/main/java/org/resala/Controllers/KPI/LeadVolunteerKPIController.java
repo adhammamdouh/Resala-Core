@@ -16,7 +16,7 @@ public class LeadVolunteerKPIController {
     @Autowired
     LeadVolunteerKPIService leadVolunteerKPIService;
 
-    @RequestMapping(value = "/generateKPIs", method = RequestMethod.GET)
+    @RequestMapping(value = "/generateKPIs", method = RequestMethod.POST)
     public ResponseEntity<Object> generateKPIs() {
         leadVolunteerKPIService.generateKPIsForAll();
         return ResponseEntity.ok(new Response("KPIs Generated Successfully", HttpStatus.OK.value()));

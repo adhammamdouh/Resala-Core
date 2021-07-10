@@ -58,7 +58,8 @@ public class LeadVolunteer implements Serializable {
     @JoinColumn(name = "committe_id")
     Committee committee;
 
-    @OneToOne(mappedBy = "leadVolunteer")
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "lead_kpi_id")
     LeadVolunteerKPI leadVolunteerKPI;
 
 

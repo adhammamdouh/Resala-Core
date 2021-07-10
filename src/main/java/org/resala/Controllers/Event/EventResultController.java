@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/eventResult")
 public class EventResultController {
     EventResultService eventResultSerivice;
-    @RequestMapping(value = "/generateKPIs", method = RequestMethod.GET)
+    @RequestMapping(value = "/generateKPIs", method = RequestMethod.POST)
     public ResponseEntity<Object> generateKPIs() {
         eventResultSerivice.generateKPIsForAll();
         return ResponseEntity.ok(new Response("KPIs Generated Successfully", HttpStatus.OK.value()));
