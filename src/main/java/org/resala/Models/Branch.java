@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.Models.Event.Event;
+import org.resala.Models.Event.EventResult;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
@@ -28,4 +29,8 @@ public class Branch implements Serializable {
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Volunteer> volunteers;
+
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<EventResult> eventResults;
 }

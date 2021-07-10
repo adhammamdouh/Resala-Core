@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -115,7 +114,7 @@ public class EventAttendanceService {
 
     public double getAttendancePercentageByEventAndBranch(Event event, Branch branch) {
         AttendanceStatus attendanceStatus=attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-        return countAllByEventAndBranch(event,branch,attendanceStatus)/((double)callsService.countAllCalledByEventAndBranch(event,branch)+1);///////////
+        return countAllByEventAndBranch(event,branch,attendanceStatus)/((double)callsService.countAllCalledByEventAndBranch(event,branch)+1.0);///////////
     }
     public int countAllByEventAndBranch(Event event,Branch branch,AttendanceStatus attendanceStatus){
         return eventAttendanceRepo.countAllByEventAndEvent_BranchesAndAttendanceStatus(event,branch,attendanceStatus);

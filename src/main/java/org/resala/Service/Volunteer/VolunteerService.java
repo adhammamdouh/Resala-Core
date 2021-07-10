@@ -204,8 +204,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         List<Volunteer> volunteers = new ArrayList<>();
 //            System.out.println("branch is " + branch.getId());
 //            System.out.println("network type is " + networkType.getName());
-        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_NameAndLeadVolunteer
-                (branch, networkType, StaticNames.activeState,null));
+        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
+                (branch, networkType, StaticNames.activeState));
 
 
         return volunteers;
@@ -245,11 +245,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return volunteerRepo.getAllNormal(Volunteer.class);
     }
     public void setNewKPI(Volunteer volunteer, VolunteerKPI kpi) {
-        volunteer.setVolunteerKPI(kpi);
-        volunteerRepo.save(volunteer);
-    }
-
-    public void setNewKPI(Volunteer volunteer,VolunteerKPI kpi) {
         volunteer.setVolunteerKPI(kpi);
         volunteerRepo.save(volunteer);
     }

@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LeadVolunteerRepo extends JpaRepository<LeadVolunteer, Integer> {
-    /*@Query("SELECT l \n" +
-            "FROM LeadVolunteer l")*/
     <T> List<T> findAllBy(Class<T> projection);
 
     <T> List<T> findByMyVolunteerInfo_BranchAndMyVolunteerInfo_VolunteerStatus(Branch branch, VolunteerStatus volunteerStatus, Class<T> projection);

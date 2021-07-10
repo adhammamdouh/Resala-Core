@@ -15,7 +15,10 @@ import java.util.List;
 
 @Repository
 public interface EventRepo extends JpaRepository<Event, Integer> {
-    List<Event> findByBranches_id(@Param("branch_id") int branchId);
+    /*@Query(value = "select * from event as e inner join event_branches as b on e.id=b.event_id inner join event_result as er on " +
+            "er.event_id = e.id where b.branch_id =:branchId and er.branch_id= :branchId",nativeQuery=true)*/
+
+    List<Event> findByBranches_id(@Param("branchId") int branchId);
 
     List<Event> findAllByEventStatus_name(String name);
 
@@ -31,4 +34,5 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
     List<Event> findAllByEventStatus_nameAndBranchesIn(String name, List<Branch> branches);
 
     List<Event>findAllByEventStatusAndEventResult(EventStatus eventStatus, EventResult eventResult);
+
 }

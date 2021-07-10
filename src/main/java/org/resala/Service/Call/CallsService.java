@@ -277,7 +277,7 @@ public class CallsService {
     public double getResponsePercentageByEventAndBranch(Event event, Branch branch) {
 
         return countAllCalledByEventAndBranch(event, branch) /
-                ((double) countAllByEventAndBranch(event, branch)+1);
+                (double) countAllByEventAndBranch(event, branch);
     }
 
     public int countAllByEventAndBranch(Event event, Branch branch) {
