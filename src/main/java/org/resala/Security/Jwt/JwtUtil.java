@@ -1,6 +1,8 @@
 package org.resala.Security.Jwt;
 
 import io.jsonwebtoken.*;
+import org.resala.Exceptions.JwtTokenMalformedException;
+import org.resala.Exceptions.JwtTokenMissingException;
 import org.resala.Models.MyUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,15 +42,26 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
     }
 
-    public boolean validateToken(String token) {
-        String userName = extractUserName(token);
-        List<String> authorities = extractAuthorities(token);
-        String role = extractId(token);
-        Date expirationDate = extractExpirationDate(token);
-        if (userName == null || role == null || authorities == null || expirationDate.before(new Date()))
-            return false;
+    public void validateToken(String token) throws JwtTokenMalformedException, JwtTokenMissingException {
+        try {
+            String userName = extractUserName(token);
+            List<String> authorities = extractAuthorities(token);
+            String role = extractId(token);
+            Date expirationDate = extractExpirationDate(token);
+            if (userName == null || role == null || authorities == null || expirationDate.before(new Date()))
+                throw new JwtTokenMalformedException("JWT UserName or Roles can't be null or JWT Token has expired");
 
-        return true;
+        } catch (SignatureException e) {
+            throw new JwtTokenMalformedException("Invalid JWT signature");
+        } catch (MalformedJwtException e) {
+            throw new JwtTokenMalformedException("Invalid JWT token");
+        } catch (ExpiredJwtException e) {
+            throw new JwtTokenMalformedException("Expired JWT token");
+        } catch (UnsupportedJwtException e) {
+            throw new JwtTokenMalformedException("Unsupported JWT token");
+        } catch (IllegalArgumentException e) {
+            throw new JwtTokenMissingException("JWT claims string is empty.");
+        }
     }
 
     /*public String extractUserName(String token) {
@@ -76,6 +89,7 @@ public class JwtUtil {
         String details = extractClaim(token, Claims::getAudience);
         details = details.substring(1);
         details = details.substring(0, details.length() - 1);
+        if (details.length() == 0) return null;
         return asList(details.split(","));
     }
 

@@ -87,7 +87,7 @@ INSERT ignore INTO call_result (`id`, `name`) VALUES ('5', 'اول مره');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('3', 'الجيزة');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('4', 'شبرا الخيمة	');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('4', 'شبرا الخيمة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('5', 'بور سعيد');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('6', 'السويس');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('7', 'المحلة الكبرى');

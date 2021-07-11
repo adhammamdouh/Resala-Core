@@ -86,6 +86,7 @@ public class Event implements Serializable {
     @NotEmpty(message = "Branches can't be empty")
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "branch_id")
     //@JsonIdentityReference(alwaysAsId = true)
+
     private List<Branch> branches;
 
     @ManyToOne(cascade = CascadeType.ALL)

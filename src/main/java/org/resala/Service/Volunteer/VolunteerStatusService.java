@@ -31,7 +31,6 @@ public class VolunteerStatusService{
 
     public VolunteerStatus getVolunteerStatusByUserName(String userName){
         Optional<VolunteerStatus> volunteerStatusOptional=volunteerStatuesRepo.findByVolunteers_User_UserName(userName);
-        System.out.println("user name is "+userName);
         if(!volunteerStatusOptional.isPresent())
             throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
         return volunteerStatusOptional.get();

@@ -3,10 +3,12 @@ package org.resala.Security;
 import org.resala.Models.Auth.Response;
 import org.resala.Security.Jwt.AuthEntryPointJwt;
 import org.resala.Security.Filter.JwtRequestFilter;
+import org.resala.Security.Jwt.MyAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,7 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
-
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,8 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
     @Autowired
     JwtRequestFilter jwtRequestFilter;
+
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    private MyAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public JwtRequestFilter authenticationJwtTokenFilter() {
@@ -47,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).accessDeniedHandler(accessDeniedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/**").permitAll().antMatchers("/favicon.ico").permitAll()
                 .anyRequest().fullyAuthenticated();

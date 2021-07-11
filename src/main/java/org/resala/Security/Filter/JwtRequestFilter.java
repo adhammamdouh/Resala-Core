@@ -1,10 +1,20 @@
 package org.resala.Security.Filter;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+//import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.resala.Models.Auth.MyJacksonObjMapper;
+import org.resala.Models.Auth.Response;
 import org.resala.Security.Jwt.JwtUtil;
 import org.resala.Security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,9 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -52,22 +60,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                if (!jwtUtil.validateToken(jwt)) {
-                    logger.error("Unable to get JWT Token or JWT Token has expired");
-                    return;
-                }
-            } catch (IllegalArgumentException | MalformedJwtException | ExpiredJwtException e) {
-                logger.error("Unable to get JWT Token or JWT Token has expired");
+                jwtUtil.validateToken(jwt);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                response.setContentType("application/json");
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                Response responseObj = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+                ObjectMapper mapper = new MyJacksonObjMapper();
+                response.getWriter().write(mapper.writeValueAsString(responseObj));
                 return;
             }
             username = jwtUtil.extractUserName(jwt);
             id = jwtUtil.extractId(jwt);
             actions = jwtUtil.extractAuthorities(jwt);
+
             for (String action : actions) {
-                //System.out.println(action);
                 grantedAuth.add(new SimpleGrantedAuthority(action.trim()));
             }
         }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             ///move to login
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -80,5 +91,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
+
 
 }
