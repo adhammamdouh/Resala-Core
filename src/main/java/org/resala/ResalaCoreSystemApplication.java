@@ -40,7 +40,6 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     @Autowired
     LeadVolunteerKPIService leadVolunteerKPIService;
 
-
     @Override
     public void run(String... args) throws Exception {
         //volunteerKPIService.generateKPIsForAll();

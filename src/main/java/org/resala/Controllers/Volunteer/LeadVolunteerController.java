@@ -67,6 +67,13 @@ public class LeadVolunteerController {
 
     }
 
+    @RequestMapping(value = "/getCommitteeTeam",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('"+StaticNames.getCommitteeTeam+"')")
+    public ResponseEntity<Object> getCommitteeTeam(@RequestBody LeadVolunteerDTO leadVolunteerDTO){
+        return ResponseEntity.ok(new Response(leadVolunteerService.getCommitteeTeam(
+                leadVolunteerDTO.getMyVolunteerInfo().getBranch(),leadVolunteerDTO.getCommittee()),HttpStatus.OK.value()));
+    }
+
    /* @RequestMapping(value = "/getAllActivePublicInfo", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllActiveLeadVolunteersPublicInfo + "')")
     public ResponseEntity<Object> getAllActivePublicInfo() {

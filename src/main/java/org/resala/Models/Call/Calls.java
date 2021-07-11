@@ -34,7 +34,7 @@ public class Calls {
     @Column
     String notAttendComment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "event_id", nullable = false)
     Event event;
@@ -88,7 +88,7 @@ public class Calls {
     @OnDelete(action = OnDeleteAction.CASCADE)
     CallResult callResult;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
 //    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
 //    @JsonIdentityReference(alwaysAsId = true)

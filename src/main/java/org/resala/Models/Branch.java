@@ -26,7 +26,7 @@ public class Branch implements Serializable {
     @Column(name = "name")
     @NotEmpty(message = "Please Enter Branch Name")
     String name;
-    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Volunteer> volunteers;
 

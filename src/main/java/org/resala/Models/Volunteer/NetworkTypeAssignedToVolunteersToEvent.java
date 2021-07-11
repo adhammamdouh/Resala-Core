@@ -2,6 +2,8 @@ package org.resala.Models.Volunteer;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Models.Branch;
+import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Event;
 
@@ -17,17 +19,25 @@ public class NetworkTypeAssignedToVolunteersToEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name = "network_type_assigned_to_volunteers",
             joinColumns = {@JoinColumn(name = "NetworkTypeAssignedToVolunteersToEvent_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)})
     List<Volunteer> volunteers;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "network_type_id")
     NetworkType networkType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "event_id")
     Event event;
+
+    @ManyToOne()
+    @JoinColumn(name = "call_type_id")
+    CallType callType;
+
+    @ManyToOne()
+    @JoinColumn(name = "branch_id")
+    Branch branch;
 }

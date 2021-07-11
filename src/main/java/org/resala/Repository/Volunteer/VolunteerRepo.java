@@ -19,10 +19,6 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     <T> List<T> findByBranch_id(int branchId, Class<T> projection);
     public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_Name(
             Branch branches,NetworkType networkTypes,String volunteerStatus);
-    public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_NameAndLeadVolunteer(
-            Branch branches,NetworkType networkTypes,String volunteerStatus ,LeadVolunteer leadVolunteer);
-    /*@Query("SELECT v \n" +
-            "FROM Volunteer v")*/
     <T> List<T> findAllBy(Class<T> projection);
 
     Optional<Volunteer> findByUser_UserName(String userName);
@@ -41,4 +37,5 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     }
 
     <T>List<T> findAllByVolunteerStatus(VolunteerStatus volunteerStatus, Class<T> projection);
+
 }

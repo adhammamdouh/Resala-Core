@@ -114,10 +114,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     public List<Event> getAll() {
         return eventRepo.findAll();
     }
-    public List<Event> getAllByStatusAndResult(String eventStatusName, EventResult eventResult) {
-        EventStatus eventStatus=eventStatusService.getEventStatusByName(eventStatusName);
-        return eventRepo.findAllByEventStatusAndEventResult(eventStatus,eventResult);
-    }
+
     public List<Event> getEventsByBranchId(int branchId) {
         return eventRepo.findByBranches_id(branchId);
     }

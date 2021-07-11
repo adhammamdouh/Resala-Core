@@ -10,7 +10,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ControllerAdvice
@@ -69,7 +68,6 @@ public class ExceptionHelper {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
     /*@ExceptionHandler(value = {HttpClientErrorException.Unauthorized.class})
     public ResponseEntity<Object> handleUserForbiddenException(UsernameNotFoundException ex) {
         LOGGER.error("Forbidden: ", ex.getMessage());

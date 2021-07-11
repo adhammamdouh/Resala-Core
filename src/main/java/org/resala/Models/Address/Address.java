@@ -22,7 +22,7 @@ public class Address {
     /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_id")
     Volunteer volunteer;*/
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "capital_id")
     @NotNull(message = "Please enter Capital")
     Capital capital;

@@ -1,6 +1,8 @@
 package org.resala.Service.Call;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.MyEntityFoundBeforeException;
+import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
@@ -19,6 +21,7 @@ import org.resala.Service.Event.EventService;
 import org.resala.Service.Volunteer.NetworkTypeAssignedToVolunteersToEventService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
+import org.resala.dto.BranchDTO;
 import org.resala.dto.Call.*;
 import org.resala.dto.Event.EventDTO;
 import org.resala.dto.Volunteer.NetworkTypeAssignedToVolunteersToEventDTO;
@@ -68,25 +71,38 @@ public class CallsService {
     public ResponseEntity<Object> assignCalls(VolunteerToCallsDTO volunteerToCallsDTO) {
 
         EventDTO eventDTO = volunteerToCallsDTO.getEvent();
+        CallTypeDTO callTypeDTO =  volunteerToCallsDTO.getCallType();
+        BranchDTO branchDTO = volunteerToCallsDTO.getBranchDTO();
+
+        Branch branch=branchService.getById(branchDTO.getId());
+        Event event=eventService.getById(eventDTO.getId());
+
+        if(callsRepo.countAllByEventAndBranch(event,branch)>0) {
+            throw new MyEntityFoundBeforeException(StaticNames.callsHasBeenCreatedBefore);
+        }
+
         for (NetworkTypeAssignedToVolunteersToEventDTO networkTypeAssignedToVolunteersToEventDTO
                 : volunteerToCallsDTO.getNetworkTypeAssignedToVolunteersToEvents()) {
             List<VolunteerDTO> volunteerDTO = networkTypeAssignedToVolunteersToEventDTO.getVolunteers();
             NetworkTypeDTO networkTypeDTO = networkTypeAssignedToVolunteersToEventDTO.getNetworkType();
 
 
-            networkTypeAssignedToVolunteersToEventService.update(volunteerDTO, eventDTO, networkTypeDTO);
+            networkTypeAssignedToVolunteersToEventService.update(volunteerDTO, eventDTO, networkTypeDTO,callTypeDTO,branchDTO);
         }
         return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
 
-    public ResponseEntity<Object> confirmAssignedCalls(boolean balanced, EventDTO eventDTO) {
+    public ResponseEntity<Object> confirmAssignedCalls(boolean balanced,NetworkTypeAssignedToVolunteersToEventDTO networkTypeAssignedToVolunteersToEventDTO) {
 
-        Event event = eventService.getById(eventDTO.getId());
-        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
-        Branch branch = branchService.getById(branchId);
+        Event event = eventService.getById(networkTypeAssignedToVolunteersToEventDTO.getEventDTO().getId());
+        Branch branch = branchService.getById(networkTypeAssignedToVolunteersToEventDTO.getBranchDTO().getId());
+
+        if(callsRepo.countAllByEventAndBranch(event,branch)>0) {
+            throw new MyEntityFoundBeforeException(StaticNames.callsHasBeenCreatedBefore);
+        }
 
         List<NetworkTypeAssignedToVolunteersToEvent> networkTypeAssignedToVolunteersToEvents =
-                networkTypeAssignedToVolunteersToEventService.getByEventId(event.getId());
+                networkTypeAssignedToVolunteersToEventService.getByEventIdAndBranchId(event.getId(),branch.getId());
 
 
         List<Pair<Volunteer, Integer>> counts = new ArrayList<>();
@@ -141,10 +157,16 @@ public class CallsService {
                 .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
 
         Iterator<Map.Entry<Volunteer, Integer>> itr = sortedMap.entrySet().iterator();
-        Map.Entry<Volunteer, Integer> entry = itr.next();
+        Map.Entry<Volunteer, Integer> entry;
+        try {
+            entry = itr.next();
+        }
+        catch (Exception e){
+            throw new MyEntityNotFoundException(StaticNames.thereIsNoCallsToBalance);
+        }
 
         for (Calls call : calls) {
-//            System.out.println(entry.getKey().getId() + " " + entry.getValue());
+            System.out.println(entry.getKey().getId() + " " + entry.getValue());
             while (entry.getValue() >= callsPerCaller) {
                 if (itr.hasNext())
                     entry = itr.next();
@@ -161,7 +183,11 @@ public class CallsService {
                 map.replace(call.getCaller(), map.get(call.getCaller()) - 1);
                 call.setCaller(entry.getKey());
             }
+
+
         }
+
+
     }
 
 
@@ -201,11 +227,11 @@ public class CallsService {
         return calls;
     }
 
-    public List<CallsPublicInfoProjection> getAssignedCalls(CallsDTO callsDTO) {
-        //volunteerToCallsDTO.checkNullForGetAssigned();
-        Volunteer volunteer = volunteerService.getById(callsDTO.getCallerDTO().getId());
-        CallType callType = callTypeService.getCallTypeById(callsDTO.getCallTypeDTO().getId());
-        Event event = eventService.getById(callsDTO.getEventDTO().getId());
+    public List<CallsPublicInfoProjection> getAssignedCalls(VolunteerToCallsDTO volunteerToCallsDTO) {
+        volunteerToCallsDTO.checkNullForGetAssigned();
+        Volunteer volunteer = volunteerService.getById(1);//volunteerToCallsDTO.getVolunteer().getId());
+        CallType callType = callTypeService.getCallTypeById(volunteerToCallsDTO.getCallType().getId());
+        Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
 
 //        if(event.isEnded()) throw new MyEntityNotFoundException("this event "+StaticNames.notFound);
 
@@ -214,12 +240,12 @@ public class CallsService {
     }
 
 
-    public ResponseEntity<Object> submitAssignedCalls(CallsDTO callsDTO) {
+    public ResponseEntity<Object> submitAssignedCalls(SubmitCallDTO submitCallDTO) {
 
-        int callId = callsDTO.getId();
-        CallTypeDTO callTypeDTO = callsDTO.getCallTypeDTO();
-        String comment = callsDTO.getComment();
-        CallResultDTO callResultDto = callsDTO.getCallResultDTO();
+        int callId = submitCallDTO.getCallId();
+        CallTypeDTO callTypeDTO = submitCallDTO.getCallType();
+        String comment = submitCallDTO.getComment();
+        CallResultDTO callResultDto = submitCallDTO.getCallResult();
 
         CallResult callResult = callResultService.getById(callResultDto.getId());
         Calls call = callsRepo.findById(callId);
@@ -277,7 +303,7 @@ public class CallsService {
     public double getResponsePercentageByEventAndBranch(Event event, Branch branch) {
 
         return countAllCalledByEventAndBranch(event, branch) /
-                (double) countAllByEventAndBranch(event, branch);
+                ((double) countAllByEventAndBranch(event, branch)+1.0);
     }
 
     public int countAllByEventAndBranch(Event event, Branch branch) {
@@ -298,6 +324,6 @@ public class CallsService {
     public double getAttractingPercentage(Event event, Branch branch) {
         CallResult callResult = callResultService.getByName(StaticNames.firstTimeCall);
         return countAllByEventAndBranchAndCallResult(event, branch,callResult) /
-                ((double) countAllByEventAndBranch(event, branch)+1);
+                ((double) countAllByEventAndBranch(event, branch)+1.0);
     }
 }

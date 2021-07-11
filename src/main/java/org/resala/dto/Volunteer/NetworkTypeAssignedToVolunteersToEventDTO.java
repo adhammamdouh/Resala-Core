@@ -3,6 +3,8 @@ package org.resala.dto.Volunteer;
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.Exceptions.NullException;
+import org.resala.dto.BranchDTO;
+import org.resala.dto.Call.CallTypeDTO;
 import org.resala.dto.Call.NetworkTypeDTO;
 import org.resala.dto.Event.EventDTO;
 
@@ -14,13 +16,19 @@ public class NetworkTypeAssignedToVolunteersToEventDTO {
     List<VolunteerDTO> volunteers;
     NetworkTypeDTO networkType;
     EventDTO eventDTO;
+    CallTypeDTO callTypeDTO;
+    BranchDTO branchDTO;
 
-    public NetworkTypeAssignedToVolunteersToEventDTO() {
-    }
-
-    public NetworkTypeAssignedToVolunteersToEventDTO(List<VolunteerDTO> volunteers, NetworkTypeDTO networkType) {
+    public NetworkTypeAssignedToVolunteersToEventDTO(List<VolunteerDTO> volunteers, NetworkTypeDTO networkType, EventDTO eventDTO, CallTypeDTO callTypeDTO, BranchDTO branchDTO) {
         this.volunteers = volunteers;
         this.networkType = networkType;
+        this.eventDTO = eventDTO;
+        this.callTypeDTO = callTypeDTO;
+        this.branchDTO = branchDTO;
+    }
+
+
+    public NetworkTypeAssignedToVolunteersToEventDTO() {
     }
 
 

@@ -36,13 +36,6 @@
     <dependencies>
         <!--
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-storage-spring-boot-starter</artifactId>
-            <version>2.2.5</version>
-        </dependency>
-        -->
-        <!--
-        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-core</artifactId>
             <version>3.5.0</version>
@@ -149,9 +142,7 @@
 
     <build>
 
-
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

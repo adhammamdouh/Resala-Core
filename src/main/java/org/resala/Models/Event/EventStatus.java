@@ -19,7 +19,7 @@ public class EventStatus {
     @Column(name = "name", nullable = false)
     @NotEmpty(message = "Please Enter Event Status Name")
     String name;
-    @OneToMany(mappedBy = "eventStatus", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "eventStatus", fetch = FetchType.LAZY)
     @JsonBackReference
     List<Event> events;
 }

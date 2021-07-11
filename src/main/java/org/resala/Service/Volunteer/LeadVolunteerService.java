@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
+import org.resala.Models.Committe.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
@@ -12,7 +13,10 @@ import org.resala.Projections.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.LeadVolunteerRepo;
 import org.resala.Service.BranchService;
+import org.resala.Service.Commiittee.CommitteeService;
 import org.resala.StaticNames;
+import org.resala.dto.BranchDTO;
+import org.resala.dto.Committe.CommitteeDTO;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,8 @@ public class LeadVolunteerService {
     VolunteerStatusService volunteerStatusService;
     @Autowired
     BranchService branchService;
+    @Autowired
+    CommitteeService committeeService;
 
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -89,13 +95,14 @@ public class LeadVolunteerService {
         Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
         return leadVolunteerOptional.isPresent();
     }
-    public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
-        leadVolunteer.setLeadVolunteerKPI(kpi);
-        leadVolunteerRepo.save(leadVolunteer);
-    }
 
     public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
         leadVolunteer.setLeadVolunteerKPI(kpi);
         leadVolunteerRepo.save(leadVolunteer);
+    }
+    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(BranchDTO branchDTO,CommitteeDTO committeeDTO){
+        Branch branch=branchService.getById(branchDTO.getId());
+        Committee committee =committeeService.getById(committeeDTO.getId());
+        return leadVolunteerRepo.findAllByMyVolunteerInfo_Branch_IdAndCommittee_Id(branch.getId(),committee.getId(),LeadVolunteerPublicInfoProjection.class);
     }
 }

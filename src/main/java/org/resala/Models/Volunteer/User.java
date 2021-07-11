@@ -23,7 +23,7 @@ public class User implements Serializable {
     private String userName;
     @Column(nullable = false)
     private String password;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference

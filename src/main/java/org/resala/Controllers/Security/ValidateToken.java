@@ -21,6 +21,5 @@ public class ValidateToken {
     @RequestMapping(value = "/validate",method = RequestMethod.GET)
     @PermitAll
     public void validateToken(){
-        throw new TokenException(StaticNames.invalidToken);
     }
 }

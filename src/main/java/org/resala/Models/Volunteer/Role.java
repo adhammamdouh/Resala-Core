@@ -23,7 +23,7 @@ public class Role implements Serializable {
     @NotEmpty(message = "Please Enter Role Name")
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "role",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "role")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<Volunteer>volunteers;
 }

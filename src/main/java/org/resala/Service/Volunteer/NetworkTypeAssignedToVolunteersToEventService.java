@@ -3,15 +3,21 @@ package org.resala.Service.Volunteer;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
+import org.resala.Models.Branch;
+import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.NetworkTypeAssignedToVolunteersToEvent;
 import org.resala.Repository.Volunteer.NetworkTypeAssignedToVolunteersToEventRepo;
+import org.resala.Service.BranchService;
+import org.resala.Service.Call.CallTypeService;
 import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Event.EventService;
 import org.resala.StaticNames;
+import org.resala.dto.BranchDTO;
+import org.resala.dto.Call.CallTypeDTO;
 import org.resala.dto.Call.NetworkTypeDTO;
 import org.resala.dto.Event.EventDTO;
 import org.resala.dto.Volunteer.NetworkTypeAssignedToVolunteersToEventDTO;
@@ -41,6 +47,11 @@ public class NetworkTypeAssignedToVolunteersToEventService implements CommonServ
     @Autowired
     EventService eventService;
 
+    @Autowired
+    CallTypeService callTypeService;
+
+    @Autowired
+    BranchService branchService;
 
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -87,36 +98,39 @@ public class NetworkTypeAssignedToVolunteersToEventService implements CommonServ
         return networkTypeAssignedToVolunteersToEvent.get();
     }
 
-    public void update(List<VolunteerDTO> volunteersDto, EventDTO eventDto, NetworkTypeDTO networkTypeDto){
+    public void update(List<VolunteerDTO> volunteersDto, EventDTO eventDto, NetworkTypeDTO networkTypeDto, CallTypeDTO callTypeDTO, BranchDTO branchDTO){
         NetworkType networkType = networkTypeService.getById(networkTypeDto.getId());
         Event event = eventService.getById(eventDto.getId());
+        CallType callType =callTypeService.getCallTypeById(callTypeDTO.getId());
+        Branch branch =branchService.getById(branchDTO.getId());
 
+        for(VolunteerDTO volunteerDto : volunteersDto) {
+            Volunteer volunteer = volunteerService.getById(volunteerDto.getId());
+        }
 //        System.out.println("id = " + event.getId());
 
         NetworkTypeAssignedToVolunteersToEvent networkTypeAssignedToVolunteersToEvent =
                 getByNetworkTypeAndEvent(networkType.getId(),event.getId());
 
         if(networkTypeAssignedToVolunteersToEvent != null){
-            for(VolunteerDTO volunteerDto : volunteersDto) {
-                Volunteer volunteer = volunteerService.getById(volunteerDto.getId());
-            }
 
             networkTypeAssignedToVolunteersToEvent.setVolunteers(mapAll(volunteersDto,Volunteer.class));
+            networkTypeAssignedToVolunteersToEvent.setCallType(callType);
             networkTypeAssignedToVolunteersToEventRepo.save(networkTypeAssignedToVolunteersToEvent);
         }
         else {
-            create(new NetworkTypeAssignedToVolunteersToEventDTO(volunteersDto,networkTypeDto,eventDto));
+            create(new NetworkTypeAssignedToVolunteersToEventDTO(volunteersDto,networkTypeDto,eventDto,callTypeDTO,branchDTO));
         }
     }
 
-    public List<NetworkTypeAssignedToVolunteersToEvent> getByEventId(int eventId){
-        System.out.println("id   " +eventId);
+    public List<NetworkTypeAssignedToVolunteersToEvent> getByEventIdAndBranchId(int eventId,int branchId){
+//        System.out.println("id   " +eventId);
 
         List<NetworkTypeAssignedToVolunteersToEvent> networkTypeAssignedToVolunteersToEvents =
-                networkTypeAssignedToVolunteersToEventRepo.getByEvent_Id(eventId);
+                networkTypeAssignedToVolunteersToEventRepo.getByEvent_IdAndBranch_id(eventId,branchId);
 
-        if(networkTypeAssignedToVolunteersToEvents.isEmpty() || networkTypeAssignedToVolunteersToEvents ==null)
-            throw new MyEntityNotFoundException("Calls" +StaticNames.notFound);
+        if(networkTypeAssignedToVolunteersToEvents ==null || networkTypeAssignedToVolunteersToEvents.isEmpty())
+            throw new MyEntityNotFoundException("Assigned Calls " +StaticNames.notFound);
 
         return networkTypeAssignedToVolunteersToEvents;
     }
