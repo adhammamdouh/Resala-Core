@@ -42,8 +42,12 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('33', 'ROLE_GET_ASSIGNED_CALL
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('34', 'ROLE_SUBMIT_ASSIGNED_CALLS');
 
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('36', 'ROLE_CREATE_LEAD_VOLUNTEER');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_CREATE_LEAD_VOLUNTEER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('37', 'ROLE_GET_ALL_COMMITTEE_TEAM');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('38', 'ROLE_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS');
+
+
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
