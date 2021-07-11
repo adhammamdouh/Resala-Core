@@ -2,8 +2,8 @@ package org.resala.Controllers.Volunteer;
 
 import org.resala.Controllers.AuthorizeController;
 import org.resala.Models.Auth.Response;
-import org.resala.Projections.LeadVolunteerProjection;
-import org.resala.Projections.LeadVolunteerPublicInfoProjection;
+import org.resala.Projections.LeadVolunteer.LeadVolunteerProjection;
+import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;

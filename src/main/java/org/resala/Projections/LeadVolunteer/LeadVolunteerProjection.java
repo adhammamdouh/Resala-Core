@@ -1,14 +1,9 @@
-package org.resala.Projections;
+package org.resala.Projections.LeadVolunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.resala.Models.Committe.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
-import org.resala.Models.Volunteer.LeadVolunteer;
-import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Projections.Volunteer.VolunteerProjection;
 
-import javax.persistence.*;
 import java.util.Date;
 //@Projection(name = "leadVolunteerProjection", types = { LeadVolunteer.class })
 //@EntityView(LeadVolunteer.class)

@@ -9,6 +9,7 @@ import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.NetworkTypeAssignedToVolunteersToEvent;
+import org.resala.Projections.Calls.NetworkTypeAssignedToVolunteerProjection;
 import org.resala.Repository.Volunteer.NetworkTypeAssignedToVolunteersToEventRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Call.CallTypeService;
@@ -96,6 +97,19 @@ public class NetworkTypeAssignedToVolunteersToEventService implements CommonServ
                 networkTypeAssignedToVolunteersToEventRepo.getByNetworkType_IdAndEvent_Id(networkTypeId,eventId);
         if(!networkTypeAssignedToVolunteersToEvent.isPresent()) return null;
         return networkTypeAssignedToVolunteersToEvent.get();
+    }
+
+    public List<NetworkTypeAssignedToVolunteerProjection> getNetworkTypeAssignedToVolunteers(NetworkTypeAssignedToVolunteersToEventDTO networkTypeAssignedToVolunteersToEventDTO){
+        Branch branch=branchService.getById(networkTypeAssignedToVolunteersToEventDTO.getBranchDTO().getId());
+        Event event=eventService.getById(networkTypeAssignedToVolunteersToEventDTO.getEventDTO().getId());
+        Volunteer volunteer=volunteerService.getById(networkTypeAssignedToVolunteersToEventDTO.getVolunteers().get(0).getId());
+
+        List<NetworkTypeAssignedToVolunteerProjection>list= networkTypeAssignedToVolunteersToEventRepo.getByEvent_IdAndBranch_IdAndVolunteersContains(event.getId(),branch.getId(),volunteer,NetworkTypeAssignedToVolunteerProjection.class);
+
+        if(list==null || list.isEmpty()){
+            throw new MyEntityNotFoundException("network type assigned to volunteer "+StaticNames.notFound);
+        }
+        return list;
     }
 
     public void update(List<VolunteerDTO> volunteersDto, EventDTO eventDto, NetworkTypeDTO networkTypeDto, CallTypeDTO callTypeDTO, BranchDTO branchDTO){

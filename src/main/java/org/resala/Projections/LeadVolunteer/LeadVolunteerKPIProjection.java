@@ -1,4 +1,4 @@
-package org.resala.Projections;
+package org.resala.Projections.LeadVolunteer;
 
 import javax.persistence.Column;
 

@@ -1,4 +1,4 @@
-package org.resala.Projections;
+package org.resala.Projections.Volunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

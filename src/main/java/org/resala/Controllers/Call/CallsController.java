@@ -25,8 +25,6 @@ import java.util.List;
 public class CallsController {
     @Autowired
     CallsService callsService;
-    @Autowired
-    VolunteerService volunteerService;
 
     @RequestMapping(value = "/assignCalls" , method = RequestMethod.POST)/////
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
@@ -34,7 +32,6 @@ public class CallsController {
 
         return callsService.assignCalls(volunteerToCallsDTO);
     }
-
 
     @RequestMapping(value = "/confirmAssignedCalls/{balanced}" , method = RequestMethod.POST)/////
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")

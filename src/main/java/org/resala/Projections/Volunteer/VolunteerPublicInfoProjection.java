@@ -1,18 +1,12 @@
-package org.resala.Projections;
+package org.resala.Projections.Volunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;
-import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.VolunteerStatus;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
 public interface VolunteerPublicInfoProjection {
     int getId();

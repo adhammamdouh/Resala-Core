@@ -92,6 +92,7 @@ public class CallsService {
         return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
 
+
     public ResponseEntity<Object> confirmAssignedCalls(boolean balanced,NetworkTypeAssignedToVolunteersToEventDTO networkTypeAssignedToVolunteersToEventDTO) {
 
         Event event = eventService.getById(networkTypeAssignedToVolunteersToEventDTO.getEventDTO().getId());

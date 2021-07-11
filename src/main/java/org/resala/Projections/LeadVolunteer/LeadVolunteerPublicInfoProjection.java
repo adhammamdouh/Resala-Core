@@ -1,4 +1,6 @@
-package org.resala.Projections;
+package org.resala.Projections.LeadVolunteer;
+
+import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
 
 public interface LeadVolunteerPublicInfoProjection {
     int getId();

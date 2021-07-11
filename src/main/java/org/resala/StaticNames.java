@@ -55,6 +55,7 @@ public interface StaticNames {
     String getAllLeadVolunteersByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH";
     String getAllLeadVolunteersPublicInfoByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH";
     String getCommitteeTeam="ROLE_GET_ALL_COMMITTEE_TEAM";
+    String getNetworkTypeAssignedToVolunteer="ROLW_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS";
 
     /*String getAllActiveLeadVolunteers = "ROLE_GET_ALL_ACTIVE_LEAD_VOLUNTEERS";
     String getAllArchivedLeadVolunteers = "ROLE_GET_ALL_ARCHIVED_LEAD_VOLUNTEERS";
