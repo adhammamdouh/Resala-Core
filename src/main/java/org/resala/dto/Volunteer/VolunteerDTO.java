@@ -18,6 +18,7 @@ import java.util.Date;
 @Setter
 public class VolunteerDTO {
     int id;
+    int gender;
     AddressDTO address;
     BranchDTO branch;
     String faculty;

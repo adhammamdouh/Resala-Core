@@ -9,6 +9,7 @@ import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Event.EventResult;
 import org.resala.Models.Event.EventStatus;
+import org.resala.Pair;
 import org.resala.Repository.Event.EventRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Call.CallsService;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,21 +47,35 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
     @Override
-    public ResponseEntity<Object> create(EventDTO dto) {
-        dto.checkNull();
-        EventStatus eventStatus = eventStatusService.getEventStatusByName(StaticNames.activeState);
-        List<Branch> branches = branchService.getBranchByIds(
-                dto.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
-        );
+    public ResponseEntity<Object> create(List<EventDTO> dtos) {
+        ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
+        int count = 0;
+        for (EventDTO dto : dtos) {
+            try {
+                dto.checkNull();
+                EventStatus eventStatus = eventStatusService.getEventStatusByName(StaticNames.activeState);
+                List<Branch> branches = branchService.getBranchByIds(
+                        dto.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
+                );
 
-        Event event = modelMapper().map(dto, Event.class);
-        event.setId(0);
-        event.setBranches(branches);
-        event.setEventStatus(eventStatus);
+                Event event = modelMapper().map(dto, Event.class);
+                event.setId(0);
+                event.setBranches(branches);
+                event.setEventStatus(eventStatus);
 
-        checkConstraintViolations(event);
-        eventRepo.save(event);
-        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
+                checkConstraintViolations(event);
+                eventRepo.save(event);
+                count++;
+            } catch (Exception e) {
+                failed.add(new Pair<>(count, e.getMessage()));
+                count++;
+            }
+
+        }
+        if(failed.size()==0)
+            return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
+        else
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -122,23 +138,24 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     public List<Event> getAllEventsByStateName(String stateName) {
         return eventRepo.findAllByEventStatus_name(stateName);
     }
+
     public List<Event> getAllEventsByStateId(int id) {
-        EventStatus eventStatus=eventStatusService.getEventStatusById(id);
+        EventStatus eventStatus = eventStatusService.getEventStatusById(id);
         return eventRepo.findAllByEventStatus(eventStatus);
     }
 
     public List<Event> getAllEventsByShareableAndEventState(boolean shareable, int eventStateId) {
-        EventStatus eventStatus=eventStatusService.getEventStatusById(eventStateId);
+        EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
         return eventRepo.findAllByShareableAndEventStatus(shareable, eventStatus);
     }
 
     public List<Event> getAllEventsByShareableAndBranchIdAndEventStateId(boolean shareable, int branchId, int eventStateId) {
-        EventStatus eventStatus=eventStatusService.getEventStatusById(eventStateId);
+        EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
         return eventRepo.findAllByShareableAndEventStatusAndAndBranches_id(shareable, eventStatus, branchId);
     }
 
-    public List<Event> getAllByStateIdAndBranchId(int stateId,int branchId) {
-        EventStatus eventStatus=eventStatusService.getEventStatusById(stateId);
+    public List<Event> getAllByStateIdAndBranchId(int stateId, int branchId) {
+        EventStatus eventStatus = eventStatusService.getEventStatusById(stateId);
         return eventRepo.findAllByBranches_idAndEventStatus(branchId, eventStatus);
     }
 
@@ -147,15 +164,15 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         CheckConstraintService.checkConstraintViolations(event, Event.class);
         if (event.isHasCalls() && event.getCallsStartTime() == null)
             throw new ConstraintViolationException("Your event has Calls so you have to enter CallsStartTime");
-        else{
-            if(event.getCallsStartTime().after(event.getToDate())||event.getCallsStartTime().before(event.getFromDate()))
+        else {
+            if (event.getCallsStartTime().after(event.getToDate()) || event.getCallsStartTime().before(event.getFromDate()))
                 throw new ConstraintViolationException("Your event Calls must be between start and to date");
         }
     }
 
 
     public List<Event> getAllByStatusAndResult(String eventStatusName, EventResult eventResult) {
-        EventStatus eventStatus=eventStatusService.getEventStatusByName(eventStatusName);
-        return eventRepo.findAllByEventStatusAndEventResult(eventStatus,eventResult);
+        EventStatus eventStatus = eventStatusService.getEventStatusByName(eventStatusName);
+        return eventRepo.findAllByEventStatusAndEventResult(eventStatus, eventResult);
     }
 }

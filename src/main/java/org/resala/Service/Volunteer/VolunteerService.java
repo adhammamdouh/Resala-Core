@@ -2,6 +2,7 @@ package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.ActiveStateException;
+import org.resala.Exceptions.ConstraintViolationException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
@@ -12,8 +13,10 @@ import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Pair;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
+
 import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
@@ -23,7 +26,10 @@ import org.resala.Service.CheckConstraintService;
 import org.resala.Service.CommonCRUDService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
+import org.resala.dto.BranchDTO;
+import org.resala.dto.Committe.CommitteeDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
+import org.resala.dto.Volunteer.VolunteerStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,27 +69,40 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     @Override
-    public ResponseEntity<Object> create(VolunteerDTO dto) {
-        dto.checkNull();
-        Branch branch = branchService.getById(dto.getBranch().getId());
-        Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
-        Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
-        Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
-        String phoneNumber = dto.getPhoneNumber();
-        Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
-        volunteer.setId(0);
-        volunteer.setBranch(branch);
-        volunteer.getAddress().setCapital(capital);
-        volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
-        volunteer.setRole(role);
-        volunteer.setVolunteerStatus(volunteerStatus);
+    public ResponseEntity<Object> create(List<VolunteerDTO> dtos) {
+        ArrayList<Pair<Integer,String>>failed=new ArrayList<>();
+        int count=0;
+        for (VolunteerDTO dto : dtos) {
+            try {
+                dto.checkNull();
+                Branch branch = branchService.getById(dto.getBranch().getId());
+                Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
+                Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
+                VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
+                Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
+                String phoneNumber = dto.getPhoneNumber();
+                Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
+                volunteer.setId(0);
+                volunteer.setBranch(branch);
+                volunteer.getAddress().setCapital(capital);
+                volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
+                volunteer.setRole(role);
+                volunteer.setVolunteerStatus(volunteerStatus);
+                checkConstraintViolations(volunteer);
+                addressService.checkConstraintViolations(volunteer.getAddress());
+                volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
+                volunteerRepo.save(volunteer);
+                count++;
+            }catch (Exception e){
+                failed.add(new Pair<>(count,e.getMessage()));
+                count++;
+            }
 
-        checkConstraintViolations(volunteer);
-        addressService.checkConstraintViolations(volunteer.getAddress());
-        volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
-        volunteerRepo.save(volunteer);
-        return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
+        }
+        if(failed.size()==0)
+            return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
+        else
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
     }
 
 
@@ -229,20 +248,22 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
-        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return volunteerRepo.findAllByVolunteerStatusAndBranch(volunteerStatus, branch, VolunteerPublicInfoProjection.class);
     }
 
 
-
     public void checkConstraintViolations(Volunteer volunteer) {
-
+        if(volunteer.getGender()!=StaticNames.gender.MALE.ordinal()&&volunteer.getGender()!=StaticNames.gender.FEMALE.ordinal()){
+            throw new ConstraintViolationException("Gender must be male or female");
+        }
         CheckConstraintService.checkConstraintViolations(volunteer, Volunteer.class);
     }
 
     public List<Volunteer> getAllNormal() {
         return volunteerRepo.getAllNormal(Volunteer.class);
     }
+
     public void setNewKPI(Volunteer volunteer, VolunteerKPI kpi) {
         volunteer.setVolunteerKPI(kpi);
         volunteerRepo.save(volunteer);

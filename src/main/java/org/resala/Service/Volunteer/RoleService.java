@@ -18,7 +18,7 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
     @Autowired
     RoleRepo roleRepo;
     @Override
-    public ResponseEntity<Object> create(RoleDTO dto) {
+    public ResponseEntity<Object> create(List<RoleDTO> dto) {
         return null;
     }
 

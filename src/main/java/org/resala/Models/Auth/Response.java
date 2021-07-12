@@ -13,7 +13,7 @@ public class Response implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private int status;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private String error;
+    private Object error;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Object message;
 
@@ -23,7 +23,7 @@ public class Response implements Serializable {
         this.message = message;
     }
 
-    public Response(int status, String error) {
+    public Response(int status, Object error) {
         timestamp = DateTimeService.getNow();
         this.status = status;
         this.error = error;

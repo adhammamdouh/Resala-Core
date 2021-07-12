@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
+import org.hibernate.validator.constraints.Range;
 import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
@@ -43,6 +44,8 @@ public class Volunteer implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     Address address;
+    @Column(name = "gender")
+    int gender;
     @Column(name = "faculty")
     @NotEmpty(message = "Please enter Faculty")
     String faculty;

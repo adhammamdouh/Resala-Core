@@ -20,7 +20,7 @@ public class CapitalService implements CommonCRUDService<CapitalDTO>, CommonServ
     CapitalRepo capitalRepo;
 
     @Override
-    public ResponseEntity<Object> create(CapitalDTO dto) {
+    public ResponseEntity<Object> create(List<CapitalDTO> dto) {
         return null;
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Event.EventResult;
 import org.resala.Models.Volunteer.Volunteer;

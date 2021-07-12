@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -248,7 +249,7 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
     @Override
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.createVolunteer + "')")
-    public ResponseEntity<Object> add(@RequestBody VolunteerDTO volunteerDTO) {
+    public ResponseEntity<Object> add(@RequestBody List<VolunteerDTO> volunteerDTO) {
         return volunteerService.create(volunteerDTO);
     }
 

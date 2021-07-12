@@ -62,6 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 jwtUtil.validateToken(jwt);
             } catch (Exception e) {
+                System.out.println(e.getCause().toString());
                 logger.error(e.getMessage());
                 response.setContentType("application/json");
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());

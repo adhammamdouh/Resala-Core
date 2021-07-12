@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/event")
@@ -122,7 +123,7 @@ public class EventController implements CommonController<EventDTO> {
     @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.addEvent + "')")
     @Override
-    public ResponseEntity<Object> add(@RequestBody EventDTO obj) {
+    public ResponseEntity<Object> add(@RequestBody List<EventDTO> obj) {
         return eventService.create(obj);
     }
 

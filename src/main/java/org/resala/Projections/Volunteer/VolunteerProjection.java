@@ -12,6 +12,8 @@ import java.util.Date;
 public interface VolunteerProjection {
     int getId();
 
+    int getGender();
+
     Address getAddress();
 
     String getNationalId();

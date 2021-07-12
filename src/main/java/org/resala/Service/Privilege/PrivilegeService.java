@@ -18,7 +18,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     @Autowired
     PrivilegeRepo privilegeRepo;
     @Override
-    public ResponseEntity<Object> create(PrivilegeDTO dto) {
+    public ResponseEntity<Object> create(List<PrivilegeDTO> dto) {
         return null;
     }
 
