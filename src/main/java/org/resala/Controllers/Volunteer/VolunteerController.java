@@ -52,22 +52,22 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
     }*/
 
 
-    @RequestMapping(value = "/getAllByState", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllByState/{stateId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteersByState + "') or hasRole('" + StaticNames.getAllVolunteersPublicInfoByState + "')" +
             "or hasRole('" + StaticNames.getAllVolunteersByStateAndMyBranch + "') or hasRole('" + StaticNames.getAllVolunteersPublicInfoByStateAndMyBranch + "')")
-    public ResponseEntity<Object> getAllByState(@RequestBody VolunteerStatusDTO volunteerStatusDTO) {
+    public ResponseEntity<Object> getAllByState(@PathVariable int stateId) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllVolunteersByState, authorities))
-            return ResponseEntity.ok(new Response(volunteerService.getAllByState(volunteerStatusDTO.getId()), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getAllByState(stateId), HttpStatus.OK.value()));
         else if (AuthorizeController.contain(StaticNames.getAllVolunteersPublicInfoByState, authorities))
-            return ResponseEntity.ok(new Response(volunteerService.getAllPublicInfoByState(volunteerStatusDTO.getId()), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getAllPublicInfoByState(stateId), HttpStatus.OK.value()));
 
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         if (AuthorizeController.contain(StaticNames.getAllVolunteersByStateAndMyBranch, authorities)) {
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
 
         } else {
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
         }
 
     }
@@ -145,14 +145,14 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
     }*/
 
 
-    @RequestMapping(value = "/getAllByStateAndBranch/{branchId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllByStateAndBranch/{stateId}/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllVolunteersByState + "') or hasRole('" + StaticNames.getAllVolunteersPublicInfoByState + "')")
-    public ResponseEntity<Object> getAllByStateAndBranchId(@RequestBody VolunteerStatusDTO volunteerStatusDTO, @PathVariable int branchId) {
+    public ResponseEntity<Object> getAllByStateAndBranchId(@PathVariable int stateId, @PathVariable int branchId) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllVolunteersByState, authorities))
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(volunteerStatusDTO.getId(), branchId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(volunteerStatusDTO.getId(), branchId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
     }
 
     /*@RequestMapping(value = "/getAllByStateAndBranch", method = RequestMethod.GET)
@@ -267,7 +267,7 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
     }
 
     @Override
-    @RequestMapping(value = "/acceptToArchive", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/acceptToArchive", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.acceptToArchiveVolunteer + "')")
     public ResponseEntity<Object> archive(@RequestBody VolunteerDTO obj) {
         return volunteerService.archive(obj);

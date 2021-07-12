@@ -40,7 +40,7 @@ public class CallsController {
         return callsService.confirmAssignedCalls(balanced, networkTypeAssignedToVolunteersToEventDTO);
     }
 
-    @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+StaticNames.getAssignedCalls+"')")
     public ResponseEntity<Object> getEventAssignCalls(@RequestBody VolunteerToCallsDTO volunteerToCallsDTO){
         return ResponseEntity.ok(callsService.getAssignedCalls(volunteerToCallsDTO));

@@ -100,9 +100,9 @@ public class LeadVolunteerService {
         leadVolunteer.setLeadVolunteerKPI(kpi);
         leadVolunteerRepo.save(leadVolunteer);
     }
-    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(BranchDTO branchDTO,CommitteeDTO committeeDTO){
-        Branch branch=branchService.getById(branchDTO.getId());
-        Committee committee =committeeService.getById(committeeDTO.getId());
+    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(int branchId,int committeeId){
+        Branch branch=branchService.getById(branchId);
+        Committee committee =committeeService.getById(committeeId);
         return leadVolunteerRepo.findAllByMyVolunteerInfo_Branch_IdAndCommittee_Id(branch.getId(),committee.getId(),LeadVolunteerPublicInfoProjection.class);
     }
 }
