@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.resala.Exceptions.NullException;
 import org.resala.dto.BranchDTO;
+import org.resala.dto.OrganizationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -32,6 +33,7 @@ public class EventDTO {
     boolean hasCalls;
     boolean shareable;
     List<BranchDTO>branches;
+    OrganizationDTO organization;
     public void checkNull(){
         if (branches==null||branches.isEmpty())
             throw new NullException("Branches");

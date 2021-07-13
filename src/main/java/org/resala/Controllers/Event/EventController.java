@@ -7,6 +7,7 @@ import org.resala.Controllers.CommonBranchController;
 import org.resala.Controllers.CommonController;
 import org.resala.Models.Auth.Response;
 import org.resala.Service.Event.EventService;
+import org.resala.Service.IssTokenService;
 import org.resala.StaticNames;
 import org.resala.dto.Event.EventDTO;
 import org.resala.dto.Event.EventStatuesDTO;
@@ -35,8 +36,8 @@ public class EventController implements CommonController<EventDTO> {
         if (AuthorizeController.contain(StaticNames.getAllEvents, authorities))
             return ResponseEntity.ok(new Response(eventService.getAll(), HttpStatus.OK.value()));
         else {
-            int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
-            return ResponseEntity.ok(new Response(eventService.getEventsByBranchId(branchId), HttpStatus.OK.value()));
+//            int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+            return ResponseEntity.ok(new Response(eventService.getEventsByBranchId(IssTokenService.getBranchId()), HttpStatus.OK.value()));
         }
     }
 
@@ -49,11 +50,11 @@ public class EventController implements CommonController<EventDTO> {
             return ResponseEntity.ok(new Response(eventService.getAllEventsByStateId(eventStatusId), HttpStatus.OK.value()));
         else if (AuthorizeController.contain(StaticNames.getAllShareableEventsByState, authorities))
             return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndEventState(true, eventStatusId), HttpStatus.OK.value()));
-        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+//        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
         if (AuthorizeController.contain(StaticNames.getAllEventsByStateAndMyBranch, authorities))
-            return ResponseEntity.ok(new Response(eventService.getAllByStateIdAndBranchId(eventStatusId, branchId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(eventService.getAllByStateIdAndBranchId(eventStatusId, IssTokenService.getBranchId()), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventStateId(true, branchId, eventStatusId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(eventService.getAllEventsByShareableAndBranchIdAndEventStateId(true, IssTokenService.getBranchId(), eventStatusId), HttpStatus.OK.value()));
 
     }
 

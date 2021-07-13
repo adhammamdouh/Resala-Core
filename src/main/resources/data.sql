@@ -1,3 +1,20 @@
+ALTER DATABASE `resalacore` CHARACTER SET utf8 COLLATE utf8_general_ci;
+SET @sql = (SELECT IF(
+    (SELECT COUNT(INDEX_NAME)
+        FROM INFORMATION_SCHEMA.statistics WHERE
+        INDEX_NAME='UK_lqjrcobrh9jc8wpcar64q1bfh'
+    ) <> 0,
+    "SELECT 0",
+    "alter table user add constraint UK_lqjrcobrh9jc8wpcar64q1bfh unique (organization_id, user_name);"
+));
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+
+
+
+INSERT ignore INTO `organization` (`id`, `name`) VALUES ('1', 'Resala');
+
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('1', 'ROLE_GET_ALL_VOLUNTEERS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('2', 'ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('3', 'ROLE_GET_VOLUNTEERS_BY_MY_BRANCH_ID');
@@ -115,14 +132,14 @@ INSERT ignore INTO capital (`id`, `name`) VALUES ('24', 'بنها');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('25', 'العريش');
 
 
-INSERT ignore INTO branch (`id`, `name`) VALUES ('1', 'حلوان');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('2', 'المعادى');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('3', 'المهندسين');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('4', 'فيصل');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('5', 'مصر الجديدة');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('6', 'مدينة نصر');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('7', 'اكتوبر');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('8', 'الاسكندرية');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('1', 'حلوان','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('2', 'المعادى','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('3', 'المهندسين','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('4', 'فيصل','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('5', 'مصر الجديدة','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('6', 'مدينة نصر','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('7', 'اكتوبر','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('8', 'الاسكندرية','1');
 
 
 INSERT ignore INTO committee (`id`, `name`) VALUES ('1', 'اسقف');

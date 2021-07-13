@@ -1,12 +1,14 @@
 package org.resala.Models.Volunteer;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Models.Organization;
 
 import java.io.Serializable;
 

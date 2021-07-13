@@ -4,6 +4,7 @@ package org.resala.Controllers.Volunteer;
 import org.resala.Controllers.AuthorizeController;
 import org.resala.Controllers.CommonController;
 import org.resala.Models.Auth.Response;
+import org.resala.Service.IssTokenService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.VolunteerDTO;
@@ -36,11 +37,11 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
         else if (AuthorizeController.contain(StaticNames.getAllVolunteersPublicInfo, authorities))
             return ResponseEntity.ok(new Response(volunteerService.getAllPublicInfo(), HttpStatus.OK.value()));
 
-        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+//        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         if (AuthorizeController.contain(StaticNames.getVolunteersByMyBranchId, authorities))
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersProjectionByBranch(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersProjectionByBranch(IssTokenService.getBranchId()), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByBranch(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByBranch(IssTokenService.getBranchId()), HttpStatus.OK.value()));
 
 
     }
@@ -62,12 +63,12 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
         else if (AuthorizeController.contain(StaticNames.getAllVolunteersPublicInfoByState, authorities))
             return ResponseEntity.ok(new Response(volunteerService.getAllPublicInfoByState(stateId), HttpStatus.OK.value()));
 
-        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+//        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         if (AuthorizeController.contain(StaticNames.getAllVolunteersByStateAndMyBranch, authorities)) {
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersByStateAndBranch(stateId, IssTokenService.getBranchId()), HttpStatus.OK.value()));
 
         } else {
-            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByStateAndBranch(stateId, IssTokenService.getBranchId()), HttpStatus.OK.value()));
         }
 
     }
