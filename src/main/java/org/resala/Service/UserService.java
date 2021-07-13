@@ -1,9 +1,6 @@
 package org.resala.Service;
 
 import org.resala.Exceptions.ActiveStateException;
-import org.resala.Models.Volunteer.LeadVolunteer;
-import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.dto.UserLoginDTO;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.VolunteerStatus;
@@ -33,8 +30,6 @@ public class UserService {
     @Autowired
     VolunteerService volunteerService;
     @Autowired
-    LeadVolunteerService leadVolunteerService;
-    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     JwtUtil jwtUtil;
@@ -59,10 +54,7 @@ public class UserService {
         //User loggedUser = getUser(auth.getUsername());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
-        Volunteer volunteer= volunteerService.getByUserName(auth.getUsername());
-        map.put("volunteer",
-        ((leadVolunteerService.checkFound(volunteer)?volunteer:
-        leadVolunteerService.getByVolunteerInfo(volunteer))));
+        map.put("volunteer",volunteerService.getByUserName(auth.getUsername()));
         return map;
     }
 }
