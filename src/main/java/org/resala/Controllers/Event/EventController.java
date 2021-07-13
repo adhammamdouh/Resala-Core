@@ -148,7 +148,7 @@ public class EventController implements CommonController<EventDTO> {
         return eventService.update(newObj);
     }
 
-    @RequestMapping(value = "/getEventsByBranch/{branchId}", method = RequestMethod.GET)
+        @RequestMapping(value = "/getEventsByBranch/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllEvents + "')")
     public ResponseEntity<Object> getAllByBranchId(@PathVariable int branchId) {
         return ResponseEntity.ok(new Response(eventService.getEventsByBranchId(branchId), HttpStatus.OK.value()));

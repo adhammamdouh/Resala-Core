@@ -69,7 +69,7 @@ public class LeadVolunteerController {
 
     @RequestMapping(value = "/getCommitteeTeam/{branchId}/{committeeId}",method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+StaticNames.getCommitteeTeam+"')")
-    public ResponseEntity<Object> getCommitteeTeam(@PathVariable int branchId,int committeeId){
+    public ResponseEntity<Object> getCommitteeTeam(@PathVariable int branchId,@PathVariable int committeeId){
         return ResponseEntity.ok(new Response(leadVolunteerService.getCommitteeTeam(
                 branchId,committeeId),HttpStatus.OK.value()));
     }
