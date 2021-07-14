@@ -94,7 +94,7 @@ public class Volunteer implements Serializable {
 
     @Column(name = "tShirt")
     @NotNull(message = "T-Shirt Can't be null")
-    boolean tShirt;
+    int tShirt;
     @Column(name = "mini_camp")
     boolean miniCamp;
 

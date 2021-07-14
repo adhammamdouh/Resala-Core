@@ -28,13 +28,14 @@ public class VolunteerDTO {
     String midName;
     String nickName;
     String phoneNumber;
+    String comments;
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date joinDate;
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
-    boolean tShirt;
+    int tShirt;
     boolean miniCamp;
 
     public void checkNull() {
