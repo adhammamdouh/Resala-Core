@@ -29,7 +29,7 @@ public class KPIGeneration {
     @FunctionName("resala.CloudFunctions.volunteerKPIGeneration")
     public HttpResponseMessage generateVolunteerKPI(
                                     ///sec min hour day month day of a week
-            @TimerTrigger(name = "req",schedule = "0 35 18 * * *") HttpRequestMessage<Optional<String>> request,
+            @TimerTrigger(name = "req",schedule = "0 0 19 * * *") HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
 
         volunteerKPIService.generateKPIsForAll();
@@ -41,7 +41,7 @@ public class KPIGeneration {
 
     @FunctionName("resala.CloudFunctions.leadVolunteerKPIGeneration")
     public HttpResponseMessage generateLeadVolunteerKPI(
-            @TimerTrigger(name = "req",schedule = "0 35 20 * * *") HttpRequestMessage<Optional<String>> request,
+            @TimerTrigger(name = "req",schedule = "0 0 21 * * *") HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
 
         leadVolunteerKPIService.generateKPIsForAll();

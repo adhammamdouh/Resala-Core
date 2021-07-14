@@ -17,7 +17,7 @@ public class EducationLevel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @Column(name = "education_level_name")
+    @Column
     String name;
 
 }
