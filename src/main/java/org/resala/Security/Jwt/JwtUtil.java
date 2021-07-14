@@ -20,12 +20,12 @@ public class JwtUtil {
     private String SECRET_CODE = "DevOutLoudTeam111";
     /// feb ,aug
 
-    public String generateToken(int branchId, Authentication authentication) {
+    public String generateToken(int organizationId, int branchId, Authentication authentication) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, branchId, authentication);
+        return createToken(claims, organizationId, branchId, authentication);
     }
 
-    private String createToken(Map<String, Object> claims, int branchId, Authentication authentication) {
+    private String createToken(Map<String, Object> claims, int organizationId, int branchId, Authentication authentication) {
         int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
                 LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
         int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
@@ -36,7 +36,7 @@ public class JwtUtil {
         return Jwts.builder().setClaims(claims)
                 .setSubject(authentication.getName())
                 .setAudience(authentication.getAuthorities().toString())
-                .setIssuer(String.valueOf(branchId))
+                .setIssuer(organizationId + "," + branchId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(year, month, 1))
                 .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
@@ -46,11 +46,10 @@ public class JwtUtil {
         try {
             String userName = extractUserName(token);
             List<String> authorities = extractAuthorities(token);
-            String role = extractId(token);
+            String myPlace = extractId(token);
             Date expirationDate = extractExpirationDate(token);
-            if (userName == null || role == null || authorities == null || expirationDate.before(new Date()))
-                throw new JwtTokenMalformedException("JWT UserName or Roles can't be null or JWT Token has expired");
-
+            if (userName == null || myPlace == null || myPlace.isEmpty() || myPlace.split(",").length != 2 || authorities == null || expirationDate.before(new Date()))
+                throw new JwtTokenMalformedException("Invalid JWT signature or JWT Token has expired");
         } catch (SignatureException e) {
             throw new JwtTokenMalformedException("Invalid JWT signature");
         } catch (MalformedJwtException e) {

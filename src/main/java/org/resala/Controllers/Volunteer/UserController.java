@@ -1,25 +1,12 @@
 package org.resala.Controllers.Volunteer;
 
-import org.resala.Security.Jwt.JwtUtil;
-import org.resala.Models.Auth.Request;
+import org.resala.dto.UserLoginDTO;
 import org.resala.Models.Auth.Response;
-import org.resala.Models.MyUserDetails;
-import org.resala.Models.Volunteer.User;
 import org.resala.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController()
 public class UserController {
@@ -31,7 +18,7 @@ public class UserController {
     UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> loginUser(@RequestBody Request auth) throws Exception {
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO auth) throws Exception {
 
         return ResponseEntity.ok(new Response(userService.login(auth), HttpStatus.OK.value()));
     }

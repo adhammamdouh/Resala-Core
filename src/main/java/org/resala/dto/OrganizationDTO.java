@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BranchDTO {
+public class OrganizationDTO {
     int id;
     String name;
-    String region;
-    OrganizationDTO organization;
 }

@@ -2,6 +2,7 @@ package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
+import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Committe.Committee;
@@ -96,13 +97,19 @@ public class LeadVolunteerService {
         return leadVolunteerOptional.isPresent();
     }
 
+    public LeadVolunteer getByVolunteerInfo(Volunteer volunteer){
+        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
+        if(leadVolunteerOptional.isPresent()) return leadVolunteerOptional.get();
+        throw new MyEntityNotFoundException("lead volunteer "+StaticNames.notFound);
+    }
+
     public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {
         leadVolunteer.setLeadVolunteerKPI(kpi);
         leadVolunteerRepo.save(leadVolunteer);
     }
-    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(BranchDTO branchDTO,CommitteeDTO committeeDTO){
-        Branch branch=branchService.getById(branchDTO.getId());
-        Committee committee =committeeService.getById(committeeDTO.getId());
+    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(int branchId,int committeeId){
+        Branch branch=branchService.getById(branchId);
+        Committee committee =committeeService.getById(committeeId);
         return leadVolunteerRepo.findAllByMyVolunteerInfo_Branch_IdAndCommittee_Id(branch.getId(),committee.getId(),LeadVolunteerPublicInfoProjection.class);
     }
 }

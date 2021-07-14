@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Branch;
+import org.resala.Models.Organization;
 import org.resala.Models.Volunteer.VolunteerStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,12 @@ public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Organization organization;
 
     @Column(name = "name")
     @NotEmpty(message = "Please enter Name")

@@ -1,11 +1,10 @@
 package org.resala.Service;
 
 import org.resala.Exceptions.ActiveStateException;
-import org.resala.Models.Auth.Request;
+import org.resala.dto.UserLoginDTO;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.VolunteerStatus;
 import org.resala.Repository.UserRepository;
-import org.resala.Repository.Volunteer.VolunteerRepo;
 import org.resala.Security.Jwt.JwtUtil;
 import org.resala.Service.Volunteer.RoleService;
 import org.resala.Service.Volunteer.VolunteerService;
@@ -40,15 +39,15 @@ public class UserService {
         return userRepository.findByUserName(username);
     }
 
-    public int getBranchId(String username){
+   /* public int getBranchId(String username){
         return branchService.getBranchByUserName(username).getId();
-    }
+    }*/
     //@Transactional
-    public Object login(Request auth){
+    public Object login(UserLoginDTO auth){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
-
-        String token = jwtUtil.generateToken(getBranchId(auth.getUsername()),authentication);
+        User user=getUser(auth.getUsername());
+        String token = jwtUtil.generateToken(user.getVolunteer().getOrganization().getId(),user.getVolunteer().getBranch().getId(),authentication);
         VolunteerStatus volunteerStatus=volunteerStatusService.getVolunteerStatusByUserName(auth.getUsername());
         if(volunteerStatus.getName().equals(StaticNames.archivedState))
             throw new ActiveStateException("This volunteer State is "+volunteerStatus.getName());

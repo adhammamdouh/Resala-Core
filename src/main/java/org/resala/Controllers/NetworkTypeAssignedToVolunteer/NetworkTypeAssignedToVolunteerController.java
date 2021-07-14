@@ -21,7 +21,7 @@ public class NetworkTypeAssignedToVolunteerController {
     @Autowired
     NetworkTypeAssignedToVolunteersToEventService networkTypeAssignedToVolunteersToEventService;
 
-    @RequestMapping(value = "/getNetworkTypeAssignedToVolunteer"  , method = RequestMethod.GET)
+    @RequestMapping(value = "/getNetworkTypeAssignedToVolunteer"  , method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.getNetworkTypeAssignedToVolunteer + "')")
     public ResponseEntity<Object> getAssignedCalls(@RequestBody NetworkTypeAssignedToVolunteersToEventDTO networkTypeAssignedToVolunteersToEventDTO){
         return ResponseEntity.ok(new Response(networkTypeAssignedToVolunteersToEventService.getNetworkTypeAssignedToVolunteers(networkTypeAssignedToVolunteersToEventDTO), HttpStatus.OK.value()));
