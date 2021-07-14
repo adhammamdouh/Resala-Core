@@ -15,21 +15,6 @@
     <description>Resala-Volunteer-And-Event-Management-System-Core</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-
-        <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
-        <azure.functions.maven.plugin.version>1.11.0</azure.functions.maven.plugin.version>
-
-        <!-- customize those two properties. The functionAppName should be unique across Azure -->
-        <functionResourceGroup>SENG41283</functionResourceGroup>
-        <functionAppName>         </functionAppName><!-- TODO -->
-
-        <functionAppRegion>South Africa North</functionAppRegion>
-        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <start-class>com.example.DemoApplication</start-class>
-
         <java.version>11</java.version>
     </properties>
     <dependencyManagement>
