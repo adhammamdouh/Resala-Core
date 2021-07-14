@@ -51,7 +51,7 @@ public class UserService {
         String token = jwtUtil.generateToken(getBranchId(auth.getUsername()),authentication);
         VolunteerStatus volunteerStatus=volunteerStatusService.getVolunteerStatusByUserName(auth.getUsername());
         if(volunteerStatus.getName().equals(StaticNames.archivedState))
-            throw new ActiveStateException("This Volunteer State is "+volunteerStatus.getName());
+            throw new ActiveStateException("This volunteer State is "+volunteerStatus.getName());
         //User loggedUser = getUser(auth.getUsername());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
