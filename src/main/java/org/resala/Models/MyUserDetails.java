@@ -2,6 +2,7 @@ package org.resala.Models;
 
 import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
+import org.resala.Models.Volunteer.Cloud;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.dto.Privilege.ActionDTO;
@@ -15,17 +16,22 @@ import java.util.*;
 public class MyUserDetails implements UserDetails {
     private final User user;
     private final Volunteer volunteer;
-
+    private final Cloud cloud;
 
     public MyUserDetails(User user) {
         this.user = user;
         this.volunteer = user.getVolunteer();
+        this.cloud = user.getCloud();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        List<Privilege> privileges = volunteer.getPrivileges();
+        List<Privilege> privileges;
+        if(volunteer!=null)
+            privileges = volunteer.getPrivileges();
+        else
+            privileges = cloud.getPrivileges();
         for (Privilege privilege : privileges) {
             List<Action> actions = privilege.getActions();
             for (Action action : actions)

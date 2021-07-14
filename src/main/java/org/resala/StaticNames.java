@@ -6,6 +6,7 @@ public interface StaticNames {
     String TeamLeader = "TEAM_LEADER";
     String TeamMember = "TEAM_MEMBER";
     String normalVolunteer = "NORMAL_VOLUNTEER";
+    String cloud = "CLOUD";
     //----------------------------------------------------------------------------------------------------------------------
     String activeState = "ACTIVE";
     String deletedState = "DELETED";
@@ -63,7 +64,10 @@ public interface StaticNames {
     String getCommitteeTeam="ROLE_GET_ALL_COMMITTEE_TEAM";
     String getNetworkTypeAssignedToVolunteer="ROLE_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS";
 
-
+    String createCloud = "ROLE_CREATE_CLOUD";
+    String generateVolunteersKPIs ="ROLE_GENERATE_VOLUNTEERS_KPIS";
+    String generateLeadVolunteersKPIs ="ROLE_GENERATE_LEAD_VOLUNTEERS_KPIS";
+    String generateEventsKPIs="ROLE_GENERATE_EVENTS_KPIS";
 
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";

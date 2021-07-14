@@ -49,29 +49,29 @@ public class LeadVolunteerController {
     }*/
 
 
-    @RequestMapping(value = "/getAllByState", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllByState/{stateId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteersByState + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByState + "')" +
             "or hasRole('" + StaticNames.getAllLeadVolunteersByStateAndMyBranch + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByStateAndMyBranch + "')")
-    public ResponseEntity<Object> getAllActive(@RequestBody VolunteerStatusDTO volunteerStatusDTO) {
+    public ResponseEntity<Object> getAllActive(@PathVariable int stateId) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByState, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByState(volunteerStatusDTO.getId()), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByState(stateId), HttpStatus.OK.value()));
         else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfoByState, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStatePublicInfo(volunteerStatusDTO.getId()), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStatePublicInfo(stateId), HttpStatus.OK.value()));
 
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByStateAndMyBranch, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(volunteerStatusDTO.getId(), Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
 
     }
 
-    @RequestMapping(value = "/getCommitteeTeam",method = RequestMethod.GET)
+    @RequestMapping(value = "/getCommitteeTeam/{branchId}/{committeeId}",method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+StaticNames.getCommitteeTeam+"')")
-    public ResponseEntity<Object> getCommitteeTeam(@RequestBody LeadVolunteerDTO leadVolunteerDTO){
+    public ResponseEntity<Object> getCommitteeTeam(@PathVariable int branchId,@PathVariable int committeeId){
         return ResponseEntity.ok(new Response(leadVolunteerService.getCommitteeTeam(
-                leadVolunteerDTO.getMyVolunteerInfo().getBranch(),leadVolunteerDTO.getCommittee()),HttpStatus.OK.value()));
+                branchId,committeeId),HttpStatus.OK.value()));
     }
 
    /* @RequestMapping(value = "/getAllActivePublicInfo", method = RequestMethod.GET)
@@ -145,14 +145,14 @@ public class LeadVolunteerController {
     }*/
 
 
-    @RequestMapping(value = "/getAllByStateAndBranch/{branchId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllByStateAndBranch/{stateId}/{branchId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getAllLeadVolunteersByState + "') or hasRole('" + StaticNames.getAllLeadVolunteersPublicInfoByState + "')")
-    public ResponseEntity<Object> getAllByStateAndBranchId(@RequestBody VolunteerStatusDTO volunteerStatusDTO, @PathVariable int branchId) {
+    public ResponseEntity<Object> getAllByStateAndBranchId(@PathVariable int stateId, @PathVariable int branchId) {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByState, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(volunteerStatusDTO.getId(), branchId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(volunteerStatusDTO.getId(), branchId), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
     }
 
     /*@RequestMapping(value = "/getAllByStateAndBranch", method = RequestMethod.GET)

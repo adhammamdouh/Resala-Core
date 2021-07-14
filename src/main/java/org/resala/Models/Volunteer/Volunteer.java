@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
-import org.hibernate.validator.constraints.Range;
 import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
-import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
+import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +39,10 @@ public class Volunteer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
@@ -96,7 +99,8 @@ public class Volunteer implements Serializable {
     @JoinColumn(name = "kpi_id")
     VolunteerKPI volunteerKPI;
 
-    @OneToOne(mappedBy = "volunteer", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",unique = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
@@ -142,12 +146,13 @@ public class Volunteer implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    VolunteerStatus volunteerStatus;
+    UserStatus volunteerStatus;
 
 
-    @OneToOne(mappedBy = "myVolunteerInfo",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "myVolunteerInfo", fetch = FetchType.EAGER)
     @JsonBackReference
     LeadVolunteer leadVolunteer;
+
     public Volunteer() {
     }
 
