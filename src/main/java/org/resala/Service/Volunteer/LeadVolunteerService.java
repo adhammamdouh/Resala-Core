@@ -14,6 +14,7 @@ import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.LeadVolunteerRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Commiittee.CommitteeService;
+import org.resala.Service.IssTokenService;
 import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.Committe.CommitteeDTO;
@@ -57,38 +58,42 @@ public class LeadVolunteerService {
     }
 
     public <T> List<T> getAll(Class<T> projection) {
-        return leadVolunteerRepo.findAllBy(projection);
+        return leadVolunteerRepo.findAllByAndMyVolunteerInfo_Organization_Id(projection, IssTokenService.getOrganizationId());
+    }
+
+    public List<LeadVolunteer> getAllForKPI() {
+        return leadVolunteerRepo.findAllBy();
     }
 
 
     public List<LeadVolunteerProjection> getAllByStateAndBranch(int stateId, int branchId) {
-        Branch branch=branchService.getById(branchId);
-        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class);
+        Branch branch = branchService.getById(branchId);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllPublicInfoByStateAndBranch(int stateId, int branchId) {
-        Branch branch=branchService.getById(branchId);
-        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class);
+        Branch branch = branchService.getById(branchId);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getAllByState(int stateId) {
-        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus(volunteerStatus, LeadVolunteerProjection.class);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(int stateId) {
-        VolunteerStatus volunteerStatus=volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatus(volunteerStatus, LeadVolunteerPublicInfoProjection.class);
+        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getLeadVolunteersProjectionByBranch(int branchId) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_Id(branchId, LeadVolunteerProjection.class);
+        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_IdAndMyVolunteerInfo_Organization_Id(branchId, LeadVolunteerProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getLeadVolunteersPublicInfoByBranch(int branchId) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_Id(branchId, LeadVolunteerPublicInfoProjection.class);
+        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_IdAndMyVolunteerInfo_Organization_Id(branchId, LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 
     public boolean checkFound(Volunteer volunteer) {
@@ -100,9 +105,10 @@ public class LeadVolunteerService {
         leadVolunteer.setLeadVolunteerKPI(kpi);
         leadVolunteerRepo.save(leadVolunteer);
     }
-    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(int branchId,int committeeId){
-        Branch branch=branchService.getById(branchId);
-        Committee committee =committeeService.getById(committeeId);
-        return leadVolunteerRepo.findAllByMyVolunteerInfo_Branch_IdAndCommittee_Id(branch.getId(),committee.getId(),LeadVolunteerPublicInfoProjection.class);
+
+    public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(int branchId, int committeeId) {
+        Branch branch = branchService.getById(branchId);
+        Committee committee = committeeService.getById(committeeId);
+        return leadVolunteerRepo.findAllByMyVolunteerInfo_Branch_IdAndCommittee_IdAndMyVolunteerInfo_Organization_Id(branch.getId(), committee.getId(), LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 }

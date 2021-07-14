@@ -12,6 +12,7 @@ import org.resala.Models.Call.Calls;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
+import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +41,10 @@ public class Volunteer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
@@ -145,9 +150,10 @@ public class Volunteer implements Serializable {
     VolunteerStatus volunteerStatus;
 
 
-    @OneToOne(mappedBy = "myVolunteerInfo",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "myVolunteerInfo", fetch = FetchType.EAGER)
     @JsonBackReference
     LeadVolunteer leadVolunteer;
+
     public Volunteer() {
     }
 

@@ -1,3 +1,20 @@
+ALTER DATABASE `resalacore` CHARACTER SET utf8 COLLATE utf8_general_ci;
+SET @sql = (SELECT IF(
+    (SELECT COUNT(INDEX_NAME)
+        FROM INFORMATION_SCHEMA.statistics WHERE
+        INDEX_NAME='UK_lqjrcobrh9jc8wpcar64q1bfh'
+    ) <> 0,
+    "SELECT 0",
+    "alter table user add constraint UK_lqjrcobrh9jc8wpcar64q1bfh unique (organization_id, user_name);"
+));
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+
+
+
+INSERT ignore INTO `organization` (`id`, `name`) VALUES ('1', 'Resala');
+
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('1', 'ROLE_GET_ALL_VOLUNTEERS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('2', 'ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('3', 'ROLE_GET_VOLUNTEERS_BY_MY_BRANCH_ID');
@@ -91,38 +108,40 @@ INSERT ignore INTO call_result (`id`, `name`) VALUES ('5', 'اول مره');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('3', 'الجيزة');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('4', 'شبرا الخيمة');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('5', 'بور سعيد');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('6', 'السويس');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('7', 'المحلة الكبرى');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('4', 'اسوان');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('5', 'اسيوط');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('6', 'البحيرة');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('7', 'الإسماعيلية');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('8', 'الاقصر');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('9', 'المنصورة');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('10', 'طنطا');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('11', 'اسيوط');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('12', 'الاسماعيلية');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('13', 'الفيوم');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('14', 'الزقازيق');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('15', 'دمياط');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('16', 'اسوان');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('17', 'المنيا');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('18', 'دمنهور');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('19', 'بنى سويف');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('20', 'الغردقة');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('21', 'قنا');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('22', 'سوهاج');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('23', 'شبين الكوم');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('24', 'بنها');
-INSERT ignore INTO capital (`id`, `name`) VALUES ('25', 'العريش');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('9', 'البحر الأحمر');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('10', 'بني سويف');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('11', 'بورسعيد');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('12', 'جنوب سيناء');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('13', 'الدقهلية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('14', 'دمياط');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('15', 'سوهاج');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('16', 'السويس');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('17', 'الشرقية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('18', 'شمال سيناء');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('19', 'الغربية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('20', 'الفيوم');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('21', 'القليوبية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('22', 'قنا');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('23', 'كفر الشيخ');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('24', 'مطروح');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('25', 'المنوفية');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('26', 'المنيا');
+INSERT ignore INTO capital (`id`, `name`) VALUES ('27', 'الوادي الجديد');
 
 
-INSERT ignore INTO branch (`id`, `name`) VALUES ('1', 'حلوان');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('2', 'المعادى');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('3', 'المهندسين');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('4', 'فيصل');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('5', 'مصر الجديدة');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('6', 'مدينة نصر');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('7', 'اكتوبر');
-INSERT ignore INTO branch (`id`, `name`) VALUES ('8', 'الاسكندرية');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('1', 'حلوان','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('2', 'المعادى','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('3', 'المهندسين','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('4', 'فيصل','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('5', 'مصر الجديدة','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('6', 'مدينة نصر','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('7', 'اكتوبر','1');
+INSERT ignore INTO branch (`id`, `name`,`organization_id`) VALUES ('8', 'الاسكندرية','1');
 
 
 INSERT ignore INTO committee (`id`, `name`) VALUES ('1', 'اسقف');
