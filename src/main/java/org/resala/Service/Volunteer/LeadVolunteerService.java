@@ -8,7 +8,7 @@ import org.resala.Models.Committe.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Projections.LeadVolunteer.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.LeadVolunteerRepo;
@@ -16,8 +16,6 @@ import org.resala.Service.BranchService;
 import org.resala.Service.Commiittee.CommitteeService;
 import org.resala.Service.IssTokenService;
 import org.resala.StaticNames;
-import org.resala.dto.BranchDTO;
-import org.resala.dto.Committe.CommitteeDTO;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +32,7 @@ public class LeadVolunteerService {
     @Autowired
     VolunteerService volunteerService;
     @Autowired
-    VolunteerStatusService volunteerStatusService;
+    UserStatusService volunteerStatusService;
     @Autowired
     BranchService branchService;
     @Autowired
@@ -68,23 +66,23 @@ public class LeadVolunteerService {
 
     public List<LeadVolunteerProjection> getAllByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getAllByState(int stateId) {
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerProjection.class,IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(int stateId) {
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
     }
 

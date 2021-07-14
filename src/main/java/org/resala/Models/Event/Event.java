@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Models.Branch;
 import org.resala.Models.Organization;
-import org.resala.Models.Volunteer.VolunteerStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

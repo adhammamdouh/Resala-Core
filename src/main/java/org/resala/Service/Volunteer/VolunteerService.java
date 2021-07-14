@@ -13,7 +13,7 @@ import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Pair;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
@@ -53,7 +53,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private VolunteerStatusService volunteerStatusService;
+    private UserStatusService volunteerStatusService;
     @Autowired
     private AddressService addressService;
     @Autowired
@@ -78,7 +78,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
                 Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
                 Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
-                VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
+                UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
                 Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
                 String phoneNumber = dto.getPhoneNumber();
                 Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
@@ -111,7 +111,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         Volunteer volunteer = getById(dto.getId());
         if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.activeState))
             throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
-        VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.requestedToArchiveState);
+        UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.requestedToArchiveState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Requested To Archive Successfully", HttpStatus.OK.value()));
@@ -121,7 +121,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         Volunteer volunteer = getById(dto.getId());
         if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToArchiveState))
             throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
-        VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
+        UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Declined to Archive Successfully", HttpStatus.OK.value()));
@@ -132,7 +132,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         Volunteer volunteer = getById(dto.getId());
         if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToArchiveState))
             throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
-        VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.archivedState);
+        UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.archivedState);
         volunteer.setVolunteerStatus(volunteerStatus);
         volunteerRepo.save(volunteer);
         return ResponseEntity.ok(new Response("Archived Successfully", HttpStatus.OK.value()));
@@ -196,12 +196,12 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
 
     public List<VolunteerProjection> getAllByState(int stateId) {
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfoByState(int stateId) {
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
     }
 
@@ -244,13 +244,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<VolunteerProjection> getVolunteersByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
-        VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
+        UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
         return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
     }
 

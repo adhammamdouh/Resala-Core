@@ -3,7 +3,7 @@ package org.resala.Projections.Volunteer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;
-import org.resala.Models.Volunteer.VolunteerStatus;
+import org.resala.Models.Volunteer.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -44,5 +44,5 @@ public interface VolunteerPublicInfoProjection {
 
     Branch getBranch();
 
-    VolunteerStatus getVolunteerStatus();
+    UserStatus getVolunteerStatus();
 }

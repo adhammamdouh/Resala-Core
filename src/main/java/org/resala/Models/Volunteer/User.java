@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.Models.Organization;
@@ -25,9 +26,13 @@ public class User implements Serializable {
     private String userName;
     @Column(nullable = false)
     private String password;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "volunteer_id",nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "volunteer_id",nullable = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     Volunteer volunteer;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
+    Cloud cloud;
 }

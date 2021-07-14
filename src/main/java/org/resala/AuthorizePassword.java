@@ -16,7 +16,7 @@ public class AuthorizePassword {
 
         System.out.println(StaticNames.gender.MALE);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String pass = "test";
+        String pass = "cloud";
         System.out.println(encoder.encode(pass));
 
     }

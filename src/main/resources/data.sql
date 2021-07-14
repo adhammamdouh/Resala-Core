@@ -64,6 +64,10 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('36', 'ROLE_CREATE_LEAD_VOLUN
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('37', 'ROLE_GET_ALL_COMMITTEE_TEAM');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('38', 'ROLE_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS');
 
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('39', 'ROLE_CREATE_CLOUD');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('40', 'ROLE_GENERATE_VOLUNTEERS_KPIS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('41', 'ROLE_GENERATE_LEAD_VOLUNTEERS_KPIS');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('42', 'ROLE_GENERATE_EVENTS_KPIS');
 
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
@@ -78,6 +82,8 @@ INSERT ignore INTO privilege (`id`, `name`) VALUES ('2', 'VICE_CEO');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('3', 'TEAM_LEADER');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('4', 'TEAM_MEMBER');
 INSERT ignore INTO privilege (`id`, `name`) VALUES ('5', 'NORMAL_VOLUNTEER');
+INSERT ignore INTO privilege (`id`, `name`) VALUES ('6', 'CLOUD');
+
 
 
 INSERT ignore INTO volunteer_status (`id`, `name`) VALUES ('1', 'ACTIVE');
