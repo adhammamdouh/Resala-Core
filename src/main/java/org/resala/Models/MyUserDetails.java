@@ -1,5 +1,6 @@
 package org.resala.Models;
 
+import org.resala.Exceptions.ActiveStateException;
 import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Cloud;
@@ -28,10 +29,12 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         List<Privilege> privileges;
-        if(volunteer!=null)
+        if (volunteer != null)
             privileges = volunteer.getPrivileges();
-        else
+        else if (cloud != null)
             privileges = cloud.getPrivileges();
+        else
+            throw new ActiveStateException("Wrong User Name Or Password");
         for (Privilege privilege : privileges) {
             List<Action> actions = privilege.getActions();
             for (Action action : actions)

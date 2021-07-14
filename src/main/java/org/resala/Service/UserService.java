@@ -1,6 +1,7 @@
 package org.resala.Service;
 
 import org.resala.Exceptions.ActiveStateException;
+import org.resala.Exceptions.NullException;
 import org.resala.dto.UserLoginDTO;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.UserStatus;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -54,11 +56,13 @@ public class UserService {
             token = jwtUtil.generateToken(user.getVolunteer().getOrganization().getId(), user.getVolunteer().getBranch().getId(), authentication);
             userStatus = user.getVolunteer().getVolunteerStatus();
         }
-        else
+        else if(user.getCloud() != null)
         {
             token = jwtUtil.generateToken(user.getCloud().getOrganization().getId(), 0, authentication);
             userStatus = user.getCloud().getCloudStatus();
         }
+        else
+            throw new ActiveStateException("Wrong User Name Or Password");
         if (userStatus.getName().equals(StaticNames.archivedState))
             throw new ActiveStateException("This Volunteer State is " + userStatus.getName());
         Map<String, Object> map = new HashMap<>();
