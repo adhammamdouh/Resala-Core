@@ -106,10 +106,13 @@ INSERT ignore INTO call_type (`id`, `name`) VALUES ('2', 'تعليق');
 INSERT ignore INTO call_type (`id`, `name`) VALUES ('3', 'مكالمة الاكيد و مجاش');
 
 INSERT ignore INTO call_result (`id`, `name`) VALUES ('1', 'اكد');
-INSERT ignore INTO call_result (`id`, `name`) VALUES ('2', 'لم يؤكد');
-INSERT ignore INTO call_result (`id`, `name`) VALUES ('3', 'لم يرد');
-INSERT ignore INTO call_result (`id`, `name`) VALUES ('4', 'لم يتم الاتصال بعد');
-INSERT ignore INTO call_result (`id`, `name`) VALUES ('5', 'اول مره');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('2', 'احتمال');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('3', 'رفض');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('4', 'لم يرد');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('5', 'الرقم غلط');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('6', 'مغلق');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('7', 'غير متاح');
+INSERT ignore INTO call_result (`id`, `name`) VALUES ('8', 'اول مره');
 
 INSERT ignore INTO capital (`id`, `name`) VALUES ('1', 'القاهرة');
 INSERT ignore INTO capital (`id`, `name`) VALUES ('2', 'الاسكندرية');
@@ -175,4 +178,13 @@ INSERT ignore INTO committee (`id`, `name`) VALUES ('22', 'موظف');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('23', 'لجنه فنيه');
 
 INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('1', 'حضر');
-INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('2', 'لم يحضر');
+INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('2', 'اعتذر');
+INSERT ignore INTO attendance_status (`id`, `name`) VALUES ('3', 'لم يحضر');
+
+
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('1', 'اعدادى');
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('2', 'ثانوى عام');
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('3', 'ثانوى مهنى');
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('4', 'جامعة');
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('5', 'معهد');
+INSERT ignore INTO education_level (`id`, `name`) VALUES ('6', 'خريج');

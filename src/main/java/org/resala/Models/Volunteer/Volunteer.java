@@ -1,9 +1,13 @@
 package org.resala.Models.Volunteer;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
@@ -12,16 +16,11 @@ import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -52,28 +51,34 @@ public class Volunteer implements Serializable {
     @Column(name = "faculty")
     @NotEmpty(message = "Please enter Faculty")
     String faculty;
-    @Column(name = "national_id")
-    @NotEmpty(message = "Please enter National Id")
-    String nationalId;
     @Column(name = "university")
     @NotEmpty(message = "Please enter University")
     String university;
 
+    @Column(name = "comments")
+    String comments;
+
+    @Column(name = "national_id")
+    @NotEmpty(message = "Please enter National Id")
+    String nationalId;
+
     @Column(name = "first_name")
     @NotEmpty(message = "Please enter First Name")
     String firstName;
-    @Column(name = "last_name")
-    @NotEmpty(message = "Please enter Last Name")
-    String lastName;
     @Column(name = "mid_name")
     @NotEmpty(message = "Please enter Mid Name")
     String midName;
+    @Column(name = "last_name")
+    @NotEmpty(message = "Please enter Last Name")
+    String lastName;
     @Column(name = "nick_name")
     String nickName;
+
     @Column(name = "phone_number")
     @NotEmpty(message = "Please enter Phone Number")
     @Phone
     String phoneNumber;
+
     @Column(name = "join_date")
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Please Enter Join Date")
@@ -91,9 +96,7 @@ public class Volunteer implements Serializable {
     @NotNull(message = "T-Shirt Can't be null")
     boolean tShirt;
     @Column(name = "mini_camp")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    LocalDateTime miniCamp;
+    boolean miniCamp;
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "kpi_id")
@@ -103,6 +106,13 @@ public class Volunteer implements Serializable {
     @JoinColumn(name = "user_id",unique = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
+
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "education_level_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    EducationLevel educationLevel;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
