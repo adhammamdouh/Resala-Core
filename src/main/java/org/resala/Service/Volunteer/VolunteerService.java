@@ -9,7 +9,6 @@ import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.KPI.VolunteerKPI;
-import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
@@ -19,13 +18,18 @@ import org.resala.Projections.Volunteer.VolunteerProjection;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
 
 import org.resala.Repository.Volunteer.VolunteerRepo;
-import org.resala.Service.*;
 import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
+import org.resala.Service.BranchService;
 import org.resala.Service.Call.NetworkTypeService;
+import org.resala.Service.CheckConstraintService;
+import org.resala.Service.CommonCRUDService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
+import org.resala.dto.BranchDTO;
+import org.resala.dto.Committe.CommitteeDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
+import org.resala.dto.Volunteer.VolunteerStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +49,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     @Autowired
     private BranchService branchService;
     @Autowired
-    private OrganizationService organizationService;
-    @Autowired
     private CapitalService capitalService;
     @Autowired
     private PrivilegeService privilegeService;
@@ -59,7 +61,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     @Autowired
     NetworkTypeService networkTypeService;
 
-
     //@Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -69,13 +70,12 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     @Override
     public ResponseEntity<Object> create(List<VolunteerDTO> dtos) {
-        ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
-        int count = 0;
+        ArrayList<Pair<Integer,String>>failed=new ArrayList<>();
+        int count=0;
         for (VolunteerDTO dto : dtos) {
             try {
                 dto.checkNull();
                 Branch branch = branchService.getById(dto.getBranch().getId());
-                Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
                 Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
                 Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
                 VolunteerStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
@@ -84,7 +84,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
                 volunteer.setId(0);
                 volunteer.setBranch(branch);
-                volunteer.setOrganization(organization);
                 volunteer.getAddress().setCapital(capital);
                 volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
                 volunteer.setRole(role);
@@ -94,13 +93,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
                 volunteerRepo.save(volunteer);
                 count++;
-            } catch (Exception e) {
-                failed.add(new Pair<>(count, e.getMessage()));
+            }catch (Exception e){
+                failed.add(new Pair<>(count,e.getMessage()));
                 count++;
             }
 
         }
-        if (failed.size() == 0)
+        if(failed.size()==0)
             return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
         else
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
@@ -151,7 +150,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         Volunteer newVolunteer = modelMapper().map(newDto, Volunteer.class);
         newVolunteer.setId(volunteer.getId());
         newVolunteer.setBranch(branch);
-        newVolunteer.setOrganization(volunteer.getOrganization());
         newVolunteer.getAddress().setId(volunteer.getAddress().getId());
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
@@ -164,7 +162,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public Volunteer getById(int id) {
-        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByIdAndOrganization_Id(id, IssTokenService.getOrganizationId());
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findById(id);
         if (!optionalVolunteer.isPresent())
             throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
         return optionalVolunteer.get();
@@ -187,22 +185,22 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public List<VolunteerProjection> getAll() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerProjection.class,IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllBy(VolunteerProjection.class);
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfo() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllBy(VolunteerPublicInfoProjection.class);
     }
 
 
     public List<VolunteerProjection> getAllByState(int stateId) {
         VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatus(volunteerStatus, VolunteerProjection.class);
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfoByState(int stateId) {
         VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatus(volunteerStatus, VolunteerPublicInfoProjection.class);
     }
 
 
@@ -224,8 +222,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         List<Volunteer> volunteers = new ArrayList<>();
 //            System.out.println("branch is " + branch.getId());
 //            System.out.println("network type is " + networkType.getName());
-        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id
-                (branch, networkType, StaticNames.activeState, IssTokenService.getOrganizationId()));
+        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_Name
+                (branch, networkType, StaticNames.activeState));
 
 
         return volunteers;
@@ -234,36 +232,36 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<VolunteerProjection> getVolunteersProjectionByBranch(int branchId) {
         branchService.getById(branchId);
-        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findByBranch_id(branchId, VolunteerProjection.class);
     }
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByBranch(int branchId) {
         branchService.getById(branchId);
-        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findByBranch_id(branchId, VolunteerPublicInfoProjection.class);
     }
 
     public List<VolunteerProjection> getVolunteersByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndBranch(volunteerStatus, branch, VolunteerProjection.class);
     }
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         VolunteerStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndBranch(volunteerStatus, branch, VolunteerPublicInfoProjection.class);
     }
 
 
     public void checkConstraintViolations(Volunteer volunteer) {
-        if (volunteer.getGender() != StaticNames.gender.MALE.ordinal() && volunteer.getGender() != StaticNames.gender.FEMALE.ordinal()) {
+        if(volunteer.getGender()!=StaticNames.gender.MALE.ordinal()&&volunteer.getGender()!=StaticNames.gender.FEMALE.ordinal()){
             throw new ConstraintViolationException("Gender must be male or female");
         }
         CheckConstraintService.checkConstraintViolations(volunteer, Volunteer.class);
     }
 
     public List<Volunteer> getAllNormal() {
-        return volunteerRepo.getAllNormal(Volunteer.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.getAllNormal(Volunteer.class);
     }
 
     public void setNewKPI(Volunteer volunteer, VolunteerKPI kpi) {

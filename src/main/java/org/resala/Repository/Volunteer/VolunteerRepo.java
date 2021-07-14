@@ -14,28 +14,26 @@ import java.util.Optional;
 
 @Repository
 public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
-    Optional<Volunteer>findByIdAndOrganization_Id(int id,int orgId);
-    <T> List<T> findByBranch_idAndOrganization_Id(int branchId, Class<T> projection,int orgId);
-    public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id(
-            Branch branches,NetworkType networkTypes,String volunteerStatus,int orgId);
-
-    <T> List<T> findAllByOrganization_Id(Class<T> projection, int orgId);
+    <T> List<T> findByBranch_id(int branchId, Class<T> projection);
+    public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_Name(
+            Branch branches,NetworkType networkTypes,String volunteerStatus);
+    <T> List<T> findAllBy(Class<T> projection);
 
     Optional<Volunteer> findByUser_UserName(String userName);
 
-    <T> List<T> findAllByVolunteerStatus_nameAndOrganization_Id(String name, Class<T> projection,int orgId);
+    <T> List<T> findAllByVolunteerStatus_name(String name, Class<T> projection);
 
-    <T> List<T> findAllByVolunteerStatusAndBranchAndOrganization_Id(VolunteerStatus volunteerStatus, Branch branch, Class<T> projection,int orgId);
+    <T> List<T> findAllByVolunteerStatusAndBranch(VolunteerStatus volunteerStatus, Branch branch, Class<T> projection);
     //-------------------------------------------------------
     /*
     @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.user as u WHERE u.userName=:userName")
     Volunteer test(@Param("userName")String userName);//need to be change
     */
-    <T>List<T> findAllByLeadVolunteerAndOrganization_Id(LeadVolunteer leadVolunteer,Class<T> projection,int orgId);
-    default <T>List<T> getAllNormal(Class<T> projection,int orgId){
-        return findAllByLeadVolunteerAndOrganization_Id(null,projection,orgId);
+    <T>List<T> findAllByLeadVolunteer(LeadVolunteer leadVolunteer,Class<T> projection);
+    default <T>List<T> getAllNormal(Class<T> projection){
+        return findAllByLeadVolunteer(null,projection);
     }
 
-    <T>List<T> findAllByVolunteerStatusAndOrganization_Id(VolunteerStatus volunteerStatus, Class<T> projection,int orgId);
+    <T>List<T> findAllByVolunteerStatus(VolunteerStatus volunteerStatus, Class<T> projection);
 
 }

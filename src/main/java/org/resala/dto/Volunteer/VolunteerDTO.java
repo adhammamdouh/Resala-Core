@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.resala.Exceptions.NullException;
 import org.resala.dto.Address.AddressDTO;
 import org.resala.dto.BranchDTO;
-import org.resala.dto.OrganizationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
@@ -22,7 +21,6 @@ public class VolunteerDTO {
     int gender;
     AddressDTO address;
     BranchDTO branch;
-    OrganizationDTO organization;
     String faculty;
     String nationalId;
     String university;
@@ -49,9 +47,6 @@ public class VolunteerDTO {
         if (branch == null) {
             throw new NullException("Branch");
         }
-        /*if (organization == null) {
-            throw new NullException("Organization");
-        }*/
         address.checkNull();
     }
 

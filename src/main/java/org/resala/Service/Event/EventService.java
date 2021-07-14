@@ -9,11 +9,13 @@ import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Event.EventResult;
 import org.resala.Models.Event.EventStatus;
-import org.resala.Models.Organization;
 import org.resala.Pair;
 import org.resala.Repository.Event.EventRepo;
-import org.resala.Service.*;
+import org.resala.Service.BranchService;
 import org.resala.Service.Call.CallsService;
+import org.resala.Service.CheckConstraintService;
+import org.resala.Service.CommonCRUDService;
+import org.resala.Service.CommonService;
 import org.resala.StaticNames;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.Event.EventDTO;
@@ -33,8 +35,6 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     private EventRepo eventRepo;
     @Autowired
     private BranchService branchService;
-    @Autowired
-    private OrganizationService organizationService;
     @Autowired
     private CallsService callsService;
     @Autowired
@@ -57,12 +57,12 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
                 List<Branch> branches = branchService.getBranchByIds(
                         dto.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
                 );
-                Organization organization=organizationService.getById(IssTokenService.getOrganizationId());
+
                 Event event = modelMapper().map(dto, Event.class);
                 event.setId(0);
                 event.setBranches(branches);
-                event.setOrganization(organization);
                 event.setEventStatus(eventStatus);
+
                 checkConstraintViolations(event);
                 eventRepo.save(event);
                 count++;
@@ -112,7 +112,6 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         Event newEvent = modelMapper().map(newDto, Event.class);
         newEvent.setId(event.getId());
         newEvent.setBranches(branches);
-        newEvent.setOrganization(event.getOrganization());
         newEvent.setEventStatus(event.getEventStatus());
         checkConstraintViolations(newEvent);
         eventRepo.save(newEvent);
@@ -121,7 +120,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     @Override
     public Event getById(int id) {
-        Optional<Event> optionalEvent = eventRepo.findByIdAndOrganization_id(id,IssTokenService.getOrganizationId());
+        Optional<Event> optionalEvent = eventRepo.findById(id);
         if (!optionalEvent.isPresent())
             throw new MyEntityNotFoundException("Event " + StaticNames.notFound);
         return optionalEvent.get();
@@ -129,35 +128,35 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     @Override
     public List<Event> getAll() {
-        return eventRepo.findAllByOrganization_Id(IssTokenService.getOrganizationId());
+        return eventRepo.findAll();
     }
 
     public List<Event> getEventsByBranchId(int branchId) {
-        return eventRepo.findAllByBranches_idAndOrganization_Id(branchId, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByBranches_id(branchId);
     }
 
     public List<Event> getAllEventsByStateName(String stateName) {
-        return eventRepo.findAllByEventStatus_nameAndOrganization_Id(stateName, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatus_name(stateName);
     }
 
     public List<Event> getAllEventsByStateId(int id) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(id);
-        return eventRepo.findAllByEventStatusAndOrganization_Id(eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatus(eventStatus);
     }
 
     public List<Event> getAllEventsByShareableAndEventState(boolean shareable, int eventStateId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
-        return eventRepo.findAllByShareableAndEventStatusAndOrganization_Id(shareable, eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByShareableAndEventStatus(shareable, eventStatus);
     }
 
     public List<Event> getAllEventsByShareableAndBranchIdAndEventStateId(boolean shareable, int branchId, int eventStateId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
-        return eventRepo.findAllByShareableAndEventStatusAndAndBranches_idAndOrganization_Id(shareable, eventStatus, branchId, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByShareableAndEventStatusAndAndBranches_id(shareable, eventStatus, branchId);
     }
 
     public List<Event> getAllByStateIdAndBranchId(int stateId, int branchId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(stateId);
-        return eventRepo.findAllByBranches_idAndEventStatusAndOrganization_Id(branchId, eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByBranches_idAndEventStatus(branchId, eventStatus);
     }
 
 
@@ -174,6 +173,6 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     public List<Event> getAllByStatusAndResult(String eventStatusName, EventResult eventResult) {
         EventStatus eventStatus = eventStatusService.getEventStatusByName(eventStatusName);
-        return eventRepo.findAllByEventStatusAndEventResultAndOrganization_Id(eventStatus, eventResult, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatusAndEventResult(eventStatus, eventResult);
     }
 }

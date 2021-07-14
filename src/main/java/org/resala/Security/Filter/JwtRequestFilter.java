@@ -48,11 +48,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             logger.error("Request header should be Authorization");
-            response.setContentType("application/json");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            Response responseObj = new Response(HttpStatus.UNAUTHORIZED.value(), "Request header should be Authorization");
-            ObjectMapper mapper = new MyJacksonObjMapper();
-            response.getWriter().write(mapper.writeValueAsString(responseObj));
             return;
         }
 
@@ -67,6 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 jwtUtil.validateToken(jwt);
             } catch (Exception e) {
+                System.out.println(e.getCause().toString());
                 logger.error(e.getMessage());
                 response.setContentType("application/json");
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());

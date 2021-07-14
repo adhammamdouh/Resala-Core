@@ -12,28 +12,25 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface EventRepo extends JpaRepository<Event, Integer> {
-    List<Event>findAllByOrganization_Id(int orgId);
-    Optional<Event>findByIdAndOrganization_id(int id,int orgId);
 //    @Query("SELECT e FROM Event AS e  LEFT JOIN FETCH e.eventResult as er INNER JOIN FETCH e.branches as b WHERE b.id =:branchId and (er.branch.id=:branchId or er.event.id IS NULL)")
-    List<Event> findAllByBranches_idAndOrganization_Id(@Param("branchId") int branchId,int orgId);
+    List<Event> findAllByBranches_id(@Param("branchId") int branchId);
 
-    List<Event> findAllByEventStatus_nameAndOrganization_Id(String name,int orgId);
+    List<Event> findAllByEventStatus_name(String name);
 
-    List<Event> findAllByEventStatusAndOrganization_Id(EventStatus eventStatus,int orgId);
+    List<Event> findAllByEventStatus(EventStatus eventStatus);
 
     //@Query("select e from Event e where e.eventStatus.name = :name  and e.branches in :ids")
 
-    List<Event> findAllByBranches_idAndEventStatusAndOrganization_Id(@Param("branch_id") int branchId, EventStatus eventStatus,int orgId);
+    List<Event> findAllByBranches_idAndEventStatus(@Param("branch_id") int branchId, EventStatus eventStatus);
 
 
-    List<Event> findAllByShareableAndEventStatusAndAndBranches_idAndOrganization_Id(boolean isShareable,EventStatus eventStatus,@Param("branch_id") int branchId,int orgId);
-    List<Event> findAllByShareableAndEventStatusAndOrganization_Id(boolean isShareable,EventStatus eventStatus,int orgId);
+    List<Event> findAllByShareableAndEventStatusAndAndBranches_id(boolean isShareable,EventStatus eventStatus,@Param("branch_id") int branchId);
+    List<Event> findAllByShareableAndEventStatus(boolean isShareable,EventStatus eventStatus);
 //    List<Event> findAllByEventStatus_nameAndBranchesIn(String name, List<Branch> branches);
 
-    List<Event>findAllByEventStatusAndEventResultAndOrganization_Id(EventStatus eventStatus, EventResult eventResult,int orgId);
+    List<Event>findAllByEventStatusAndEventResult(EventStatus eventStatus, EventResult eventResult);
 
 }

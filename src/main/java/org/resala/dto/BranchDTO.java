@@ -9,5 +9,5 @@ public class BranchDTO {
     int id;
     String name;
     String region;
-    OrganizationDTO organization;
+
 }
