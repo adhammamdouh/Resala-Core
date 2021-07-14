@@ -1,18 +1,15 @@
 package org.resala.dto.Volunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.Exceptions.NullException;
 import org.resala.dto.Address.AddressDTO;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.OrganizationDTO;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -38,9 +35,7 @@ public class VolunteerDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
     boolean tShirt;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    LocalDateTime miniCamp;
+    boolean miniCamp;
 
     public void checkNull() {
         if (address == null) {
