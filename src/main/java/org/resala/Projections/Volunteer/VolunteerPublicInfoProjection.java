@@ -5,7 +5,6 @@ import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Volunteer.UserStatus;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface VolunteerPublicInfoProjection {
@@ -35,10 +34,10 @@ public interface VolunteerPublicInfoProjection {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date getBirthDate();
 
-    boolean gettShirt();
+    int gettShirt();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    LocalDateTime getMiniCamp();
+    boolean getMiniCamp();
 
     VolunteerKPI getVolunteerKPI();
 

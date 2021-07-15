@@ -18,6 +18,8 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     <T> List<T> findByBranch_idAndOrganization_Id(int branchId, Class<T> projection,int orgId);
     public List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id(
             Branch branches,NetworkType networkTypes,String volunteerStatus,int orgId);
+    Optional<Volunteer>findAllByPhoneNumber(String phoneNumber);
+
 
     <T> List<T> findAllByOrganization_Id(Class<T> projection, int orgId);
 

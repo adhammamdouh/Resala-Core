@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public interface VolunteerCallsInfoProjection {
+    int getId();
+
+    String getFirstName();
+
     String getLastName();
 
     String getMidName();

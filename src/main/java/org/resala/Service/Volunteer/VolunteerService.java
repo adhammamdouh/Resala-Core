@@ -231,6 +231,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return volunteers;
     }
 
+    public Volunteer getVolunteerByPhoneNumber(String phoneNumber){
+        Optional<Volunteer> optionalVolunteer=volunteerRepo.findAllByPhoneNumber(phoneNumber);
+        if(optionalVolunteer.isPresent()){
+            return optionalVolunteer.get();
+        }
+        throw new MyEntityNotFoundException("volunteer "+StaticNames.notFound);
+    }
+
 
     public List<VolunteerProjection> getVolunteersProjectionByBranch(int branchId) {
         branchService.getById(branchId);

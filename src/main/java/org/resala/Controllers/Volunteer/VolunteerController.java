@@ -8,13 +8,11 @@ import org.resala.Service.IssTokenService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.VolunteerDTO;
-import org.resala.dto.Volunteer.VolunteerStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -115,6 +113,13 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
             return ResponseEntity.ok(new Response(volunteerService.getVolunteersProjectionByBranch(branchId), HttpStatus.OK.value()));
         else
             return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByBranch(branchId), HttpStatus.OK.value()));
+    }
+
+    @RequestMapping(value = "/getAllByPhoneNumber", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.getAllVolunteers + "') or hasRole('" + StaticNames.getAllVolunteersPublicInfo + "')")
+    public ResponseEntity<Object> getAllByBranchId(@RequestBody String phoneNumber) {
+
+        return ResponseEntity.ok(new Response(volunteerService.getVolunteerByPhoneNumber(phoneNumber), HttpStatus.OK.value()));
     }
 
     /*@RequestMapping(value = "/getAllByBranch", method = RequestMethod.GET)

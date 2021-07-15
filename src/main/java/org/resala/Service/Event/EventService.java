@@ -133,6 +133,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
     public List<Event> getEventsByBranchId(int branchId) {
+        Branch branch=branchService.getById(branchId);
         return eventRepo.findAllByBranches_idAndOrganization_Id(branchId, IssTokenService.getOrganizationId());
     }
 
