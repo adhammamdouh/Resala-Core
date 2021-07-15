@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;
+import org.resala.Models.Volunteer.Shirt;
 import org.resala.Models.Volunteer.UserStatus;
 
 import java.util.Date;
@@ -39,9 +40,8 @@ public interface VolunteerProjection {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date getBirthDate();
 
-    int gettShirt();
+    Shirt getShirt();
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     boolean getMiniCamp();
 
     VolunteerKPI getVolunteerKPI();

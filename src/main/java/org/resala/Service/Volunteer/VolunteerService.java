@@ -12,6 +12,7 @@ import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.Role;
+import org.resala.Models.Volunteer.Shirt;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Pair;
@@ -58,6 +59,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     private AddressService addressService;
     @Autowired
     NetworkTypeService networkTypeService;
+    @Autowired
+    ShirtService shirtService;
 
 
     //@Bean
@@ -80,6 +83,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
                 UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
                 Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
+                Shirt shirt = shirtService.getById(dto.getShirt().getId());
                 String phoneNumber = dto.getPhoneNumber();
                 Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
                 volunteer.setId(0);
@@ -87,6 +91,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 volunteer.setOrganization(organization);
                 volunteer.getAddress().setCapital(capital);
                 volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
+                volunteer.setShirt(shirt);
                 volunteer.setRole(role);
                 volunteer.setVolunteerStatus(volunteerStatus);
                 checkConstraintViolations(volunteer);
@@ -148,6 +153,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
         Branch branch = branchService.getById(newDto.getBranch().getId());
         Capital capital = capitalService.getById(newDto.getAddress().getCapital().getId());
+        Shirt shirt = shirtService.getById(newDto.getShirt().getId());
         Volunteer newVolunteer = modelMapper().map(newDto, Volunteer.class);
         newVolunteer.setId(volunteer.getId());
         newVolunteer.setBranch(branch);
@@ -156,9 +162,11 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
         newVolunteer.setPrivileges(volunteer.getPrivileges());
+        newVolunteer.setShirt(shirt);
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
         checkConstraintViolations(newVolunteer);
         addressService.checkConstraintViolations(newVolunteer.getAddress());
+        newVolunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(newVolunteer.getPhoneNumber()));
         volunteerRepo.save(newVolunteer);
         return ResponseEntity.ok(new Response(StaticNames.updatedSuccessfully, HttpStatus.OK.value()));
     }
@@ -187,11 +195,11 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public List<VolunteerProjection> getAll() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerProjection.class,IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByOrganization_Id(VolunteerProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfo() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerPublicInfoProjection.class,IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByOrganization_Id(VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
     }
 
 
@@ -222,8 +230,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, NetworkType networkType) {
         List<Volunteer> volunteers = new ArrayList<>();
-//            System.out.println("branch is " + branch.getId());
-//            System.out.println("network type is " + networkType.getName());
         volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id
                 (branch, networkType, StaticNames.activeState, IssTokenService.getOrganizationId()));
 
@@ -231,12 +237,12 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return volunteers;
     }
 
-    public Volunteer getVolunteerByPhoneNumber(String phoneNumber){
-        Optional<Volunteer> optionalVolunteer=volunteerRepo.findAllByPhoneNumber(phoneNumber);
-        if(optionalVolunteer.isPresent()){
+    public Volunteer getVolunteerByPhoneNumber(String phoneNumber) {
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findAllByPhoneNumber(phoneNumber);
+        if (optionalVolunteer.isPresent()) {
             return optionalVolunteer.get();
         }
-        throw new MyEntityNotFoundException("volunteer "+StaticNames.notFound);
+        throw new MyEntityNotFoundException("volunteer " + StaticNames.notFound);
     }
 
 

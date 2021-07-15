@@ -1,4 +1,4 @@
-package org.resala.dto.Committe;
+package org.resala.dto.Committee;
 
 public class PreviousCommitteeDTO {
     long responsibleVolunteerId;

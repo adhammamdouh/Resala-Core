@@ -19,6 +19,7 @@ public class VolunteerDTO {
     int gender;
     AddressDTO address;
     BranchDTO branch;
+    ShirtDTO shirt;
     OrganizationDTO organization;
     String faculty;
     String nationalId;
@@ -35,7 +36,6 @@ public class VolunteerDTO {
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
-    int tShirt;
     boolean miniCamp;
 
     public void checkNull() {
@@ -45,9 +45,9 @@ public class VolunteerDTO {
         if (branch == null) {
             throw new NullException("Branch");
         }
-        /*if (organization == null) {
-            throw new NullException("Organization");
-        }*/
+        if (shirt == null) {
+            throw new NullException("T-Shirt");
+        }
         address.checkNull();
     }
 

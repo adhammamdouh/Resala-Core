@@ -3,12 +3,8 @@ package org.resala.dto.Volunteer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Exceptions.NullException;
-import org.resala.Models.Committe.Committee;
-import org.resala.Models.Volunteer.Volunteer;
-import org.resala.dto.Committe.CommitteeDTO;
+import org.resala.dto.Committee.CommitteeDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -39,5 +35,7 @@ public class LeadVolunteerDTO {
     public void checkNullForCreation(){
         if (myVolunteerInfo == null)
             throw new NullException("MyVolunteerInfo");
+        if (committee == null)
+            throw new NullException("Committee");
     }
 }

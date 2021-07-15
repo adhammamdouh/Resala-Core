@@ -1,6 +1,9 @@
 package org.resala.Projections.LeadVolunteer;
 
+import org.resala.Models.Committee.Committee;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
+
+import java.util.Date;
 
 public interface LeadVolunteerPublicInfoProjection {
     int getId();
@@ -12,13 +15,10 @@ public interface LeadVolunteerPublicInfoProjection {
     String getDreams();
     String getNationalIdUrl();
     String getDoctorMeeting();
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "current_commit_id")
-    Committe committe;*/
-
+    Committee getCommittee();
     String getGraduationDate();
     int getGraduationNumber();
-    boolean getCamp48();
+    int getCamp48();
     boolean getGraduated();
-    boolean getOmra();
+    Date getOmra();
 }

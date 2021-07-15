@@ -1,6 +1,7 @@
 package org.resala.Repository.Volunteer;
 
 import org.resala.Models.Branch;
+import org.resala.Models.Committee.Committee;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.UserStatus;
@@ -26,5 +27,8 @@ public interface LeadVolunteerRepo extends JpaRepository<LeadVolunteer, Integer>
 
     Optional<LeadVolunteer> findAllByMyVolunteerInfo(Volunteer volunteer);
 
-    <T> List<T> findAllByMyVolunteerInfo_Branch_IdAndCommittee_IdAndMyVolunteerInfo_Organization_Id(int branchId, int committeeId, Class<T> projection,int orgId);
+    <T> List<T> findAllByMyVolunteerInfo_BranchAndCommitteeAndMyVolunteerInfo_Organization_Id(Class<T> projection, Branch branch, Committee committee, int orgId);
+    default <T> List<T> findMyCommitteeTeam(Class<T> projection,Branch branch, Committee committee, int orgId){
+        return findAllByMyVolunteerInfo_BranchAndCommitteeAndMyVolunteerInfo_Organization_Id(projection,branch,committee,orgId);
+    }
 }

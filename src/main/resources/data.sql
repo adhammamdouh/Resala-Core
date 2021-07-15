@@ -188,3 +188,9 @@ INSERT ignore INTO education_level (`id`, `name`) VALUES ('3', 'ثانوى مه�
 INSERT ignore INTO education_level (`id`, `name`) VALUES ('4', 'جامعة');
 INSERT ignore INTO education_level (`id`, `name`) VALUES ('5', 'معهد');
 INSERT ignore INTO education_level (`id`, `name`) VALUES ('6', 'خريج');
+
+INSERT ignore INTO shirt (`id`, `name`) VALUES ('1', 'عنده');
+INSERT ignore INTO shirt (`id`, `name`) VALUES ('2', 'معندوش');
+INSERT ignore INTO shirt (`id`, `name`) VALUES ('3', 'عايز');
+
+

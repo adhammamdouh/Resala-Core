@@ -92,9 +92,10 @@ public class Volunteer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
 
-    @Column(name = "tShirt")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "shirt_id",nullable = false)
     @NotNull(message = "T-Shirt Can't be null")
-    int tShirt;
+    Shirt shirt;
     @Column(name = "mini_camp")
     boolean miniCamp;
 
@@ -103,7 +104,7 @@ public class Volunteer implements Serializable {
     VolunteerKPI volunteerKPI;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 

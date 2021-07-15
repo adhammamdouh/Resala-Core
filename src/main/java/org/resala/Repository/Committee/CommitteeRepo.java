@@ -1,6 +1,6 @@
 package org.resala.Repository.Committee;
 
-import org.resala.Models.Committe.Committee;
+import org.resala.Models.Committee.Committee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

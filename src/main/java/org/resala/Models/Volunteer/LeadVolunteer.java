@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.resala.Models.Committe.Committee;
+import org.resala.Models.Committee.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "lead_volunteer")
@@ -55,7 +55,8 @@ public class LeadVolunteer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date omra;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "committe_id")
+    @JoinColumn(name = "committe_id",nullable = false)
+    @NotNull(message = "Committee Can't be null")
     Committee committee;
 
     @OneToOne(orphanRemoval = true)

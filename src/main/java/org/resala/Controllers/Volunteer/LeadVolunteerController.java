@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/leadVolunteer")
@@ -241,7 +242,7 @@ public class LeadVolunteerController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.createLeadVolunteer + "')")
-    public ResponseEntity<Object> add(@RequestBody LeadVolunteerDTO leadVolunteerDTO) {
-        return leadVolunteerService.create(leadVolunteerDTO);
+    public ResponseEntity<Object> add(@RequestBody List<LeadVolunteerDTO> leadVolunteerDTOs) {
+        return leadVolunteerService.create(leadVolunteerDTOs);
     }
 }

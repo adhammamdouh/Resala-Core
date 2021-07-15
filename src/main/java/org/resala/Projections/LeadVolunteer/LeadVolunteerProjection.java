@@ -1,6 +1,7 @@
 package org.resala.Projections.LeadVolunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.resala.Models.Committee.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 
@@ -17,7 +18,7 @@ public interface LeadVolunteerProjection {
     String getDreams();
     String getNationalIdUrl();
     String getDoctorMeeting();
-
+    Committee getCommittee();
     String getGraduationDate();
     int getGraduationNumber();
     int getCamp48();

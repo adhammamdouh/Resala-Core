@@ -11,7 +11,7 @@ public class PhoneNumberValidator implements ConstraintValidator<Phone, String> 
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext constraintValidatorContext) {
-        if(phoneNumber.length() != 11 || !phoneNumber.startsWith("01"))
+        if(phoneNumber==null||phoneNumber.length() != 11 || !phoneNumber.startsWith("01"))
             return false;
         switch (phoneNumber.charAt(2)){
             case '0':

@@ -1,16 +1,12 @@
 package org.resala.Service.Commiittee;
 
 import org.resala.Exceptions.MyEntityNotFoundException;
-import org.resala.Models.Branch;
-import org.resala.Models.Committe.Committee;
+import org.resala.Models.Committee.Committee;
 import org.resala.Repository.Committee.CommitteeRepo;
-import org.resala.Service.CommonCRUDService;
-import org.resala.Service.CommonService;
 import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

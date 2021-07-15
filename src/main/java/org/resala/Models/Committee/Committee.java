@@ -1,8 +1,7 @@
-package org.resala.Models.Committe;
+package org.resala.Models.Committee;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.resala.Models.Volunteer.LeadVolunteer;
 
 import javax.persistence.*;
 

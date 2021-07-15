@@ -99,5 +99,10 @@ public interface StaticNames {
     String didNotAnswer="لم يرد";
     String doesNotCalled="لم يتم الاتصال بعد";
     String firstTimeCall="اول مره";
+    //----------------------------------------------------------------------------------------------------------------------
+    String hasTShirt ="عنده";
+    String hasNoTShirt ="معندوش";
+    String needTShirt ="عايز";
+
     enum gender{MALE,FEMALE}
 }

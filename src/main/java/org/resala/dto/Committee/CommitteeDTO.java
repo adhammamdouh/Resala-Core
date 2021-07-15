@@ -1,4 +1,4 @@
-package org.resala.dto.Committe;
+package org.resala.dto.Committee;
 
 import lombok.Getter;
 import lombok.Setter;
