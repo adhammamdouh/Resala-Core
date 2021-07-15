@@ -2,6 +2,7 @@ package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
+import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Committe.Committee;
@@ -97,6 +98,12 @@ public class LeadVolunteerService {
     public boolean checkFound(Volunteer volunteer) {
         Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
         return leadVolunteerOptional.isPresent();
+    }
+
+    public LeadVolunteer getByVolunteer(Volunteer volunteer){
+        Optional<LeadVolunteer> leadVolunteerOptional=leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
+        if(leadVolunteerOptional.isPresent()) return leadVolunteerOptional.get();
+        throw new MyEntityNotFoundException("lead volunteer "+StaticNames.notFound);
     }
 
     public void setNewKPI(LeadVolunteer leadVolunteer, LeadVolunteerKPI kpi) {

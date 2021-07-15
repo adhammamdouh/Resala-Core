@@ -1,21 +1,20 @@
 package org.resala.Service;
 
 import org.resala.Exceptions.ActiveStateException;
-import org.resala.Exceptions.NullException;
-import org.resala.dto.UserLoginDTO;
 import org.resala.Models.Volunteer.User;
 import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Repository.UserRepository;
 import org.resala.Security.Jwt.JwtUtil;
+import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.Service.Volunteer.RoleService;
-import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.Service.Volunteer.UserStatusService;
+import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
+import org.resala.dto.UserLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -37,6 +36,8 @@ public class UserService {
     JwtUtil jwtUtil;
     @Autowired
     UserStatusService volunteerStatusService;
+    @Autowired
+    LeadVolunteerService leadVolunteerService;
 
     public User getUser(String username) {
         return userRepository.findByUserName(username);
@@ -67,9 +68,12 @@ public class UserService {
             throw new ActiveStateException("This Volunteer State is " + userStatus.getName());
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
-        if (user.getVolunteer() != null)
-            map.put("user", user.getVolunteer());
-        if (user.getCloud() != null)
+        if (user.getVolunteer() != null) {
+            if(leadVolunteerService.checkFound(user.getVolunteer()))
+                map.put("user",leadVolunteerService.getByVolunteer(user.getVolunteer()));
+            else map.put("user", user.getVolunteer());
+        }
+        else if (user.getCloud() != null)
             map.put("user", user.getCloud());
         return map;
     }

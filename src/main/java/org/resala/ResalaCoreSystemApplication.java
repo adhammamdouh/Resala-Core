@@ -1,18 +1,13 @@
 package org.resala;
 
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Repository.Address.AddressRepo;
-import org.resala.Repository.Address.CapitalRepo;
-import org.resala.Repository.UserRepository;
 import org.resala.Service.KPI.LeadVolunteerKPIService;
 import org.resala.Service.KPI.VolunteerKPIService;
-import org.resala.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.transaction.Transactional;
 
@@ -50,4 +45,9 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     public void showAddress(Volunteer volunteer) {
 
     }
+
+//    @Bean
+//    public Function<Void,VolunteerKPIService>test() {
+//        volunteerKPIService.generateKPIsForAll();
+//    }
 }
