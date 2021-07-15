@@ -162,12 +162,12 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
 
-    public void checkConstraintViolations(Event event) {
+    public void checkConstraintViolations(Event event) {    ///TODO
         CheckConstraintService.checkConstraintViolations(event, Event.class);
-        if (event.isHasCalls() && event.getCallsStartTime() == null)
+        if (event.isHasCalls() && event.getInvitationStartTime() == null)
             throw new ConstraintViolationException("Your event has Calls so you have to enter CallsStartTime");
         else {
-            if (event.getCallsStartTime().after(event.getToDate()) || event.getCallsStartTime().before(event.getFromDate()))
+            if (event.getInvitationStartTime().after(event.getToDate()) || event.getInvitationStartTime().before(event.getFromDate()))
                 throw new ConstraintViolationException("Your event Calls must be between start and to date");
         }
     }

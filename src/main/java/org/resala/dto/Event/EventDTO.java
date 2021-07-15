@@ -6,9 +6,7 @@ import lombok.Setter;
 import org.resala.Exceptions.NullException;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.OrganizationDTO;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
@@ -27,7 +25,13 @@ public class EventDTO {
     Date toDate;
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    Date callsStartTime;
+    Date invitationStartTime;
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date feedBackStartTime;
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date notAttendStartTime;
     String script;
     String description;
     boolean hasCalls;
