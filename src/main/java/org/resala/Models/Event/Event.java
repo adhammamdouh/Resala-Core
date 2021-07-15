@@ -52,19 +52,7 @@ public class Event implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     //----------------
-    Date invitationStartTime;
-
-    @Column(name = "calls_start_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    //----------------
-    Date feedBackStartTime;
-
-    @Column(name = "calls_start_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    //----------------
-    Date notAttendStartTime;
+    Date callsStartTime;
 
     @Column(name = "script")
     @NotEmpty(message = "Please enter Script")
