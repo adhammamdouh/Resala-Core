@@ -49,5 +49,5 @@ jobs:
       with:
         app-name: 'resala-core'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a3c74b69cec343d49b153dfff1a3ee3c }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_4768bcd898b94efc818df5c842d89b65 }}
         package: '*.jar'
