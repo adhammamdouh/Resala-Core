@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,18 +23,28 @@ public class User implements Serializable {
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private int id;
     @Column(name = "user_name", nullable = false, unique = true)
+    @NotEmpty(message = "Please enter UserName")
     private String userName;
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter Password")
     private String password;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_type_id", nullable = false)
+    @NotNull(message = "User Type Can't be null")
+    UserType userType;
+
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "volunteer_id",nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     Volunteer volunteer;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     Cloud cloud;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
+    Admin admin;
 }

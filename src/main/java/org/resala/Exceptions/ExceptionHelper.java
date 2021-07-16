@@ -33,6 +33,11 @@ public class ExceptionHelper {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.FOUND.value(), ex.getMessage()), HttpStatus.FOUND);
     }
+    @ExceptionHandler(value = {AssignedBeforeException.class})
+    public ResponseEntity<Object> handleAssignedBeforeException(AssignedBeforeException ex) {
+        LOGGER.error(ex.getMessage());
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(value = {MyEntityNotFoundException.class})
     public ResponseEntity<Object> handleEntityNotFoundException(MyEntityNotFoundException ex) {

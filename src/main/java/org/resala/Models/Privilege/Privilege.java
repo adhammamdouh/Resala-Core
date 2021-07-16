@@ -1,13 +1,16 @@
 package org.resala.Models.Privilege;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.resala.Models.Organization;
 import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
@@ -20,7 +23,14 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(name = "name")
+    @NotEmpty(message = "Please Enter Name")
     String name;
+
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Organization organization;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "privilege_Action",
@@ -29,4 +39,6 @@ public class Privilege {
     )
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Action> actions;
+
+
 }

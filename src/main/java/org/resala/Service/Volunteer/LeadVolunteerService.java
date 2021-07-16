@@ -62,6 +62,7 @@ public class LeadVolunteerService {
                 leadVolunteer.setMyVolunteerInfo(myVolunteerInfo);
                 leadVolunteer.setCommittee(committee);
                 leadVolunteerRepo.save(leadVolunteer);
+                count++;
             } catch (Exception e) {
                 failed.add(new Pair<>(count, e.getMessage()));
                 count++;

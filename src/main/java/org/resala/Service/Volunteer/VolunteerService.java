@@ -1,9 +1,7 @@
 package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
-import org.resala.Exceptions.ActiveStateException;
-import org.resala.Exceptions.ConstraintViolationException;
-import org.resala.Exceptions.MyEntityNotFoundException;
+import org.resala.Exceptions.*;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
@@ -11,10 +9,7 @@ import org.resala.Models.Call.NetworkType;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
 import org.resala.Models.Privilege.Privilege;
-import org.resala.Models.Volunteer.Role;
-import org.resala.Models.Volunteer.Shirt;
-import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Models.Volunteer.UserStatus;
+import org.resala.Models.Volunteer.*;
 import org.resala.Pair;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
@@ -61,7 +56,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     NetworkTypeService networkTypeService;
     @Autowired
     ShirtService shirtService;
-
+    @Autowired
+    UserService userService;
 
     //@Bean
     public ModelMapper modelMapper() {
@@ -285,4 +281,33 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         volunteerRepo.save(volunteer);
     }
 
+    public ResponseEntity<Object> assignVolunteerUser(List<VolunteerDTO> volunteerDTOS) {
+        ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
+        int count = 0;
+        for (VolunteerDTO dto : volunteerDTOS) {
+            try {
+                if (dto.getUser() == null)
+                    throw new NullException("User");
+                Volunteer volunteer = getById(dto.getId());
+                if (volunteer.getUser() != null)
+                    throw new AssignedBeforeException("Volunteer");
+                User user = userService.getById(dto.getUser().getId());
+
+                if (user.getAdmin() != null || user.getCloud() != null || user.getVolunteer() != null)
+                    throw new AssignedBeforeException("User");
+                if (!user.getUserType().getName().equals(StaticNames.volunteerType))
+                    throw new BadAssignException("This user can be assigned to " + user.getUserType().getName());
+                volunteer.setUser(user);
+                volunteerRepo.save(volunteer);
+                count++;
+            } catch (Exception e) {
+                failed.add(new Pair<>(count, e.getMessage()));
+                count++;
+            }
+        }
+        if (failed.size() == 0)
+            return ResponseEntity.ok(new Response(StaticNames.assignedSuccessfully, HttpStatus.OK.value()));
+        else
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
+    }
 }

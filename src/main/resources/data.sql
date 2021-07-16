@@ -10,6 +10,22 @@ SET @sql = (SELECT IF(
 
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+set @sql=NULL;
+
+SET @sql = (SELECT IF(
+    (SELECT COUNT(INDEX_NAME)
+        FROM INFORMATION_SCHEMA.statistics WHERE
+        INDEX_NAME='uq_name_org_id'
+    ) <> 0,
+    "SELECT 0",
+    "alter table privilege add constraint uq_name_org_id unique (name,organization_id);"
+));
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+set @sql=NULL;
 
 
 
@@ -69,21 +85,28 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('40', 'ROLE_GENERATE_VOLUNTEE
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('41', 'ROLE_GENERATE_LEAD_VOLUNTEERS_KPIS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('42', 'ROLE_GENERATE_EVENTS_KPIS');
 
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('43', 'ROLE_CREATE_USER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('44', 'ROLE_ASSIGN_USER');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('45', 'ROLE_CREATE_PRIVILEGES');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('46', 'ROLE_ASSIGN_ACTIONS_TO_PRIVILEGES');
+
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('3','TEAM_LEADER');
 INSERT ignore INTO role (`id`,`name`) VALUE ('4','TEAM_MEMBER');
 INSERT ignore INTO role (`id`,`name`) VALUE ('5','NORMAL_VOLUNTEER');
+INSERT ignore INTO role (`id`, `name`) VALUES ('6', 'CLOUD');
+INSERT ignore INTO role (`id`, `name`) VALUES ('7', 'ADMIN');
 
 
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('1', 'CEO');
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('2', 'VICE_CEO');
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('3', 'TEAM_LEADER');
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('4', 'TEAM_MEMBER');
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('5', 'NORMAL_VOLUNTEER');
-INSERT ignore INTO privilege (`id`, `name`) VALUES ('6', 'CLOUD');
-
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('1', 'CEO','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('2', 'VICE_CEO','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('3', 'TEAM_LEADER','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('4', 'TEAM_MEMBER','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('5', 'NORMAL_VOLUNTEER','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('6', 'CLOUD','1');
+INSERT ignore INTO privilege (`id`, `name`,`organization_id`) VALUES ('7', 'ADMIN','1');
 
 
 INSERT ignore INTO volunteer_status (`id`, `name`) VALUES ('1', 'ACTIVE');
@@ -160,7 +183,7 @@ INSERT ignore INTO committee (`id`, `name`) VALUES ('4', 'مجددون');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('5', 'مسنين');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('6', 'اتش ار');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('7', 'تدريب');
-INSERT ignore INTO committee (`id`, `name`) VALUES ('8', 'اتش ار متظوعين');
+INSERT ignore INTO committee (`id`, `name`) VALUES ('8', 'اتش ار متطوعين');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('9', 'استكشاف');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('10', 'براعم');
 INSERT ignore INTO committee (`id`, `name`) VALUES ('11', 'محو اميه');
@@ -193,4 +216,11 @@ INSERT ignore INTO shirt (`id`, `name`) VALUES ('1', 'عنده');
 INSERT ignore INTO shirt (`id`, `name`) VALUES ('2', 'معندوش');
 INSERT ignore INTO shirt (`id`, `name`) VALUES ('3', 'عايز');
 
+INSERT ignore INTO user_type (`id`, `name`) VALUES ('1', 'Volunteer');
+INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Admin');
+INSERT ignore INTO user_type (`id`, `name`) VALUES ('3', 'Cloud');
 
+
+INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','2');
+
+INSERT ignore INTO `admin`  VALUES ('1', '1','1','1');

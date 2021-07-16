@@ -7,6 +7,7 @@ public interface StaticNames {
     String TeamMember = "TEAM_MEMBER";
     String normalVolunteer = "NORMAL_VOLUNTEER";
     String cloud = "CLOUD";
+    String admin="ADMIN";
     //----------------------------------------------------------------------------------------------------------------------
     String activeState = "ACTIVE";
     String deletedState = "DELETED";
@@ -69,6 +70,11 @@ public interface StaticNames {
     String generateLeadVolunteersKPIs ="ROLE_GENERATE_LEAD_VOLUNTEERS_KPIS";
     String generateEventsKPIs="ROLE_GENERATE_EVENTS_KPIS";
 
+    String createUser="ROLE_CREATE_USER";
+    String assignUser="ROLE_ASSIGN_USER";
+    String createPrivilege="ROLE_CREATE_PRIVILEGES";
+    String assignActionsToPrivilege="ROLE_ASSIGN_ACTIONS_TO_PRIVILEGES";
+
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
     String completedSuccessfully = "Completed Successfully";
@@ -81,6 +87,8 @@ public interface StaticNames {
     String callsHasBeenCreatedBefore="Calls has been created before";
     String thereIsNoCallsToBalance="There is no calls to balance";
     String thereIsNoAssignedCallsToConfirm="There is no assigned calls to confirm";
+    //----------------------------------------------------------------------------------------------------------------------
+    String volunteerType="Volunteer";
     //----------------------------------------------------------------------------------------------------------------------
     String etisalat="ETISALAT";
     String vodafone ="VODAFONE";

@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface PrivilegeRepo extends JpaRepository<Privilege,Integer> {
-    Optional<Privilege>findByName(String name);
+    Optional<Privilege>findByNameAndOrganization_Id(String name,int orgId);
+    Optional<Privilege>findByIdAndOrganization_Id(int id,int orgId);
 }
