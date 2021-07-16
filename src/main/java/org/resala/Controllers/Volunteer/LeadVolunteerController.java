@@ -7,7 +7,6 @@ import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
-import org.resala.dto.Volunteer.VolunteerStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +29,9 @@ public class LeadVolunteerController {
             "or hasRole('" + StaticNames.getLeadVolunteersByMyBranchId + "') or hasRole('" + StaticNames.getLeadVolunteersPublicInfoByMyBranch + "')")
     public ResponseEntity<Object> getAll() {
         Collection<? extends GrantedAuthority> authorities = AuthorizeController.getAuthorities();
-        if (AuthorizeController.contain(StaticNames.getAllLeadVolunteers, authorities)){
+        if (AuthorizeController.contain(StaticNames.getAllLeadVolunteers, authorities)) {
             return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerProjection.class), HttpStatus.OK.value()));
-        }
-        else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfo, authorities))
+        } else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfo, authorities))
             return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerPublicInfoProjection.class), HttpStatus.OK.value()));
 
         String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
@@ -68,11 +66,12 @@ public class LeadVolunteerController {
 
     }
 
-    @RequestMapping(value = "/getCommitteeTeam/{branchId}/{committeeId}",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+StaticNames.getCommitteeTeam+"')")
-    public ResponseEntity<Object> getCommitteeTeam(@PathVariable int branchId,@PathVariable int committeeId){
+    @RequestMapping(value = "/getBranchCommitteeTeam/{committeeId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + StaticNames.getMyBranchCommitteeTeam + "')")
+    public ResponseEntity<Object> getCommitteeTeam(@PathVariable int committeeId) {
+        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
         return ResponseEntity.ok(new Response(leadVolunteerService.getCommitteeTeam(
-                branchId,committeeId),HttpStatus.OK.value()));
+                branchId, committeeId), HttpStatus.OK.value()));
     }
 
    /* @RequestMapping(value = "/getAllActivePublicInfo", method = RequestMethod.GET)

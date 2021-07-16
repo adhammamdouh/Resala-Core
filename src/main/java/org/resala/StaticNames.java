@@ -62,7 +62,7 @@ public interface StaticNames {
     String makeEventAttendance="ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER";
 
     String createLeadVolunteer = "ROLE_CREATE_LEAD_VOLUNTEER";
-    String getCommitteeTeam="ROLE_GET_ALL_COMMITTEE_TEAM";
+    String getMyBranchCommitteeTeam ="ROLE_GET_MY_BRANCH_COMMITTEE_TEAM";
     String getNetworkTypeAssignedToVolunteer="ROLE_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS";
 
     String createCloud = "ROLE_CREATE_CLOUD";
