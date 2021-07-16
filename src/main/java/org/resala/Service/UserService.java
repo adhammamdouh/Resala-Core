@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +50,8 @@ public class UserService {
     LeadVolunteerService leadVolunteerService;
     @Autowired
     UserTypeService userTypeService;
+    @Autowired
+    OrganizationService organizationService;
 
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -60,9 +63,16 @@ public class UserService {
         return new BCryptPasswordEncoder();
     }
 
-    public User getUser(String username) {
-        return userRepository.findByUserName(username);
+    public boolean checkPw(String pw, String encodedPw) {
+        if (getPwEncoder().matches(pw, encodedPw))
+            return true;
+        else return false;
     }
+
+    public User getUser(String username, int orgId) {
+        return userRepository.findByUserNameAndOrganization_Id(username, orgId);
+    }
+//    public bo
 
     public ResponseEntity<Object> createUser(List<UserDTO> userDTOS) {
         BCryptPasswordEncoder encoder = getPwEncoder();
@@ -71,8 +81,9 @@ public class UserService {
         for (UserDTO dto : userDTOS) {
             try {
                 User user = modelMapper().map(dto, User.class);
+                user.setOrganization(organizationService.getById(IssTokenService.getOrganizationId()));
                 checkConstraintViolations(user);
-                if (getUser(dto.getUserName()) != null)
+                if (getUser(dto.getUserName(), IssTokenService.getOrganizationId()) != null)
                     throw new MyEntityFoundBeforeException("User Name is already exist");
                 UserType userType = userTypeService.getById(user.getUserType().getId());
                 user.setPassword(encoder.encode(user.getPassword()));
@@ -91,14 +102,13 @@ public class UserService {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
     }
 
-    /* public int getBranchId(String username){
-         return branchService.getBranchByUserName(username).getId();
-     }*/
-    //@Transactional
+
     public Object login(UserLoginDTO auth) {
+        User user = getUser(auth.getUsername(), auth.getOrganizationId());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword());
+        usernamePasswordAuthenticationToken.setDetails(user);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
-        User user = getUser(auth.getUsername());
+                usernamePasswordAuthenticationToken);
         String token;
         UserStatus userStatus;
         if (user.getVolunteer() != null) {
@@ -111,17 +121,12 @@ public class UserService {
             token = jwtUtil.generateToken(user.getAdmin().getOrganization().getId(), 0, authentication);
             userStatus = user.getAdmin().getAdminStatus();
         } else
-            throw new ActiveStateException("Wrong User Name Or Password");
+            throw new BadCredentialsException("Wrong User Name Or Password");
         if (userStatus.getName().equals(StaticNames.archivedState))
             throw new ActiveStateException("This Volunteer State is " + userStatus.getName());
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
-        if (user.getVolunteer() != null) {
-            if (leadVolunteerService.checkFound(user.getVolunteer()))
-                map.put("user", leadVolunteerService.getByVolunteer(user.getVolunteer()));
-            else map.put("user", user.getVolunteer());
-        } else if (user.getCloud() != null)
-            map.put("user", user.getCloud());
+        map.put("user", user);
         return map;
     }
 

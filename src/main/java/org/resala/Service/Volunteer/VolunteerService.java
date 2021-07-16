@@ -1,5 +1,6 @@
 package org.resala.Service.Volunteer;
 
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.*;
 import org.resala.Models.Address.Capital;
@@ -66,12 +67,17 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return modelMapper;
     }
 
+    public boolean checkPhoneExist(String phone) {
+        return volunteerRepo.existsByPhoneNumberAndOrganization_Id(phone, IssTokenService.getOrganizationId());
+    }
+
     @Override
     public ResponseEntity<Object> create(List<VolunteerDTO> dtos) {
         ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
-        int count = 0;
-        for (VolunteerDTO dto : dtos) {
+//        int count = 0;
+        for (int i = 0; i < dtos.size(); i++) {
             try {
+                VolunteerDTO dto = dtos.get(i);
                 dto.checkNull();
                 Branch branch = branchService.getById(dto.getBranch().getId());
                 Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
@@ -81,6 +87,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
                 Shirt shirt = shirtService.getById(dto.getShirt().getId());
                 String phoneNumber = dto.getPhoneNumber();
+                if (checkPhoneExist(phoneNumber)) throw new MyEntityFoundBeforeException("Phone Number Found Before");
                 Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
                 volunteer.setId(0);
                 volunteer.setBranch(branch);
@@ -94,12 +101,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                 addressService.checkConstraintViolations(volunteer.getAddress());
                 volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
                 volunteerRepo.save(volunteer);
-                count++;
             } catch (Exception e) {
-                failed.add(new Pair<>(count, e.getMessage()));
-                count++;
+                failed.add(new Pair<>(i, e.getMessage()));
             }
-
         }
         if (failed.size() == 0)
             return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
@@ -234,7 +238,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public Volunteer getVolunteerByPhoneNumber(String phoneNumber) {
-        Optional<Volunteer> optionalVolunteer = volunteerRepo.findAllByPhoneNumber(phoneNumber);
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findAllByPhoneNumberAndOrganization_Id(phoneNumber, IssTokenService.getOrganizationId());
         if (optionalVolunteer.isPresent()) {
             return optionalVolunteer.get();
         }

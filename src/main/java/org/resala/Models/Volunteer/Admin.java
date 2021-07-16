@@ -1,5 +1,6 @@
 package org.resala.Models.Volunteer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Admin {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",unique = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

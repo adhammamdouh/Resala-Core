@@ -2,10 +2,10 @@ ALTER DATABASE `resalacore` CHARACTER SET utf8 COLLATE utf8_general_ci;
 SET @sql = (SELECT IF(
     (SELECT COUNT(INDEX_NAME)
         FROM INFORMATION_SCHEMA.statistics WHERE
-        INDEX_NAME='UK_lqjrcobrh9jc8wpcar64q1bfh'
+        INDEX_NAME='uq_userName_orgId'
     ) <> 0,
     "SELECT 0",
-    "alter table user add constraint UK_lqjrcobrh9jc8wpcar64q1bfh unique (organization_id, user_name);"
+    "alter table user add constraint uq_userName_orgId unique (org_id, user_name);"
 ));
 
 PREPARE stmt FROM @sql;
@@ -221,6 +221,6 @@ INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Admin');
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('3', 'Cloud');
 
 
-INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','2');
+INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`,`org_id`) VALUES ('1', 'admin','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','2','1');
 
 INSERT ignore INTO `admin`  VALUES ('1', '1','1','1');

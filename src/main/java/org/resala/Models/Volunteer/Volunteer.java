@@ -74,7 +74,7 @@ public class Volunteer implements Serializable {
     @Column(name = "nick_name")
     String nickName;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     @NotEmpty(message = "Please enter Phone Number")
     @Phone
     String phoneNumber;
@@ -93,7 +93,7 @@ public class Volunteer implements Serializable {
     Date birthDate;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "shirt_id",nullable = false)
+    @JoinColumn(name = "shirt_id", nullable = false)
     @NotNull(message = "T-Shirt Can't be null")
     Shirt shirt;
     @Column(name = "mini_camp")

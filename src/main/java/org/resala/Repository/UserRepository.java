@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Integer> {
-    User findByUserName(String userName) ;
+public interface UserRepository extends JpaRepository<User, Integer> {
+    User findByUserNameAndOrganization_Id(String userName, int orgId);
     /*@Modifying
     @Query("update User u set u.userName = ?2, u.password = ?3 where u.userName = ?1")
     void updateUserByUserName(String userName1,String userName2, String password);*/
