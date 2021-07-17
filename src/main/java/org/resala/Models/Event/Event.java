@@ -102,9 +102,6 @@ public class Event implements Serializable {
     boolean shareable;
 
 
-    @Column(name = "completed")
-    boolean completed;
-
 //    @Column
 //    boolean ended=false;
 
