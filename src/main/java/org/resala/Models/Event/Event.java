@@ -48,11 +48,41 @@ public class Event implements Serializable {
     @NotNull(message = "Please Enter To Date")
     Date toDate;
 
-    @Column(name = "calls_start_time")
+    @Column(name = "invitation_calls_start_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     //----------------
-    Date callsStartTime;
+    Date invitationStartTime;
+
+    @Column(name = "feed_back_calls_start_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
+    Date feedBackStartTime;
+
+    @Column(name = "not_attend_calls_start_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
+    Date notAttendStartTime;
+
+    @Column(name = "invitation_calls_end_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
+    Date invitationEndTime;
+
+    @Column(name = "feed_back_calls_end_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
+    Date feedBackEndTime;
+
+    @Column(name = "not_attend_calls_end_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //----------------
+    Date notAttendEndTime;
 
     @Column(name = "script")
     @NotEmpty(message = "Please enter Script")
@@ -70,6 +100,10 @@ public class Event implements Serializable {
     @Column(name = "shareable")
     @NotNull(message = "Please enter if it is shareable or not")
     boolean shareable;
+
+
+    @Column(name = "completed")
+    boolean completed;
 
 //    @Column
 //    boolean ended=false;

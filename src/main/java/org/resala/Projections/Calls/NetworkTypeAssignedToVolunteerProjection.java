@@ -9,5 +9,5 @@ public interface NetworkTypeAssignedToVolunteerProjection {
     BranchPublicInfo getBranch();
     NetworkType getNetworkType();
     EventPublicInfoProjection getEvent();
-    VolunteerCallsInfoProjection getVolunteers();
+    VolunteerCallsInfoProjection getVolunteer();
 }

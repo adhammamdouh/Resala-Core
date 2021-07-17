@@ -25,7 +25,17 @@ public class EventDTO {
     Date toDate;
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    Date callsStartTime;
+    Date invitationStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date feedBackStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date notAttendStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date invitationEndTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date feedBackEndTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date notAttendEndTime;
     String script;
     String description;
     boolean hasCalls;

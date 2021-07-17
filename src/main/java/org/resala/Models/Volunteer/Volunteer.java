@@ -151,7 +151,7 @@ public class Volunteer implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Privilege> privileges;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<EventAttendance> eventAttendances;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

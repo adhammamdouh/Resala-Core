@@ -1,6 +1,5 @@
 package org.resala.Service.Volunteer;
 
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.*;
 import org.resala.Models.Address.Capital;
@@ -14,11 +13,10 @@ import org.resala.Models.Volunteer.*;
 import org.resala.Pair;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
-
 import org.resala.Repository.Volunteer.VolunteerRepo;
-import org.resala.Service.*;
 import org.resala.Service.Address.AddressService;
 import org.resala.Service.Address.CapitalService;
+import org.resala.Service.*;
 import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.StaticNames;
@@ -229,12 +227,11 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }*/
 
     public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, NetworkType networkType) {
-        List<Volunteer> volunteers = new ArrayList<>();
-        volunteers.addAll(volunteerRepo.findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id
-                (branch, networkType, StaticNames.activeState, IssTokenService.getOrganizationId()));
+        Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
+        UserStatus userStatus=volunteerStatusService.getByName(StaticNames.activeState);
+        return volunteerRepo.findAllByRoleAndBranchAndNetworkTypeAndVolunteerStatusAndOrganization_Id
+                (role,branch, networkType,userStatus, IssTokenService.getOrganizationId());
 
-
-        return volunteers;
     }
 
     public Volunteer getVolunteerByPhoneNumber(String phoneNumber) {

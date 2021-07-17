@@ -63,6 +63,12 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
                 event.setBranches(branches);
                 event.setOrganization(organization);
                 event.setEventStatus(eventStatus);
+                event.setInvitationStartTime(dto.getInvitationStartTime());
+                event.setInvitationEndTime(dto.getInvitationEndTime());
+                event.setFeedBackStartTime(dto.getFeedBackStartTime());
+                event.setFeedBackEndTime(dto.getFeedBackEndTime());
+                event.setNotAttendStartTime(dto.getNotAttendStartTime());
+                event.setNotAttendEndTime(dto.getNotAttendEndTime());
                 checkConstraintViolations(event);
                 eventRepo.save(event);
                 count++;
@@ -164,11 +170,27 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     public void checkConstraintViolations(Event event) {
         CheckConstraintService.checkConstraintViolations(event, Event.class);
-        if (event.isHasCalls() && event.getCallsStartTime() == null)
-            throw new ConstraintViolationException("Your event has Calls so you have to enter CallsStartTime");
-        else {
-            if (event.getCallsStartTime().after(event.getToDate()) || event.getCallsStartTime().before(event.getFromDate()))
-                throw new ConstraintViolationException("Your event Calls must be between start and to date");
+        if (event.isHasCalls() && (event.getInvitationStartTime() == null || event.getFeedBackStartTime() == null||event.getNotAttendStartTime() == null ))
+            throw new ConstraintViolationException(StaticNames.callDataIsNotCompleted);
+        else if(event.isHasCalls()) {
+            if (event.getInvitationStartTime().before(event.getFromDate()))
+                throw new ConstraintViolationException(StaticNames.eventInvitationCallsStartDate);
+
+            if (event.getInvitationEndTime().after(event.getFeedBackStartTime()) || event.getInvitationEndTime().before(event.getInvitationStartTime()))
+                throw new ConstraintViolationException(StaticNames.eventInvitationEndCalls);
+
+            if (event.getFeedBackStartTime().after(event.getNotAttendStartTime()) )
+                throw new ConstraintViolationException(StaticNames.eventFeedBackStartDate);
+
+            if (event.getFeedBackEndTime().after(event.getNotAttendStartTime()) || event.getFeedBackEndTime().before(event.getFeedBackStartTime()))
+                throw new ConstraintViolationException(StaticNames.eventFeedBackEndDate);
+
+            if (event.getNotAttendStartTime().after(event.getToDate()))
+                throw new ConstraintViolationException(StaticNames.eventNotAttendStartCalls);
+
+            if (event.getNotAttendEndTime().after(event.getToDate()) || event.getNotAttendEndTime().before(event.getNotAttendStartTime()))
+                throw new ConstraintViolationException(StaticNames.eventNotAttendEndCalls);
+
         }
     }
 

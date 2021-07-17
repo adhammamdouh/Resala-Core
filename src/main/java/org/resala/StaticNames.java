@@ -87,6 +87,17 @@ public interface StaticNames {
     String callsHasBeenCreatedBefore="Calls has been created before";
     String thereIsNoCallsToBalance="There is no calls to balance";
     String thereIsNoAssignedCallsToConfirm="There is no assigned calls to confirm";
+    String eventFinished="This event is already finished";
+    String cantGetEventCalls="Can't retrieve event calls now the event may be completed or calls haven't been assigned yet";
+    String cantGetFeedBackCalls="Can't retrieve feed back calls now ";
+    String cantSubmitNow="Can't submit now";
+    String callDataIsNotCompleted="Your event has Calls so you have to enter all event data";
+    String eventInvitationCallsStartDate="Your invitation start Calls must be after event start date";
+    String eventInvitationEndCalls="Your invitation end Calls is not correct";
+    String eventFeedBackStartDate="Your feed back start Calls must be after invitation end time";
+    String eventFeedBackEndDate="Your feed back end Calls is not correct";
+    String eventNotAttendStartCalls="Your not attend Calls must be before event end date";
+    String eventNotAttendEndCalls="Your not attend end Calls is not correct";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
     //----------------------------------------------------------------------------------------------------------------------

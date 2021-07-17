@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.resala.Exceptions.NullException;
 import org.resala.dto.BranchDTO;
 import org.resala.dto.Event.EventDTO;
-import org.resala.dto.Volunteer.NetworkTypeAssignedToVolunteersToEventDTO;
+import org.resala.dto.Volunteer.NetworkAssignedToVolunteersDTO;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class VolunteerToCallsDTO {
     EventDTO event;
     CallTypeDTO callType;
     BranchDTO branchDTO;
-    List<NetworkTypeAssignedToVolunteersToEventDTO> networkTypeAssignedToVolunteersToEvents;
+    List<NetworkAssignedToVolunteersDTO> networkTypeAssignedToVolunteersToEvents;
 
     public void checkNullForGetAssigned() {
         if (event == null ) {

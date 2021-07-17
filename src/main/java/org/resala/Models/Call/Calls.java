@@ -1,7 +1,8 @@
 package org.resala.Models.Call;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -13,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "calls")
@@ -78,15 +78,35 @@ public class Calls {
     Date notAttendTime;
 
 
-    @Column(name = "time_un_editable_before")
+    @Column(name = "invitation_time_un_editable_before")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date timeUnEditableBefore;
+    Date invitationUnEditableBefore;
+
+    @Column(name = "feed_back_time_un_editable_before")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date feedBackUnEditableBefore;
+    
+    @Column(name = "not_attend_time_un_editable_before")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date notAttendUnEditableBefore;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "call_result_id")
+    @JoinColumn(name = "invitation_call_result_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    CallResult callResult;
+    CallResult invitationCallResult;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "feed_back_call_result_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    CallResult feedBackCallResult;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "not_attend_call_result_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    CallResult notAttendCallResult;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference

@@ -3,27 +3,23 @@ package org.resala.Models.Volunteer;
 import lombok.Getter;
 import lombok.Setter;
 import org.resala.Models.Branch;
-import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Event;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table
 @Setter
 @Getter
-public class NetworkTypeAssignedToVolunteersToEvent {
+public class NetworkAssignedToVolunteers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @ManyToMany()
-    @JoinTable(name = "network_type_assigned_to_volunteers",
-            joinColumns = {@JoinColumn(name = "NetworkTypeAssignedToVolunteersToEvent_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)})
-    List<Volunteer> volunteers;
+    @ManyToOne()
+    @JoinColumn(name = "volunteer_id")
+    Volunteer volunteer;
 
     @ManyToOne()
     @JoinColumn(name = "network_type_id")
@@ -32,10 +28,6 @@ public class NetworkTypeAssignedToVolunteersToEvent {
     @ManyToOne()
     @JoinColumn(name = "event_id")
     Event event;
-
-    @ManyToOne()
-    @JoinColumn(name = "call_type_id")
-    CallType callType;
 
     @ManyToOne()
     @JoinColumn(name = "branch_id")

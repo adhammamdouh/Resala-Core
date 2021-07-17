@@ -17,7 +17,13 @@ public interface CallsPublicInfoProjection {
     String getNotAttendComment();
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    Date getTimeUnEditableBefore();
+    Date getInvitationUnEditableBefore();
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date getFeedBackUnEditableBefore();
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date getNotAttendUnEditableBefore();
 
     VolunteerCallsInfoProjection getReceiver();
 

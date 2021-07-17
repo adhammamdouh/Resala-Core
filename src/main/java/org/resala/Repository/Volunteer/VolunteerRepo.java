@@ -3,13 +3,13 @@ package org.resala.Repository.Volunteer;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Volunteer.LeadVolunteer;
-import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.UserStatus;
+import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 import java.util.Optional;
 
 @Repository
@@ -18,8 +18,8 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
 
     <T> List<T> findByBranch_idAndOrganization_Id(int branchId, Class<T> projection, int orgId);
 
-    List<Volunteer> findByBranchAndNetworkTypeAndVolunteerStatus_NameAndOrganization_Id(
-            Branch branches, NetworkType networkTypes, String volunteerStatus, int orgId);
+    List<Volunteer> findAllByRoleAndBranchAndNetworkTypeAndVolunteerStatusAndOrganization_Id(
+            Role role, Branch branches, NetworkType networkTypes, UserStatus volunteerStatus, int orgId);
 
     Optional<Volunteer> findAllByPhoneNumberAndOrganization_Id(String phoneNumber, int orgId);
 

@@ -1,6 +1,5 @@
 package org.resala.dto.Call;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +17,11 @@ public class CallsDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     Date time;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date timeUneditableBefore;
+    Date invitationUneditableBefore;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date feedBackUneditableBefore;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    Date notAttendUneditableBefore;
     String callResult;
 
 }
