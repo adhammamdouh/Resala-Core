@@ -77,7 +77,7 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('34', 'ROLE_SUBMIT_ASSIGNED_C
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('35', 'ROLE_MAKE_EVENT_ATTENDANCE_TO_VOLUNTEER');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('36', 'ROLE_CREATE_LEAD_VOLUNTEER');
 
-INSERT ignore INTO `action` (`id`, `name`) VALUES ('37', 'ROLE_GET_ALL_COMMITTEE_TEAM');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('37', 'ROLE_GET_MY_BRANCH_COMMITTEE_TEAM');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('38', 'ROLE_GET_NETWORK_TYPE_ASSIGNED_TO_VOLUNTEERS');
 
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('39', 'ROLE_CREATE_CLOUD');

@@ -1,22 +1,20 @@
-# Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
-# More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Azure App Service - resala-app-service(Production), Build and deploy Spring app
+name: Build and deploy JAR app to Azure Web App - resala-app-service
 
 on:
   push:
     branches:
       - First-Patch
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: windows-latest
 
     steps:
-    # checkout the repo
-    - name: 'Checkout Github Action'
-      uses: actions/checkout@master
-
+    - uses: actions/checkout@v2
 
     - name: Set up Java version
       uses: actions/setup-java@v1
@@ -26,11 +24,30 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
 
-    - name: Run Azure webapp deploy action using publish profile credentials
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: java-app
+        path: '${{ github.workspace }}/target/*.jar'
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: resala-app-service
-        slot-name: Production
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C5A504F28909426B9AC28D370A9C3A6D }}
-        package: ${{ github.workspace }}/target/*.jar
-
+        app-name: 'resala-app-service'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ea79e7edfcd54fe099be8305dd59a991 }}
+        package: '*.jar'

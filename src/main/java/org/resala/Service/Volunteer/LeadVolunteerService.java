@@ -8,6 +8,7 @@ import org.resala.Models.Branch;
 import org.resala.Models.Committee.Committee;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.LeadVolunteer;
+import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Pair;
@@ -41,6 +42,8 @@ public class LeadVolunteerService {
     BranchService branchService;
     @Autowired
     CommitteeService committeeService;
+    @Autowired
+    RoleService roleService;
 
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -132,6 +135,8 @@ public class LeadVolunteerService {
     public List<LeadVolunteerPublicInfoProjection> getCommitteeTeam(int branchId, int committeeId) {
         Branch branch = branchService.getById(branchId);
         Committee committee = committeeService.getById(committeeId);
-        return leadVolunteerRepo.findMyCommitteeTeam(LeadVolunteerPublicInfoProjection.class, branch, committee, IssTokenService.getOrganizationId());
+        Role role1 = roleService.getRoleByName(StaticNames.TeamLeader);
+        Role role2 = roleService.getRoleByName(StaticNames.TeamMember);
+        return leadVolunteerRepo.findMyCommitteeTeam(LeadVolunteerPublicInfoProjection.class, branch, committee, IssTokenService.getOrganizationId(), role1, role2);
     }
 }
