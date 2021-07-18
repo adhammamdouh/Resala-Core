@@ -11,10 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class LeadVolunteerDTO {
-
-    int id;
-    VolunteerDTO myVolunteerInfo;
+public class LeadVolunteerDTO extends VolunteerDTO{
     String personalImageUrl;
     String resalaObjective;
     String personalObjective;
@@ -33,8 +30,6 @@ public class LeadVolunteerDTO {
     Date omra;
     CommitteeDTO committee;
     public void checkNullForCreation(){
-        if (myVolunteerInfo == null)
-            throw new NullException("MyVolunteerInfo");
         if (committee == null)
             throw new NullException("Committee");
     }

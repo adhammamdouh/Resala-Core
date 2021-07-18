@@ -6,7 +6,10 @@ import org.resala.Projections.LeadVolunteer.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
+import org.resala.dto.Privilege.PrivilegeDTO;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
+import org.resala.dto.Volunteer.UserDTO;
+import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -243,5 +246,36 @@ public class LeadVolunteerController {
     @PreAuthorize("hasRole('" + StaticNames.createLeadVolunteer + "')")
     public ResponseEntity<Object> add(@RequestBody List<LeadVolunteerDTO> leadVolunteerDTOs) {
         return leadVolunteerService.create(leadVolunteerDTOs);
+    }
+
+
+    @RequestMapping(value = "/createVolunteerUser", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.createUser + "')")
+    public ResponseEntity<Object> createUser(@RequestBody List<VolunteerDTO> dtos) {
+        return leadVolunteerService.createVolunteerUser(dtos);
+    }
+
+    /*@RequestMapping(value = "/assignVolunteerUser", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    public ResponseEntity<Object> assignVolunteerUser(@RequestBody List<VolunteerDTO> volunteerDTOS) {
+        return leadVolunteerService.assignVolunteerUser(volunteerDTOS);
+    }*/
+
+    @RequestMapping(value = "/addPrivileges", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    public ResponseEntity<Object> addPrivileges(@RequestBody List<PrivilegeDTO> privilegeDTOS) {
+        return leadVolunteerService.addPrivileges(privilegeDTOS);
+    }
+
+    @RequestMapping(value = "/addPrivilegesActions", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    public ResponseEntity<Object> addPrivilegesActions(@RequestBody List<PrivilegeDTO> privilegeDTOS) {
+        return leadVolunteerService.addPrivilegesActions(privilegeDTOS);
+    }
+
+    @RequestMapping(value = "/addUserPrivileges", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    public ResponseEntity<Object> addUserPrivileges(@RequestBody List<UserDTO> userDTOS) {
+        return leadVolunteerService.addUserPrivileges(userDTOS);
     }
 }

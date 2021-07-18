@@ -17,10 +17,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CloudDTO {
-    int id;
-    User user;
-    Organization organization;
-    UserStatus cloudStatus;
-    private List<Privilege> privileges;
+public class CloudDTO extends UserDTO {
+//    UserStatusDTO userTypeDTO;
 }

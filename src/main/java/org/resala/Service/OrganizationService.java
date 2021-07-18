@@ -41,6 +41,13 @@ public class OrganizationService implements CommonCRUDService<OrganizationDTO>, 
         return optionalOrganization.get();
     }
 
+    public Organization getByDomainName(String domainName) {
+        Optional<Organization> optionalOrganization = organizationRepo.findByDomainNameEndingWith(domainName);
+        if (!optionalOrganization.isPresent())
+            throw new MyEntityNotFoundException("Organization Domain "+ StaticNames.notFound);
+        return optionalOrganization.get();
+    }
+
     @Override
     public List<Organization> getAll() {
         return null;

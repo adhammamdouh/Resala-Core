@@ -8,7 +8,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserLoginDTO implements Serializable {
-    private int organizationId;
-    private String username;
+    private String userName;
     private String password;
 }

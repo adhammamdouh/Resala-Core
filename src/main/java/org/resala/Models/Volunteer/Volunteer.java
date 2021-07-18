@@ -21,6 +21,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import java.util.List;
         //@NamedQuery(name = "Volunteer.findById", query = "SELECT w FROM Volunteer w WHERE w.id = :id"),
         @NamedQuery(name = "Volunteer.findByBranch", query = "SELECT v FROM Volunteer v WHERE v.branch.id = :branch_id")
 })*/
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Volunteer implements Serializable {
     @Column
     @Id
@@ -137,19 +140,7 @@ public class Volunteer implements Serializable {
     //@JsonIdentityReference(alwaysAsId = true)
     private Role role;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
-    @JoinTable(name = "volunteer_privileges",
-            joinColumns = {@JoinColumn(name = "volunteer_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "privilege_id", nullable = false)}
-    )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    //@JsonIdentityReference(alwaysAsId = true)
-
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Privilege> privileges;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", fetch = FetchType.LAZY)
 //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<EventAttendance> eventAttendances;
@@ -159,16 +150,29 @@ public class Volunteer implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     UserStatus volunteerStatus;
 
+    private void mapVolData(Volunteer volunteer) {
+        for (Method getMethod : volunteer.getClass().getMethods()) {
+            if (getMethod.getName().startsWith("get")) {
+                try {
+                    Method setMethod = this.getClass().getMethod(getMethod.getName().replace("get", "set"), getMethod.getReturnType());
+                    setMethod.invoke(this, getMethod.invoke(volunteer, (Object[]) null));
 
-    @OneToOne(mappedBy = "myVolunteerInfo", fetch = FetchType.EAGER)
-    @JsonBackReference
-    LeadVolunteer leadVolunteer;
-
-    public Volunteer() {
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    //not found set
+                }
+            }
+        }
     }
 
+    public Volunteer(Volunteer volunteer) {
+        mapVolData(volunteer);
+    }
 
-    public boolean equals(Volunteer v) {
-        return (this.id == v.getId());
+    public Volunteer() {
+
+    }
+
+    public void setVolunteer(Volunteer volunteer) {
+        mapVolData(volunteer);
     }
 }

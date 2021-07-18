@@ -7,6 +7,7 @@ import org.resala.Models.Volunteer.Role;
 import org.resala.Models.Volunteer.UserStatus;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,12 +39,15 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     @Query("SELECT v FROM Volunteer AS v JOIN FETCH v.branch JOIN FETCH v.user as u WHERE u.userName=:userName")
     Volunteer test(@Param("userName")String userName);//need to be change
     */
-    <T> List<T> findAllByLeadVolunteerAndOrganization_Id(LeadVolunteer leadVolunteer, Class<T> projection, int orgId);
+//    <T> List<T> findAllByLeadVolunteerAndOrganization_Id(LeadVolunteer leadVolunteer, Class<T> projection, int orgId);
+    @Query(value = "SELECT v from Volunteer AS v left join LeadVolunteer l where l.id is null ")
+    <T> List<T> getAllNormal(Class<T> projection, int orgId);
 
-    default <T> List<T> getAllNormal(Class<T> projection, int orgId) {
+    /*default <T> List<T> getAllNormal(Class<T> projection, int orgId) {
         return findAllByLeadVolunteerAndOrganization_Id(null, projection, orgId);
-    }
+    }*/
 
     <T> List<T> findAllByVolunteerStatusAndOrganization_Id(UserStatus volunteerStatus, Class<T> projection, int orgId);
 
+    Optional<Volunteer> findByUser_id(int id);
 }

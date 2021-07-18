@@ -1,6 +1,7 @@
 package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Address.Capital;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -48,14 +50,20 @@ public class CloudService {
 
     public ResponseEntity<Object> create() {
         Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
-        UserStatus cloudStatus = userStatusService.getByName(StaticNames.activeState);
+        UserStatus userStatus = userStatusService.getByName(StaticNames.activeState);
         Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.cloud);
         Cloud cloud = new Cloud();
-        cloud.setOrganization(organization);
+//        cloud.setOrganization(organization);
         cloud.setPrivileges(Stream.of(privilege).collect(toList()));
-        cloud.setCloudStatus(cloudStatus);
+        cloud.setUserStatus(userStatus);
         cloudRepo.save(cloud);
         return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
 
+    }
+
+    public Cloud findById(int id) {
+        Optional<Cloud> optional = cloudRepo.findById(id);
+        if (!optional.isPresent()) throw new MyEntityNotFoundException("Cloud" + StaticNames.notFound);
+        return optional.get();
     }
 }

@@ -34,17 +34,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!checkPw(password, user.getPassword())) {
             throw new BadCredentialsException("Wrong User Name Or Password");
         }
+        if(user.getUserType()==null)
+            throw new BadCredentialsException("Wrong User Name Or Password");
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        List<Privilege> privileges;
-        if (user.getVolunteer() != null)
-            privileges = user.getVolunteer().getPrivileges();
-        else if (user.getCloud() != null)
-            privileges = user.getCloud().getPrivileges();
-        else if (user.getAdmin() != null)
-            privileges = user.getAdmin().getPrivileges();
-        else
-            throw new BadCredentialsException("Wrong User Name Or Password");
+        List<Privilege> privileges = user.getPrivileges();
         for (Privilege privilege : privileges) {
             List<Action> actions = privilege.getActions();
             for (Action action : actions)
@@ -59,6 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(
                 UsernamePasswordAuthenticationToken.class);
     }
+
     private BCryptPasswordEncoder getPwEncoder() {
         return new BCryptPasswordEncoder();
     }

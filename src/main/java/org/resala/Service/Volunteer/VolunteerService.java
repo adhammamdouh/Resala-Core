@@ -8,7 +8,6 @@ import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
-import org.resala.Models.Privilege.Privilege;
 import org.resala.Models.Volunteer.*;
 import org.resala.Pair;
 import org.resala.Projections.Volunteer.VolunteerProjection;
@@ -24,12 +23,12 @@ import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -57,6 +56,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     ShirtService shirtService;
     @Autowired
     UserService userService;
+    @Autowired
+    UserTypeService userTypeService;
 
     //@Bean
     public ModelMapper modelMapper() {
@@ -68,36 +69,36 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     public boolean checkPhoneExist(String phone) {
         return volunteerRepo.existsByPhoneNumberAndOrganization_Id(phone, IssTokenService.getOrganizationId());
     }
-
+    public Volunteer getVolForCreation(VolunteerDTO dto){
+        dto.checkNull();
+        Branch branch = branchService.getById(dto.getBranch().getId());
+        Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
+        Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
+        Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
+        UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
+        Shirt shirt = shirtService.getById(dto.getShirt().getId());
+        String phoneNumber = dto.getPhoneNumber();
+        if (checkPhoneExist(phoneNumber)) throw new MyEntityFoundBeforeException("Phone Number Found Before");
+        Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
+        volunteer.setId(0);
+        volunteer.setBranch(branch);
+        volunteer.setOrganization(organization);
+        volunteer.getAddress().setCapital(capital);
+        volunteer.setShirt(shirt);
+        volunteer.setRole(role);
+        volunteer.setVolunteerStatus(volunteerStatus);
+        checkConstraintViolations(volunteer);
+        addressService.checkConstraintViolations(volunteer.getAddress());
+        volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
+        return volunteer;
+    }
     @Override
     public ResponseEntity<Object> create(List<VolunteerDTO> dtos) {
         ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
-//        int count = 0;
         for (int i = 0; i < dtos.size(); i++) {
             try {
                 VolunteerDTO dto = dtos.get(i);
-                dto.checkNull();
-                Branch branch = branchService.getById(dto.getBranch().getId());
-                Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
-                Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
-                Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
-                UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
-                Privilege privilege = privilegeService.getPrivilegeByName(StaticNames.normalVolunteer);
-                Shirt shirt = shirtService.getById(dto.getShirt().getId());
-                String phoneNumber = dto.getPhoneNumber();
-                if (checkPhoneExist(phoneNumber)) throw new MyEntityFoundBeforeException("Phone Number Found Before");
-                Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
-                volunteer.setId(0);
-                volunteer.setBranch(branch);
-                volunteer.setOrganization(organization);
-                volunteer.getAddress().setCapital(capital);
-                volunteer.setPrivileges(Stream.of(privilege).collect(toList()));
-                volunteer.setShirt(shirt);
-                volunteer.setRole(role);
-                volunteer.setVolunteerStatus(volunteerStatus);
-                checkConstraintViolations(volunteer);
-                addressService.checkConstraintViolations(volunteer.getAddress());
-                volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
+                Volunteer volunteer= getVolForCreation(dto);
                 volunteerRepo.save(volunteer);
             } catch (Exception e) {
                 failed.add(new Pair<>(i, e.getMessage()));
@@ -159,7 +160,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         newVolunteer.getAddress().setId(volunteer.getAddress().getId());
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
-        newVolunteer.setPrivileges(volunteer.getPrivileges());
+//        newVolunteer.setPrivileges(volunteer.getPrivileges());
         newVolunteer.setShirt(shirt);
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
         checkConstraintViolations(newVolunteer);
@@ -228,9 +229,9 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, NetworkType networkType) {
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
-        UserStatus userStatus=volunteerStatusService.getByName(StaticNames.activeState);
+        UserStatus userStatus = volunteerStatusService.getByName(StaticNames.activeState);
         return volunteerRepo.findAllByRoleAndBranchAndNetworkTypeAndVolunteerStatusAndOrganization_Id
-                (role,branch, networkType,userStatus, IssTokenService.getOrganizationId());
+                (role, branch, networkType, userStatus, IssTokenService.getOrganizationId());
 
     }
 
@@ -294,10 +295,10 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
                     throw new AssignedBeforeException("Volunteer");
                 User user = userService.getById(dto.getUser().getId());
 
-                if (user.getAdmin() != null || user.getCloud() != null || user.getVolunteer() != null)
+                if (user.getUserType() != null)
                     throw new AssignedBeforeException("User");
-                if (!user.getUserType().getName().equals(StaticNames.volunteerType))
-                    throw new BadAssignException("This user can be assigned to " + user.getUserType().getName());
+                UserType userType = userTypeService.getByName(StaticNames.volunteerType);
+                user.setUserType(userType);
                 volunteer.setUser(user);
                 volunteerRepo.save(volunteer);
                 count++;
@@ -310,5 +311,17 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
             return ResponseEntity.ok(new Response(StaticNames.assignedSuccessfully, HttpStatus.OK.value()));
         else
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
+    }
+
+    public Volunteer getVolunteerByUserId(int id) {
+        Optional<Volunteer> optional = volunteerRepo.findByUser_id(id);
+        if (!optional.isPresent())
+            throw new BadCredentialsException("Wrong User Name Or Password");
+        return optional.get();
+    }
+
+    public void savaVol(Volunteer volunteer) {
+        checkConstraintViolations(volunteer);
+        volunteerRepo.save(volunteer);
     }
 }

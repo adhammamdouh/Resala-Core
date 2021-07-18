@@ -18,8 +18,12 @@ import org.resala.Repository.Volunteer.LeadVolunteerRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Commiittee.CommitteeService;
 import org.resala.Service.IssTokenService;
+import org.resala.Service.Privilege.PrivilegeService;
+import org.resala.Service.UserService;
 import org.resala.StaticNames;
+import org.resala.dto.Privilege.PrivilegeDTO;
 import org.resala.dto.Volunteer.LeadVolunteerDTO;
+import org.resala.dto.Volunteer.UserDTO;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +49,11 @@ public class LeadVolunteerService {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    private PrivilegeService privilegeService;
+    @Autowired
+    private UserService userService;
+
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -53,22 +62,20 @@ public class LeadVolunteerService {
 
     public ResponseEntity<Object> create(List<LeadVolunteerDTO> dtos) {
         ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
-        int count = 0;
-        for (LeadVolunteerDTO dto : dtos) {
+        for (int i=0;i<dtos.size();i++) {
             try {
+                LeadVolunteerDTO dto = dtos.get(i);
                 dto.checkNullForCreation();
-                Volunteer myVolunteerInfo = volunteerService.getById(dto.getMyVolunteerInfo().getId());
+                Volunteer volunteer = volunteerService.getVolForCreation(dto);
                 Committee committee = committeeService.getById(dto.getCommittee().getId());
-                if (checkFound(myVolunteerInfo))
+                if (checkFound(volunteer))
                     throw new MyEntityFoundBeforeException("This Volunteer is already lead");
                 LeadVolunteer leadVolunteer = modelMapper().map(dto, LeadVolunteer.class);
-                leadVolunteer.setMyVolunteerInfo(myVolunteerInfo);
+                leadVolunteer.setVolunteer(volunteer);
                 leadVolunteer.setCommittee(committee);
                 leadVolunteerRepo.save(leadVolunteer);
-                count++;
             } catch (Exception e) {
-                failed.add(new Pair<>(count, e.getMessage()));
-                count++;
+                failed.add(new Pair<>(i, e.getMessage()));
             }
         }
         if (failed.size() == 0)
@@ -78,7 +85,7 @@ public class LeadVolunteerService {
     }
 
     public <T> List<T> getAll(Class<T> projection) {
-        return leadVolunteerRepo.findAllByAndMyVolunteerInfo_Organization_Id(projection, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByOrganization_Id(projection, IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteer> getAllForKPI() {
@@ -100,29 +107,31 @@ public class LeadVolunteerService {
 
     public List<LeadVolunteerProjection> getAllByState(int stateId) {
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(int stateId) {
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return leadVolunteerRepo.findByMyVolunteerInfo_VolunteerStatusAndMyVolunteerInfo_Organization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getLeadVolunteersProjectionByBranch(int branchId) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_IdAndMyVolunteerInfo_Organization_Id(branchId, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getLeadVolunteersPublicInfoByBranch(int branchId) {
-        return leadVolunteerRepo.findByMyVolunteerInfo_Branch_IdAndMyVolunteerInfo_Organization_Id(branchId, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
     }
 
     public boolean checkFound(Volunteer volunteer) {
-        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
+        if (volunteer == null) return true;
+        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findById(volunteer.getId());
         return leadVolunteerOptional.isPresent();
     }
 
     public LeadVolunteer getByVolunteer(Volunteer volunteer) {
-        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findAllByMyVolunteerInfo(volunteer);
+        if (volunteer == null) throw new MyEntityNotFoundException("lead volunteer " + StaticNames.notFound);
+        Optional<LeadVolunteer> leadVolunteerOptional = leadVolunteerRepo.findById(volunteer.getId());
         if (leadVolunteerOptional.isPresent()) return leadVolunteerOptional.get();
         throw new MyEntityNotFoundException("lead volunteer " + StaticNames.notFound);
     }
@@ -139,4 +148,23 @@ public class LeadVolunteerService {
         Role role2 = roleService.getRoleByName(StaticNames.TeamMember);
         return leadVolunteerRepo.findMyCommitteeTeam(LeadVolunteerPublicInfoProjection.class, branch, committee, IssTokenService.getOrganizationId(), role1, role2);
     }
+
+
+    public ResponseEntity<Object> createVolunteerUser(List<VolunteerDTO> volunteerDTOS) {
+        return userService.createVolunteerUser(volunteerDTOS);
+    }
+
+    public ResponseEntity<Object> addPrivileges(List<PrivilegeDTO> privilegeDTOS) {
+        return privilegeService.create(privilegeDTOS);
+    }
+
+    public ResponseEntity<Object> addPrivilegesActions(List<PrivilegeDTO> privilegeDTOS) {
+        return privilegeService.addPrivilegesActions(privilegeDTOS);
+    }
+
+    public ResponseEntity<Object> addUserPrivileges(List<UserDTO> userDTOS) {
+        return userService.addUserPrivileges(userDTOS);
+    }
+
+
 }

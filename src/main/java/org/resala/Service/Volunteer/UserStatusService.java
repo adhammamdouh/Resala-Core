@@ -28,16 +28,5 @@ public class UserStatusService {
     }
 
 
-    public UserStatus getVolunteerStatusByUserName(String userName){
-        Optional<UserStatus> volunteerStatusOptional= userStatuesRepo.findByVolunteers_User_UserName(userName);
-        if(!volunteerStatusOptional.isPresent())
-            throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
-        return volunteerStatusOptional.get();
-    }
-    public UserStatus getCloudStatusByUserName(String userName){
-        Optional<UserStatus> volunteerStatusOptional= userStatuesRepo.findByClouds_User_UserName(userName);
-        if(!volunteerStatusOptional.isPresent())
-            throw  new MyEntityNotFoundException("User State "+StaticNames.notFound);
-        return volunteerStatusOptional.get();
-    }
+
 }

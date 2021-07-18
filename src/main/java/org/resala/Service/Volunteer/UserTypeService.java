@@ -21,4 +21,11 @@ public class UserTypeService {
             throw new MyEntityNotFoundException("UserType "+ StaticNames.notFound);
         return optional.get();
     }
+
+    public UserType getByName(String name) {
+        Optional<UserType> optional = userTypeRepo.findByName(name);
+        if (!optional.isPresent())
+            throw new MyEntityNotFoundException("UserType "+ StaticNames.notFound);
+        return optional.get();
+    }
 }

@@ -16,34 +16,12 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Cloud {
-    @Column
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",unique = true)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private User user;
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Cloud extends User{
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "status_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    public Organization organization;
+    UserStatus userStatus;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "cloud_status_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    UserStatus cloudStatus;
-
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "cloud_privileges",
-            joinColumns = {@JoinColumn(name = "cloud_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "privilege_id", nullable = false)}
-    )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Privilege> privileges;
 }

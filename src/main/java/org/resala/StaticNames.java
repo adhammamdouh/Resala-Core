@@ -100,6 +100,8 @@ public interface StaticNames {
     String eventNotAttendEndCalls="Your not attend end Calls is not correct";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
+//    String adminType="Admin";
+    String cloudType="Cloud";
     //----------------------------------------------------------------------------------------------------------------------
     String etisalat="ETISALAT";
     String vodafone ="VODAFONE";

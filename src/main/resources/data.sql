@@ -1,17 +1,4 @@
 ALTER DATABASE `resalacore` CHARACTER SET utf8 COLLATE utf8_general_ci;
-SET @sql = (SELECT IF(
-    (SELECT COUNT(INDEX_NAME)
-        FROM INFORMATION_SCHEMA.statistics WHERE
-        INDEX_NAME='uq_userName_orgId'
-    ) <> 0,
-    "SELECT 0",
-    "alter table user add constraint uq_userName_orgId unique (org_id, user_name);"
-));
-
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-set @sql=NULL;
 
 SET @sql = (SELECT IF(
     (SELECT COUNT(INDEX_NAME)
@@ -29,7 +16,7 @@ set @sql=NULL;
 
 
 
-INSERT ignore INTO `organization` (`id`, `name`) VALUES ('1', 'Resala');
+INSERT ignore INTO `organization` (`id`, `name`,`domain_name`) VALUES ('1', 'Resala','@resala.org');
 
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('1', 'ROLE_GET_ALL_VOLUNTEERS');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('2', 'ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO');
@@ -217,10 +204,9 @@ INSERT ignore INTO shirt (`id`, `name`) VALUES ('2', 'معندوش');
 INSERT ignore INTO shirt (`id`, `name`) VALUES ('3', 'عايز');
 
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('1', 'Volunteer');
-INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Admin');
-INSERT ignore INTO user_type (`id`, `name`) VALUES ('3', 'Cloud');
+INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Cloud');
 
 
-INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`,`org_id`) VALUES ('1', 'admin','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','2','1');
+INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin@resala.org','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','1');
 
-INSERT ignore INTO `admin`  VALUES ('1', '1','1','1');
+--INSERT ignore INTO `admin`  VALUES ('1', '1','1','1');

@@ -5,9 +5,8 @@ import org.resala.Projections.Volunteer.VolunteerPublicInfoProjection;
 
 import java.util.Date;
 
-public interface LeadVolunteerPublicInfoProjection {
+public interface LeadVolunteerPublicInfoProjection extends VolunteerPublicInfoProjection{
     int getId();
-    VolunteerPublicInfoProjection getMyVolunteerInfo();
     String getPersonalImageUrl();
     String getResalaObjective();
     String getPersonalObjective();

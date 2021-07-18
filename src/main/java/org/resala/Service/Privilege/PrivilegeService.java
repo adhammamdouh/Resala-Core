@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
+import org.resala.Models.Branch;
 import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Pair;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, CommonService<Privilege> {
@@ -130,5 +133,14 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
             return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
         else
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
+    }
+
+    public List<Privilege> findByIds(List<Integer> ids) {
+        List<Privilege> privileges = privilegeRepo.findAllByIdInAndOrganization_Id(ids, IssTokenService.getOrganizationId());
+        if (privileges.size() != ids.size()) {
+            ids.removeAll(privileges.stream().map(Privilege::getId).collect(toList()));
+            throw new MyEntityNotFoundException("Privilege with id's " + ids + " does not exist");
+        }
+        return privileges;
     }
 }

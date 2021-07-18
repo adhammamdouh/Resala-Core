@@ -40,9 +40,9 @@ public class LeadVolunteerKPIService {
         } catch (MyEntityNotFoundException e) {
             leadVolunteerKPI = new LeadVolunteerKPI();
         }
-        int presentCount = eventAttendanceService.countPresentForCaller(leadVolunteer.getMyVolunteerInfo(), StaticNames.attendedTheEvent);
-        int callCount = callsService.countByCallerAndCalled(leadVolunteer.getMyVolunteerInfo());
-        int callEnsureCount = callsService.countByCallerAndCallResult(leadVolunteer.getMyVolunteerInfo(), StaticNames.callEnsure);
+        int presentCount = eventAttendanceService.countPresentForCaller(leadVolunteer, StaticNames.attendedTheEvent);
+        int callCount = callsService.countByCallerAndCalled(leadVolunteer);
+        int callEnsureCount = callsService.countByCallerAndCallResult(leadVolunteer, StaticNames.callEnsure);
         /*System.out.println(presentCount);
         System.out.println(callCount);
         System.out.println(callEnsureCount);*/

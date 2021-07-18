@@ -17,15 +17,10 @@ import java.util.Date;
 @Table(name = "lead_volunteer")
 @Getter
 @Setter
-public class LeadVolunteer implements Serializable {
-    @Column
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "volunteer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    Volunteer myVolunteerInfo;
+@PrimaryKeyJoinColumn(name = "volunteer_id")
+public class LeadVolunteer extends Volunteer implements Serializable {
+
+
     @Column(name = "personal_image_url")
     String personalImageUrl;
     @Column(name = "resala_objective")
@@ -63,5 +58,11 @@ public class LeadVolunteer implements Serializable {
     @JoinColumn(name = "lead_kpi_id")
     LeadVolunteerKPI leadVolunteerKPI;
 
+    public LeadVolunteer(Volunteer volunteer){
+        super(volunteer);
+    }
 
+    public LeadVolunteer() {
+
+    }
 }
