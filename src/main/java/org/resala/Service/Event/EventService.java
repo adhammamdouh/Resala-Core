@@ -199,4 +199,11 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         EventStatus eventStatus = eventStatusService.getEventStatusByName(eventStatusName);
         return eventRepo.findAllByEventStatusAndEventResultAndOrganization_Id(eventStatus, eventResult, IssTokenService.getOrganizationId());
     }
+
+    public boolean checkEventStatus(Event event){
+        if(event.getEventStatus().getName().equals(StaticNames.activeState))
+            return true;
+        return false;
+    }
+
 }

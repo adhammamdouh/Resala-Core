@@ -4,14 +4,12 @@ import org.resala.Models.Auth.Response;
 import org.resala.Service.IssTokenService;
 import org.resala.Service.Volunteer.NetworkAssignedToVolunteersService;
 import org.resala.StaticNames;
-import org.resala.dto.Volunteer.NetworkAssignedToVolunteersDTO;
+import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/networkType")
@@ -30,9 +28,9 @@ public class NetworkAssignedToVolunteerController {
 
     @RequestMapping(value = "/assignNetworkAssignedToVolunteer"  , method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.getNetworkTypeAssignedToVolunteer + "')")
-    public ResponseEntity<Object> assignedCalls(@RequestBody List<NetworkAssignedToVolunteersDTO> networkAssignedToVolunteersDTO){
+    public ResponseEntity<Object> assignedCalls(@RequestBody VolunteerToCallsDTO dto){
         int branchId = IssTokenService.getBranchId();
-        return networkAssignedToVolunteersService.saveAndUpdate(networkAssignedToVolunteersDTO,branchId);
+        return networkAssignedToVolunteersService.saveAndUpdate(dto,branchId);
     }
 
 

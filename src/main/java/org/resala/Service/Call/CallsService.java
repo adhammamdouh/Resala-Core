@@ -1,6 +1,7 @@
 package org.resala.Service.Call;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.ConstraintViolationException;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
@@ -12,7 +13,6 @@ import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.NetworkAssignedToVolunteers;
 import org.resala.Models.Volunteer.Volunteer;
-import org.resala.Projections.Calls.CallsPublicInfoProjection;
 import org.resala.Repository.Call.CallsRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Event.Attendance.AttendanceStatusService;
@@ -74,6 +74,9 @@ public class CallsService {
 
         Event event = eventService.getById(dto.getEvent().getId());
         Branch branch = branchService.getById(branchId);
+
+        if(!eventService.checkEventStatus(event))
+            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
 
         if (callsRepo.countAllByEventAndBranch(event, branch) > 0) {
             throw new MyEntityFoundBeforeException(StaticNames.callsHasBeenCreatedBefore);
@@ -195,25 +198,36 @@ public class CallsService {
         return calls;
     }
 
-    public List<CallsPublicInfoProjection> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
+    public List<Calls> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
         Volunteer volunteer = volunteerService.getById(networkAssignedToVolunteersDTO.getVolunteer().getId());
         Event event = eventService.getById(networkAssignedToVolunteersDTO.getEvent().getId());
+
+        if(!eventService.checkEventStatus(event))
+            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
+
         Date currentDate = new Date(System.currentTimeMillis());
 
         if (volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
             if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
                 AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-                return callsRepo.findAllByAttendanceStatus(attendanceStatus, CallsPublicInfoProjection.class);
+                List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
+                for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
+                callsRepo.saveAll(calls);
+                return calls;
             }
             throw new RuntimeException(StaticNames.cantGetFeedBackCalls);
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
-            return callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class);
+            return callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), Calls.class);
         }
+
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.notAttendedTheEvent);
-            return callsRepo.findAllByAttendanceStatus(attendanceStatus, CallsPublicInfoProjection.class);
+            List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
+            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
+            callsRepo.saveAll(calls);
+            return calls;
         }
         throw new RuntimeException(StaticNames.cantGetEventCalls);
     }
@@ -229,6 +243,9 @@ public class CallsService {
         Calls call = callsRepo.findById(callId);
 
         Event event = call.getEvent();
+
+        if(!eventService.checkEventStatus(event))
+            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
 
         Date currentDate = new Date(System.currentTimeMillis());
 

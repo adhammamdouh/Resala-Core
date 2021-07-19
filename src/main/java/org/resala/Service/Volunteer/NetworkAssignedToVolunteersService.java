@@ -1,6 +1,7 @@
 package org.resala.Service.Volunteer;
 
 import org.modelmapper.ModelMapper;
+import org.resala.Exceptions.ConstraintViolationException;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
@@ -19,6 +20,7 @@ import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Event.EventService;
 import org.resala.StaticNames;
+import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.resala.dto.Volunteer.NetworkAssignedToVolunteersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -91,6 +93,9 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
         Branch branch=branchService.getById(branchId);
         Event event=eventService.getById(eventId);
 
+        if(!eventService.checkEventStatus(event))
+            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
+
         return networkAssignedToVolunteersRepo.getAllByEvent_IdAndBranch_Id(event.getId(),branch.getId(),NetworkTypeAssignedToVolunteerProjection.class);
 
     }
@@ -105,13 +110,20 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
         return optional.get();
     }
 
-    public ResponseEntity<Object> saveAndUpdate(List<NetworkAssignedToVolunteersDTO> dtos, int branchId){
+    public ResponseEntity<Object> saveAndUpdate(VolunteerToCallsDTO volunteerToCallsDTO, int branchId){
         List<Pair<Integer,String>> failed= new ArrayList<>();
+
+        Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
+        Branch branch = branchService.getById(branchId);
+
+        if(!eventService.checkEventStatus(event))
+            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
+
+        List<NetworkAssignedToVolunteersDTO> dtos=volunteerToCallsDTO.getNetworkAssignedToVolunteers();
+
         for(int i=0;i< dtos.size();++i) {
             NetworkAssignedToVolunteersDTO dto=dtos.get(i);
             try {
-                Event event = eventService.getById(dto.getEvent().getId());
-                Branch branch = branchService.getById(branchId);
 
                 if(callsService.countAllByEventAndBranch(event,branch)>0){
                     throw new MyEntityFoundBeforeException(StaticNames.callsHasBeenCreatedBefore);

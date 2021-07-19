@@ -98,6 +98,7 @@ public interface StaticNames {
     String eventFeedBackEndDate="Your feed back end Calls is not correct";
     String eventNotAttendStartCalls="Your not attend Calls must be before event end date";
     String eventNotAttendEndCalls="Your not attend end Calls is not correct";
+    String eventIsNotActive="Event is deleted or completed";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
 //    String adminType="Admin";

@@ -14,14 +14,14 @@ import java.util.List;
 public class VolunteerToCallsDTO {
     EventDTO event;
     CallTypeDTO callType;
-    BranchDTO branchDTO;
-    List<NetworkAssignedToVolunteersDTO> networkTypeAssignedToVolunteersToEvents;
+    BranchDTO branch;
+    List<NetworkAssignedToVolunteersDTO> networkAssignedToVolunteers;
 
     public void checkNullForGetAssigned() {
         if (event == null ) {
             throw new NullException("Event");
         }
-        if (networkTypeAssignedToVolunteersToEvents == null)
+        if (networkAssignedToVolunteers == null)
             throw new NullException("networkTypeAssignedToVolunteersToEventDTO");
 
         if (callType == null)
