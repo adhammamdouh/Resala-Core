@@ -66,7 +66,7 @@ public class LeadVolunteerService {
             try {
                 LeadVolunteerDTO dto = dtos.get(i);
                 dto.checkNullForCreation();
-                Volunteer volunteer = volunteerService.getVolForCreation(dto);
+                Volunteer volunteer = volunteerService.getVolForCreation(dto,StaticNames.TeamLeader);
                 Committee committee = committeeService.getById(dto.getCommittee().getId());
                 if (checkFound(volunteer))
                     throw new MyEntityFoundBeforeException("This Volunteer is already lead");
