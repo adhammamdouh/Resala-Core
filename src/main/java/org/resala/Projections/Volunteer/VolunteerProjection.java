@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;
+import org.resala.Models.Volunteer.EducationLevel;
 import org.resala.Models.Volunteer.Shirt;
 import org.resala.Models.Volunteer.UserStatus;
 
@@ -42,6 +43,8 @@ public interface VolunteerProjection {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date getBirthDate();
 
+    int getAge();
+
     Shirt getShirt();
 
     boolean getMiniCamp();
@@ -51,4 +54,6 @@ public interface VolunteerProjection {
     Branch getBranch();
 
     UserStatus getVolunteerStatus();
+
+    EducationLevel getEducationLevel();
 }
