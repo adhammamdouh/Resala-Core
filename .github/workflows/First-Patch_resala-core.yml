@@ -60,7 +60,7 @@ jobs:
         with:
           app-name: 'resala-core'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
-        azure-subscription: Azure subscription 1
+        azureSubscription: Azure subscription 1
         inputs:
           action: Restart Azure App Service
 #          app-name: 'resala-core'
