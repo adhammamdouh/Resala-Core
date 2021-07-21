@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Java version
       uses: actions/setup-java@v1
@@ -22,10 +22,10 @@ jobs:
         java-version: '11'
 
     - name: Build with Maven
-      run: mvn clean install
+      run: mvn -f pom.xml clean package
 
     - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: java-app
         path: '${{ github.workspace }}/target/*.jar'
@@ -39,13 +39,13 @@ jobs:
 
     steps:
     - name: Download artifact from build job
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v2
       with:
         name: java-app
 
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2
       with:
         app-name: 'resala-core'
         slot-name: 'production'
