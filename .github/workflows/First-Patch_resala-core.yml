@@ -50,4 +50,4 @@ jobs:
         app-name: 'resala-core'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
-        package: '*.jar'
+        package: '${{github.workspace}}/target/ResalaCoreSystem-0.0.1-SNAPSHOT.jar'
