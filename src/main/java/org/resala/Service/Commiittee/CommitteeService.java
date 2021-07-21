@@ -7,6 +7,7 @@ import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,10 @@ public class CommitteeService  {
         if (!optionalCommittee.isPresent())
             throw new MyEntityNotFoundException("Committee "+ StaticNames.notFound);
         return optionalCommittee.get();
+    }
+
+    public List<Committee> getAll(){
+        return committeeRepo.findAll();
     }
 
 }

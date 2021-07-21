@@ -37,7 +37,8 @@ public class BranchService implements CommonCRUDService<BranchDTO>, CommonServic
 
     @Override
     public List<Branch> getAll() {
-        return null;
+        int orgId=IssTokenService.getOrganizationId();
+        return branchRepo.findAllByOrganization_Id(orgId);
     }
 
     public List<Branch> getBranchByIds(List<Integer> ids) {

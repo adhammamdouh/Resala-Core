@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface BranchRepo extends JpaRepository<Branch,Integer> {
     Optional<Branch> findByIdAndOrganization_Id(int id,int orgId);
+    List<Branch> findAllByOrganization_Id(int orgId);
     List<Branch> findAllByIdInAndOrganization_Id(List<Integer> ids, int orgId);
 }

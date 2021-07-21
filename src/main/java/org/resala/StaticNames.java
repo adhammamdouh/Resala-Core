@@ -74,6 +74,8 @@ public interface StaticNames {
     String assignUser="ROLE_ASSIGN_USER";
     String createPrivilege="ROLE_CREATE_PRIVILEGES";
     String assignActionsToPrivilege="ROLE_ASSIGN_ACTIONS_TO_PRIVILEGES";
+    String getAllBranches="ROLE_GET_ALL_BRANCHES";
+    String getAllCommittees="ROLE_GET_ALL_COMMITTEES";
 
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";

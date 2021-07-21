@@ -76,6 +76,8 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('43', 'ROLE_CREATE_USER');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('44', 'ROLE_ASSIGN_USER');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('45', 'ROLE_CREATE_PRIVILEGES');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('46', 'ROLE_ASSIGN_ACTIONS_TO_PRIVILEGES');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('47', 'ROLE_GET_ALL_BRANCHES');
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('48', 'ROLE_GET_ALL_COMMITTEES');
 
 
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
