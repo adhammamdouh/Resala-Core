@@ -22,7 +22,7 @@ jobs:
         java-version: '11'
 
     - name: Build with Maven
-      run: mvn -f pom.xml clean package
+      run: mvn clean install
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -49,17 +49,5 @@ jobs:
       with:
         app-name: 'resala-core'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_21c5f7e0478d492da18c6673bb032e9c }}
         package: '*.jar'
-#  restart:
-#    runs-on: windows-latest
-#    needs: deploy
-#    steps:
-#      - task: AzureFunctionApp@1
-#        uses: azure/webapps-deploy@v2
-#        with:
-#          app-name: 'resala-core'
-#          publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
-#        inputs:
-#          action: Restart Azure App Service
-#          app-name: 'resala-core'
