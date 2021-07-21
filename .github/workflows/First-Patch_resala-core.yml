@@ -56,6 +56,7 @@ jobs:
     needs: deploy
     steps:
       - task: AzureAppServiceManage@0
+        uses: azure/webapps-deploy@v2
         inputs:
           azureSubscription: Azure subscription 1
           action: Restart Azure App Service
