@@ -115,9 +115,10 @@ public class Volunteer implements Serializable {
 
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "education_level_id")
+    @JoinColumn(name = "education_level_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @NotNull(message = "Please Enter education level")
     EducationLevel educationLevel;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
