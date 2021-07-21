@@ -55,9 +55,8 @@ jobs:
     runs-on: windows-latest
     needs: deploy
     steps:
-      -
-      - task: AzureAppServiceManage@0
+      - task: AzureFunctionApp@1
         uses: azure/webapps-deploy@v2
         inputs:
-          azureSubscription: Azure subscription 1
+          azureSubscription: 'Azure subscription 1'
           action: Restart Azure App Service
