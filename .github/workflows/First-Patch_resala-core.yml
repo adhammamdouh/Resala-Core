@@ -42,11 +42,6 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: java-app
-    - task: AzureAppServiceManage@0
-        displayName: Azure App Service Restart Deploy
-        inputs:
-          action: Restart Azure App Service
-
 
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
@@ -56,3 +51,7 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
         package: '*.jar'
+    - task: AzureAppServiceManage@0
+      inputs:
+        appName: 'resala-core'
+        action: Restart Azure App Service
