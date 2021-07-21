@@ -37,54 +37,54 @@ public class Event implements Serializable {
     @NotEmpty(message = "Please enter Name")
     String name;
 
-    @Column(name = "from_date")
+    @Column(name = "from_date",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter From Date")
     Date fromDate;
 
-    @Column(name = "to_date")
+    @Column(name = "to_date",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter To Date")
     Date toDate;
 
-    @Column(name = "invitation_calls_start_time")
+    @Column(name = "invitation_calls_start_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter invitation start Date")
     //----------------
     Date invitationStartTime;
 
-    @Column(name = "feed_back_calls_start_time")
+    @Column(name = "feed_back_calls_start_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter feed back start Date")
     //----------------
     Date feedBackStartTime;
 
-    @Column(name = "not_attend_calls_start_time")
+    @Column(name = "not_attend_calls_start_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter not attend Date")
     //----------------
     Date notAttendStartTime;
 
-    @Column(name = "invitation_calls_end_time")
+    @Column(name = "invitation_calls_end_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter invitation end Date")
     //----------------
     Date invitationEndTime;
 
-    @Column(name = "feed_back_calls_end_time")
+    @Column(name = "feed_back_calls_end_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter feed back end Date")
     //----------------
     Date feedBackEndTime;
 
-    @Column(name = "not_attend_calls_end_time")
+    @Column(name = "not_attend_calls_end_time",nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please Enter not attend end Date")

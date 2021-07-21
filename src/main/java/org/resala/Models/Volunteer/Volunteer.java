@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.resala.Annotation.PhoneNumber.Phone;
@@ -94,7 +95,8 @@ public class Volunteer implements Serializable {
     @NotNull(message = "Please Enter Birth Date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDate;
-
+    @Formula("YEAR(CURDATE()) - YEAR(birth_date)")
+    int age;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "shirt_id", nullable = false)
     @NotNull(message = "T-Shirt Can't be null")

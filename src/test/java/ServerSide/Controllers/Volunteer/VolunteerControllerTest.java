@@ -78,8 +78,4 @@ public class VolunteerControllerTest extends AbstractTest {
             assertNotNull(volunteer.getVolunteerStatus());
         }
     }
-    @Test
-    public void test(){
-        assertEquals(0,1);
-    }
 }

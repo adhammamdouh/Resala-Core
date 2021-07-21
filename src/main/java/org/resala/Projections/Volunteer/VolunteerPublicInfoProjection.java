@@ -35,6 +35,8 @@ public interface VolunteerPublicInfoProjection {
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date getBirthDate();
 
+    int getAge();
+
     Shirt getShirt();
 
 
