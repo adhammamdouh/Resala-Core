@@ -6,6 +6,7 @@ import org.resala.Exceptions.JwtTokenMissingException;
 import org.resala.Models.MyUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +25,19 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, organizationId, branchId, authentication);
     }
-
+    public String createTokenForTest(int organizationId, int branchId,List<SimpleGrantedAuthority> authorities){
+        int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
+                LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
+        int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
+                Calendar.AUGUST : Calendar.FEBRUARY;
+        return Jwts.builder().setClaims(new HashMap<>())
+                .setSubject("test")
+                .setAudience(authorities.toString())
+                .setIssuer(organizationId + "," + branchId)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(year, month, 1))
+                .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
+    }
     private String createToken(Map<String, Object> claims, int organizationId, int branchId, Authentication authentication) {
         int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
                 LocalDate.now().getYear() + 1 : LocalDate.now().getYear();

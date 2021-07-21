@@ -62,11 +62,11 @@ public class LeadVolunteerService {
 
     public ResponseEntity<Object> create(List<LeadVolunteerDTO> dtos) {
         ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
-        for (int i=0;i<dtos.size();i++) {
+        for (int i = 0; i < dtos.size(); i++) {
             try {
                 LeadVolunteerDTO dto = dtos.get(i);
                 dto.checkNullForCreation();
-                Volunteer volunteer = volunteerService.getVolForCreation(dto,StaticNames.TeamLeader);
+                Volunteer volunteer = volunteerService.getVolForCreation(dto, roleService.getById(dto.getRole().getId()));
                 Committee committee = committeeService.getById(dto.getCommittee().getId());
                 if (checkFound(volunteer))
                     throw new MyEntityFoundBeforeException("This Volunteer is already lead");

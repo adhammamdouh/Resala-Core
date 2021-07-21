@@ -1,6 +1,8 @@
 package org.resala.Projections.Volunteer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.KPI.VolunteerKPI;

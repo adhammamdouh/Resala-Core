@@ -69,12 +69,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     public boolean checkPhoneExist(String phone) {
         return volunteerRepo.existsByPhoneNumberAndOrganization_Id(phone, IssTokenService.getOrganizationId());
     }
-    public Volunteer getVolForCreation(VolunteerDTO dto,String roleName){
+
+    public Volunteer getVolForCreation(VolunteerDTO dto, Role role) {
         dto.checkNull();
         Branch branch = branchService.getById(dto.getBranch().getId());
         Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
         Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
-        Role role = roleService.getRoleByName(roleName);
+//        Role role = roleService.getRoleByName(roleName);
         UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
         Shirt shirt = shirtService.getById(dto.getShirt().getId());
         String phoneNumber = dto.getPhoneNumber();
@@ -92,13 +93,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         volunteer.setNetworkType(networkTypeService.getNetworkTypeBasedOnVolunteerNumber(phoneNumber));
         return volunteer;
     }
+
     @Override
     public ResponseEntity<Object> create(List<VolunteerDTO> dtos) {
         ArrayList<Pair<Integer, String>> failed = new ArrayList<>();
         for (int i = 0; i < dtos.size(); i++) {
             try {
                 VolunteerDTO dto = dtos.get(i);
-                Volunteer volunteer= getVolForCreation(dto,StaticNames.normalVolunteer);
+                Volunteer volunteer = getVolForCreation(dto, roleService.getRoleByName(StaticNames.normalVolunteer));
                 volunteerRepo.save(volunteer);
             } catch (Exception e) {
                 failed.add(new Pair<>(i, e.getMessage()));

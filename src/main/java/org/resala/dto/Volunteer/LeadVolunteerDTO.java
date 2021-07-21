@@ -32,5 +32,7 @@ public class LeadVolunteerDTO extends VolunteerDTO{
     public void checkNullForCreation(){
         if (committee == null)
             throw new NullException("Committee");
+        if(role == null)
+            throw new NullException("Role");
     }
 }
