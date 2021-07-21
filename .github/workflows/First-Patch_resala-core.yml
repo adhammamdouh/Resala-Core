@@ -56,7 +56,7 @@ jobs:
     needs: deploy
     steps:
       - task: AzureFunctionApp@1
-        uses: azure/webapps-deploy@v2
+        displayName: 'restart after deploy'
         inputs:
           azureSubscription: 'Azure subscription 1'
           action: Restart Azure App Service
