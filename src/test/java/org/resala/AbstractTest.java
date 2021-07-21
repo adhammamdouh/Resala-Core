@@ -71,21 +71,5 @@ public abstract class AbstractTest {
         return gson.fromJson(json, type);
     }*/
 
-    protected void setAuth(List<SimpleGrantedAuthority> authorities, int orgId, int branchId) {
 
-        Authentication auth = new AbstractAuthenticationToken(authorities) {
-            @Override
-            public Object getCredentials() {
-                return orgId + "," + branchId;
-            }
-
-            @Override
-            public Object getPrincipal() {
-                return null;
-            }
-        };
-
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
-    }
 }
