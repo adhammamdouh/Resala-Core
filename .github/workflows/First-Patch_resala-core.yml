@@ -60,3 +60,4 @@ jobs:
         inputs:
           action: Restart Azure App Service
           app-name: 'resala-core'
+          runAsPreJob: false
