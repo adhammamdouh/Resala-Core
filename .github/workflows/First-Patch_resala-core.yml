@@ -51,14 +51,10 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bf1ea31658354445838282072c8cd007 }}
         package: '*.jar'
-      action: Restart Azure App Service
-#  restart:
-#    runs-on: windows-latest
-#    needs: deploy
-#    steps:
-#      - task: AzureFunctionApp@1
-#        uses: azure/webapps-deploy@v2
-#        displayName: 'restart after deploy'
-#        inputs:
-#          azureSubscription: 'Azure subscription 1'
-#          action: Restart Azure App Service
+  restart:
+    runs-on: windows-latest
+    needs: deploy
+    steps:
+      - task: AzureFunctionApp@1
+        inputs:
+          action: Restart Azure App Service
