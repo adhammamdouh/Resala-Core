@@ -1,6 +1,5 @@
 package org.resala.Models.Volunteer;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +15,6 @@ import org.resala.Models.Call.NetworkType;
 import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
-import org.resala.Models.Privilege.Privilege;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -114,7 +112,7 @@ public class Volunteer implements Serializable {
     private User user;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "education_level_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

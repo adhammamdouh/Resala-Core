@@ -22,6 +22,7 @@ public class VolunteerDTO {
     ShirtDTO shirt;
     UserDTO user;
     RoleDTO role;
+    EducationLevelDTO educationLevel;
     OrganizationDTO organization;
     String faculty;
     String nationalId;

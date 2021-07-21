@@ -42,6 +42,7 @@ public interface StaticNames {
     String getAllLeadVolunteersPublicInfoByState="ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE";
     String getAllLeadVolunteersByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH";
     String getAllLeadVolunteersPublicInfoByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH";
+    String getVolunteerByPhoneNumber="GET_VOLUNTEER_BY_PHINE_NUMBER";
 
     String getAllEvents = "ROLE_GET_ALL_EVENTS";
     String getAllEventsByMyBranch = "ROLE_GET_EVENTS_BY_MY_BRANCH";
