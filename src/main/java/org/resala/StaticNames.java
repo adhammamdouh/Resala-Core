@@ -78,6 +78,8 @@ public interface StaticNames {
     String getAllBranches="ROLE_GET_ALL_BRANCHES";
     String getAllCommittees="ROLE_GET_ALL_COMMITTEES";
 
+    String activateVolunteer="ROLE_ACTIVATE_VOLUNTEER";
+
     //----------------------------------------------------------------------------------------------------------------------
     String addedSuccessfully = "Created Successfully";
     String completedSuccessfully = "Completed Successfully";

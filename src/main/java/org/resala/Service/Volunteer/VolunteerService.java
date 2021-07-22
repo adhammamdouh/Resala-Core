@@ -144,6 +144,16 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         return ResponseEntity.ok(new Response("Archived Successfully", HttpStatus.OK.value()));
     }
 
+    public ResponseEntity<Object> activate(VolunteerDTO dto) {
+        Volunteer volunteer = getById(dto.getId());
+        if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.archivedState))
+            throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
+        UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
+        volunteer.setVolunteerStatus(volunteerStatus);
+        volunteerRepo.save(volunteer);
+        return ResponseEntity.ok(new Response("Activated Successfully", HttpStatus.OK.value()));
+    }
+
     @Override
     public ResponseEntity<Object> update(VolunteerDTO newDto) {
         newDto.checkNull();
@@ -326,4 +336,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         checkConstraintViolations(volunteer);
         volunteerRepo.save(volunteer);
     }
+
+
 }

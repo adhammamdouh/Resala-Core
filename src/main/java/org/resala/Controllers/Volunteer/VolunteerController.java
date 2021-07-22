@@ -282,6 +282,12 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
         return volunteerService.archive(obj);
     }
 
+    @RequestMapping(value = "/activate", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + StaticNames.activateVolunteer + "')")
+    public ResponseEntity<Object> activate(@RequestBody VolunteerDTO obj) {
+        return volunteerService.activate(obj);
+    }
+
     @Override
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + StaticNames.updateVolunteer + "')")

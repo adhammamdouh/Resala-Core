@@ -80,6 +80,8 @@ INSERT ignore INTO `action` (`id`, `name`) VALUES ('47', 'ROLE_GET_ALL_BRANCHES'
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('48', 'ROLE_GET_ALL_COMMITTEES');
 INSERT ignore INTO `action` (`id`, `name`) VALUES ('49', 'ROLE_GET_VOLUNTEER_BY_PHONE_NUMBER');
 
+INSERT ignore INTO `action` (`id`, `name`) VALUES ('50', 'ROLE_ACTIVATE_VOLUNTEER');
+
 INSERT ignore INTO role (`id`,`name`) VALUE ('1','CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('2','VICE_CEO');
 INSERT ignore INTO role (`id`,`name`) VALUE ('3','TEAM_LEADER');
