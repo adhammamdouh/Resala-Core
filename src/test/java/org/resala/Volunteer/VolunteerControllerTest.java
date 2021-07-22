@@ -105,7 +105,7 @@ public class VolunteerControllerTest extends AbstractTest {
                 .content(jsonId)
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk());
-        /*mvc.perform(MockMvcRequestBuilders.post("/volunteer/acceptToArchive").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+        mvc.perform(MockMvcRequestBuilders.post("/volunteer/acceptToArchive").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(jsonId)
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk());
@@ -118,7 +118,7 @@ public class VolunteerControllerTest extends AbstractTest {
         obj = new JSONObject(mvcVolunteerResult.getResponse().getContentAsString());
         Gson gson = new Gson();
         Volunteer volunteer = gson.fromJson(obj.getJSONObject("message").toString(), Volunteer.class);
-        assertEquals(volunteer.getVolunteerStatus().getName(),StaticNames.archivedState);*/
+        assertEquals(volunteer.getVolunteerStatus().getName(),StaticNames.archivedState);
 
     }
 
