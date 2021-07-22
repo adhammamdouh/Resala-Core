@@ -26,7 +26,7 @@ public interface LeadVolunteerRepo extends JpaRepository<LeadVolunteer, Integer>
     <T> List<T> findByVolunteerStatusAndOrganization_Id(UserStatus volunteerStatus, Class<T> projection, int orgId);
 
     Optional<LeadVolunteer> findById(int volunteerId);
-
+    List<LeadVolunteer>findAllByRole(Role role1);
     <T> List<T> findAllByBranchAndCommitteeAndOrganization_IdAndRoleOrRole(Class<T> projection, Branch branch, Committee committee, int orgId, Role role1, Role role2);
 
     default <T> List<T> findMyCommitteeTeam(Class<T> projection, Branch branch, Committee committee, int orgId, Role role1, Role role2) {

@@ -34,7 +34,10 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
 
     @Override
     public Role getById(int id) {
-        return null;
+        Optional<Role> roleOptional=roleRepo.findById(id);
+        if(!roleOptional.isPresent())
+            throw  new MyEntityNotFoundException(id+" Role "+ StaticNames.notFound);
+        return roleOptional.get();
     }
 
     @Override

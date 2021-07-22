@@ -4,6 +4,7 @@ import org.resala.Controllers.AuthorizeController;
 import org.resala.Models.Auth.Response;
 import org.resala.Projections.LeadVolunteer.LeadVolunteerProjection;
 import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
+import org.resala.Service.IssTokenService;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
 import org.resala.dto.Privilege.PrivilegeDTO;
@@ -37,11 +38,11 @@ public class LeadVolunteerController {
         } else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfo, authorities))
             return ResponseEntity.ok(new Response(leadVolunteerService.getAll(LeadVolunteerPublicInfoProjection.class), HttpStatus.OK.value()));
 
-        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        int branchId = IssTokenService.getBranchId();
         if (AuthorizeController.contain(StaticNames.getLeadVolunteersByMyBranchId, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getLeadVolunteersProjectionByBranch(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getLeadVolunteersProjectionByBranch(branchId), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(leadVolunteerService.getLeadVolunteersPublicInfoByBranch(Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getLeadVolunteersPublicInfoByBranch(branchId), HttpStatus.OK.value()));
     }
 
     /*@RequestMapping(value = "/getAllPublicInfo", method = RequestMethod.GET)
@@ -61,20 +62,20 @@ public class LeadVolunteerController {
         else if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersPublicInfoByState, authorities))
             return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStatePublicInfo(stateId), HttpStatus.OK.value()));
 
-        String branchId = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        int branchId = IssTokenService.getBranchId();
         if (AuthorizeController.contain(StaticNames.getAllLeadVolunteersByStateAndMyBranch, authorities))
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
         else
-            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(stateId, Integer.parseInt(branchId)), HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(leadVolunteerService.getAllPublicInfoByStateAndBranch(stateId, branchId), HttpStatus.OK.value()));
 
     }
 
     @RequestMapping(value = "/getBranchCommitteeTeam/{committeeId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getMyBranchCommitteeTeam + "')")
     public ResponseEntity<Object> getCommitteeTeam(@PathVariable int committeeId) {
-        int branchId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
         return ResponseEntity.ok(new Response(leadVolunteerService.getCommitteeTeam(
-                branchId, committeeId), HttpStatus.OK.value()));
+
+                IssTokenService.getBranchId(), committeeId), HttpStatus.OK.value()));
     }
 
    /* @RequestMapping(value = "/getAllActivePublicInfo", method = RequestMethod.GET)
