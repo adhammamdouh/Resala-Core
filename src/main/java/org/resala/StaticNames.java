@@ -103,6 +103,7 @@ public interface StaticNames {
     String eventNotAttendEndCalls="Your not attend end Calls is not correct";
     String eventIsNotActive="Event is deleted or completed";
     String phoneNumberFound = "Phone Number Found Before";
+    String attendedEvent="Attend already assigned ";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
 //    String adminType="Admin";

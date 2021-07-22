@@ -16,11 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventAttendanceController {
     @Autowired
     EventAttendanceService eventAttendanceService;
-    @RequestMapping(value = "/makeAttendance",method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + StaticNames.makeEventAttendance + "')")
-    public ResponseEntity<Object> makeAttendanceToVolunteer(@RequestBody EventAttendanceDTO eventAttendanceDTO) {
-        return eventAttendanceService.makeAttendanceToVolunteer(eventAttendanceDTO);
-    }
 
     @RequestMapping(value = "/confirmMakeAttendance",method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + StaticNames.makeEventAttendance + "')")

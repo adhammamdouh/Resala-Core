@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.resala.Models.Branch;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.Volunteer;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +36,10 @@ public class EventAttendance {
     @JoinColumn(name = "attend_status_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     AttendanceStatus attendanceStatus;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "branch_id")
+    Branch branch;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")

@@ -16,6 +16,7 @@ import java.util.Optional;
 @Repository
 public interface EventAttendanceRepo extends JpaRepository<EventAttendance, Integer> {
     Optional<EventAttendance> findAllByEvent_IdAndAndVolunteer_Id(int eventId, int volunteerId);
+    EventAttendance findByEvent_IdAndVolunteer_IdAndBranch_Id(int eventId,int volunteerId,int branchId);
     int countAllByVolunteerAndAttendanceStatus(Volunteer volunteer, AttendanceStatus attendanceStatus);
     int countAllByEventAndEvent_BranchesAndAttendanceStatus(Event event, Branch branch,AttendanceStatus attendanceStatus);
 //    int countAllByAttendanceStatusAndVolunteer_CallerCalls_CallerA(AttendanceStatus attendanceStatus,Volunteer caller);

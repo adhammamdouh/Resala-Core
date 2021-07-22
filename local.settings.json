@@ -1,8 +1,10 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "FUNCTIONS_WORKER_RUNTIME": "custom",
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=cloudfuncs277782417;AccountKey=OfsbTZb4ADgIWvZRSD8Lq9GdsCP9Rstuf7OOt4McaXQc9VMa4rowVKaEA+FA0embpbYPdlvgjnhiBDtBwBSQ0Q==",
-    "FUNCTIONS_WORKER_RUNTIME": "java"
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+  },
+  "ConnectionStrings": {
+    "SqlConnectionString": "server=reseala-sdb-server.mysql.database.azure.com;user=rooot;passsword=MgywqbupyJnnx1nj;"
   }
 }
