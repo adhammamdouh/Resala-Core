@@ -90,6 +90,8 @@ public class UserService {
             try {
                 VolunteerDTO dto = volunteerDTOS.get(i);
                 Volunteer volunteer=volunteerService.getById(dto.getId());
+                if(volunteer.getUser()!=null)
+                    throw new MyEntityFoundBeforeException("This volunteer as already has account");
                 User user = modelMapper().map(dto.getUser(), User.class);
                 user.setUserType(userTypeService.getByName(StaticNames.volunteerType));
                 checkConstraintViolations(user);

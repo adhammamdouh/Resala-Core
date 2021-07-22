@@ -262,19 +262,19 @@ public class LeadVolunteerController {
     }*/
 
     @RequestMapping(value = "/addPrivileges", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    @PreAuthorize("hasRole('" + StaticNames.createPrivilege + "')")
     public ResponseEntity<Object> addPrivileges(@RequestBody List<PrivilegeDTO> privilegeDTOS) {
         return leadVolunteerService.addPrivileges(privilegeDTOS);
     }
 
     @RequestMapping(value = "/addPrivilegesActions", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    @PreAuthorize("hasRole('" + StaticNames.assignActionsToPrivilege + "')")
     public ResponseEntity<Object> addPrivilegesActions(@RequestBody List<PrivilegeDTO> privilegeDTOS) {
         return leadVolunteerService.addPrivilegesActions(privilegeDTOS);
     }
 
     @RequestMapping(value = "/addUserPrivileges", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + StaticNames.assignUser + "')")
+    @PreAuthorize("hasRole('" + StaticNames.assignUserPrivileges + "')")
     public ResponseEntity<Object> addUserPrivileges(@RequestBody List<UserDTO> userDTOS) {
         return leadVolunteerService.addUserPrivileges(userDTOS);
     }

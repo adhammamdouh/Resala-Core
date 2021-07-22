@@ -117,11 +117,11 @@ public class VolunteerController implements CommonController<VolunteerDTO> {
             return ResponseEntity.ok(new Response(volunteerService.getVolunteersPublicInfoByBranch(branchId), HttpStatus.OK.value()));
     }
 
-    @RequestMapping(value = "/getAllByPhoneNumber", method = RequestMethod.POST)
+    @RequestMapping(value = "/getByPhoneNumber", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.getVolunteerByPhoneNumber + "') ")
-    public ResponseEntity<Object> getAllByPhoneNumber(@RequestBody String phoneNumber) {
+    public ResponseEntity<Object> getByPhoneNumber(@RequestBody VolunteerDTO dto) {
 
-        return ResponseEntity.ok(new Response(volunteerService.getVolunteerByPhoneNumber(phoneNumber), HttpStatus.OK.value()));
+        return ResponseEntity.ok(new Response(volunteerService.getVolunteerByPhoneNumber(dto), HttpStatus.OK.value()));
     }
 
 

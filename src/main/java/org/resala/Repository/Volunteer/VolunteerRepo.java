@@ -22,7 +22,7 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
     List<Volunteer> findAllByRoleAndBranchAndNetworkTypeAndVolunteerStatusAndOrganization_Id(
             Role role, Branch branches, NetworkType networkTypes, UserStatus volunteerStatus, int orgId);
 
-    Optional<Volunteer> findAllByPhoneNumberAndOrganization_Id(String phoneNumber, int orgId);
+    Optional<Volunteer> findByPhoneNumberAndOrganization_Id(String phoneNumber, int orgId);
 
     Boolean existsByPhoneNumberAndOrganization_Id(String phoneNu, int orgId);
 

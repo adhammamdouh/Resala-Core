@@ -79,7 +79,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
         Shirt shirt = shirtService.getById(dto.getShirt().getId());
         String phoneNumber = dto.getPhoneNumber();
-        if (checkPhoneExist(phoneNumber)) throw new MyEntityFoundBeforeException("Phone Number Found Before");
+        if (checkPhoneExist(phoneNumber)) throw new MyEntityFoundBeforeException(StaticNames.phoneNumberFound);
         Volunteer volunteer = modelMapper().map(dto, Volunteer.class);
         volunteer.setId(0);
         volunteer.setBranch(branch);
@@ -237,8 +237,8 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     }
 
-    public Volunteer getVolunteerByPhoneNumber(String phoneNumber) {
-        Optional<Volunteer> optionalVolunteer = volunteerRepo.findAllByPhoneNumberAndOrganization_Id(phoneNumber, IssTokenService.getOrganizationId());
+    public Volunteer getVolunteerByPhoneNumber(VolunteerDTO dto) {
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByPhoneNumberAndOrganization_Id(dto.getPhoneNumber(), IssTokenService.getOrganizationId());
         if (optionalVolunteer.isPresent()) {
             return optionalVolunteer.get();
         }

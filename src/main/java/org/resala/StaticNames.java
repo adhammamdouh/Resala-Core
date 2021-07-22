@@ -42,7 +42,7 @@ public interface StaticNames {
     String getAllLeadVolunteersPublicInfoByState="ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE";
     String getAllLeadVolunteersByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_BY_STATE_AND_MY_BRANCH";
     String getAllLeadVolunteersPublicInfoByStateAndMyBranch = "ROLE_GET_ALL_LEAD_VOLUNTEERS_PUBLIC_INFO_BY_STATE_AND_MY_BRANCH";
-    String getVolunteerByPhoneNumber="GET_VOLUNTEER_BY_PHINE_NUMBER";
+    String getVolunteerByPhoneNumber="ROLE_GET_VOLUNTEER_BY_PHONE_NUMBER";
 
     String getAllEvents = "ROLE_GET_ALL_EVENTS";
     String getAllEventsByMyBranch = "ROLE_GET_EVENTS_BY_MY_BRANCH";
@@ -72,7 +72,7 @@ public interface StaticNames {
     String generateEventsKPIs="ROLE_GENERATE_EVENTS_KPIS";
 
     String createUser="ROLE_CREATE_USER";
-    String assignUser="ROLE_ASSIGN_USER";
+    String assignUserPrivileges ="ROLE_ASSIGN_USER_PRIVILEGES";
     String createPrivilege="ROLE_CREATE_PRIVILEGES";
     String assignActionsToPrivilege="ROLE_ASSIGN_ACTIONS_TO_PRIVILEGES";
     String getAllBranches="ROLE_GET_ALL_BRANCHES";
@@ -102,6 +102,7 @@ public interface StaticNames {
     String eventNotAttendStartCalls="Your not attend Calls must be before event end date";
     String eventNotAttendEndCalls="Your not attend end Calls is not correct";
     String eventIsNotActive="Event is deleted or completed";
+    String phoneNumberFound = "Phone Number Found Before";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
 //    String adminType="Admin";
@@ -128,6 +129,7 @@ public interface StaticNames {
     String hasTShirt ="عنده";
     String hasNoTShirt ="معندوش";
     String needTShirt ="عايز";
+
 
     enum gender{MALE,FEMALE}
 }
