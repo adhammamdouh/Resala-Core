@@ -1,4 +1,4 @@
-package ServerSide.Controllers.Volunteer;
+package org.resala.Volunteer;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -48,11 +48,6 @@ public class VolunteerControllerTest extends AbstractTest {
         authorities.add(new SimpleGrantedAuthority(StaticNames.createVolunteer));
         String token = jwtUtil.createTokenForTest(1, 1, authorities);
         String json = "[{\"age\":\"21\",\"gender\":\"1\",\"address\":{\"capital\":{\"id\":\"1\"},\"streetName\":\"151b\",\"regionName\":\"xx3\",\"buildingNumber\":\"15\",\"apartmentNumber\":\"47\"},\"branch\":{\"id\":\"3\"},\"shirt\":{\"id\":\"1\"},\"faculty\":\"FCI\",\"nationalId\":\"2558844663311\",\"university\":\"Cairo\",\"firstName\":\"okasha\",\"midName\":\"okasha\",\"lastName\":\"okasha\",\"nickName\":\"okasha\",\"phoneNumber\":\"01529180900\",\"joinDate\":\"2020-15-12\",\"birthDate\":\"1999-08-23\",\"miniCamp\":\"false\",\"educationLevel\":{\"id\":1}}]";
-//        JSONArray array = new JSONArray(json);
-        /*for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            System.out.println(object.getString("age"));
-        }*/
         mvc.perform(MockMvcRequestBuilders.get("/volunteer/add").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isMethodNotAllowed());
@@ -100,7 +95,9 @@ public class VolunteerControllerTest extends AbstractTest {
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk()).andReturn();
         JSONObject obj = new JSONObject(mvcVolunteerResult.getResponse().getContentAsString());
-
+        String state=obj.getJSONObject("message").getJSONObject("volunteerStatus").getString("name");
+//        System.out.println(state);
+        assertEquals(state,StaticNames.activeState);
         int id = obj.getJSONObject("message").getInt("id");
 
         String jsonId = "{\"id\":"+id+"}";
@@ -108,7 +105,7 @@ public class VolunteerControllerTest extends AbstractTest {
                 .content(jsonId)
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk());
-        mvc.perform(MockMvcRequestBuilders.post("/volunteer/acceptToArchive").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+        /*mvc.perform(MockMvcRequestBuilders.post("/volunteer/acceptToArchive").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(jsonId)
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk());
@@ -121,7 +118,7 @@ public class VolunteerControllerTest extends AbstractTest {
         obj = new JSONObject(mvcVolunteerResult.getResponse().getContentAsString());
         Gson gson = new Gson();
         Volunteer volunteer = gson.fromJson(obj.getJSONObject("message").toString(), Volunteer.class);
-        assertEquals(volunteer.getVolunteerStatus().getName(),StaticNames.archivedState);
+        assertEquals(volunteer.getVolunteerStatus().getName(),StaticNames.archivedState);*/
 
     }
 

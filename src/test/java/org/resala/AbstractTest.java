@@ -40,8 +40,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringBootTest(classes = ResalaCoreSystemApplication.class)
 @WebAppConfiguration
 @EnableWebMvc
-@TestPropertySource(
-        locations = "classpath:application-test.properties")
+/*@TestPropertySource(
+        locations = "classpath:application.properties")*/
 
 public abstract class AbstractTest {
     protected MockMvc mvc;
