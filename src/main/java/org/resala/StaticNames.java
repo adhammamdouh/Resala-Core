@@ -94,7 +94,7 @@ public interface StaticNames {
     String thereIsNoAssignedCallsToConfirm="There is no assigned calls to confirm";
     String eventFinished="This event is already finished";
     String cantGetEventCalls="Can't retrieve event calls now the event may be completed or calls haven't been assigned yet";
-    String cantGetFeedBackCalls="Can't retrieve feed back calls now ";
+    String cantGetFeedBackCalls="You don't have assigned feed back calls ";
     String cantSubmitNow="Can't submit now";
     String callDataIsNotCompleted="Your event has Calls so you have to enter all event data";
     String eventInvitationCallsStartDate="Your invitation start Calls must be after event start date";
@@ -107,7 +107,7 @@ public interface StaticNames {
     String phoneNumberFound = "Phone Number Found Before";
     String attendedEvent="Attend already assigned ";
     String eventShouldContainsTheBranch="This branch is not in the event brnaches list";
-    String networkTypeAssignedToVolunteer="This network type is already assigned to volunteer";
+//    String networkTypeAssignedToVolunteer="This network type is already assigned to volunteer";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
 //    String adminType="Admin";

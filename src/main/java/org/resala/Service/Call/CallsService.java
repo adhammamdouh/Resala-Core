@@ -207,15 +207,15 @@ public class CallsService {
 
         Date currentDate = new Date(System.currentTimeMillis());
 
-        if (volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
-            if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
-                AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-                List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
-                for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
-                callsRepo.saveAll(calls);
-                return calls;
+        if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
+            if (volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
+                throw new RuntimeException(StaticNames.cantGetFeedBackCalls);
             }
-            throw new RuntimeException(StaticNames.cantGetFeedBackCalls);
+            AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
+            List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
+            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
+            callsRepo.saveAll(calls);
+            return calls;
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
