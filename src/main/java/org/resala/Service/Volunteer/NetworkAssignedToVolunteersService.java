@@ -139,11 +139,10 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
 
                 optionalNetworkAssignedToVolunteers = getByBranchAndEventAndNetwork(branch.getId(), event.getId(), networkType.getId());
 
-                if(optionalNetworkAssignedToVolunteers.isPresent())
-                    throw new MyEntityFoundBeforeException(StaticNames.networkTypeAssignedToVolunteer);
-
                 NetworkAssignedToVolunteers networkAssignedToVolunteers = new NetworkAssignedToVolunteers();
 
+                if(optionalNetworkAssignedToVolunteers.isPresent())
+                    networkAssignedToVolunteers=optionalNetworkAssignedToVolunteers.get();
 
                 networkAssignedToVolunteers.setBranch(branch);
                 networkAssignedToVolunteers.setEvent(event);
