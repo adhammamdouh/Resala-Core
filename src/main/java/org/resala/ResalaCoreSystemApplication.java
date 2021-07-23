@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.transaction.Transactional;
+import java.util.function.Function;
 
 @SpringBootApplication
 @EnableJpaRepositories("org.resala.Repository")
@@ -27,9 +28,9 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     @Autowired
     VolunteerKPIService volunteerKPIService;
     @Autowired
-    LeadVolunteerKPIService leadVolunteerKPIService;
-    @Autowired
     VolunteerService volunteerService;
+    @Autowired
+    LeadVolunteerKPIService leadVolunteerKPIService;
 
 
     @Override
@@ -44,16 +45,21 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     }
 
     @Bean
-    public void leadVolunteerKPIGeneration1(){
-        leadVolunteerKPIService.generateKPIsForAll();
+    public Function<String,String> leadVolunteerKPIGeneration1(){
+        return timerInfo ->{
+            leadVolunteerKPIService.generateKPIsForAll();
+            return "";
+        };
     }
 
     @Bean
-    public void testing(){
-
-        VolunteerDTO volunteerDTO=new VolunteerDTO();
-        volunteerDTO.setId(2);
-        volunteerService.archive(volunteerDTO);
+    public Function<String,String> testing(){
+        return timerInfo ->{
+            VolunteerDTO volunteerDTO=new VolunteerDTO();
+            volunteerDTO.setId(2);
+            volunteerService.archive(volunteerDTO);
+            return "";
+        };
     }
 
 }
