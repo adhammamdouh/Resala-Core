@@ -12,7 +12,6 @@ import org.resala.Annotation.PhoneNumber.Phone;
 import org.resala.Models.Address.Address;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.NetworkType;
-import org.resala.Models.Event.Attendance.EventAttendance;
 import org.resala.Models.KPI.VolunteerKPI;
 import org.resala.Models.Organization;
 
@@ -142,9 +141,7 @@ public class Volunteer implements Serializable {
     private Role role;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", fetch = FetchType.LAZY)
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    List<EventAttendance> eventAttendances;
+
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "volunteer_status_id")
