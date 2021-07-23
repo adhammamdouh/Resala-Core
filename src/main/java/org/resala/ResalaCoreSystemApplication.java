@@ -3,10 +3,13 @@ package org.resala;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Service.KPI.LeadVolunteerKPIService;
 import org.resala.Service.KPI.VolunteerKPIService;
+import org.resala.Service.Volunteer.VolunteerService;
+import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.transaction.Transactional;
@@ -20,20 +23,14 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
         SpringApplication.run(ResalaCoreSystemApplication.class, args);
     }
 
-   /* @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://resala-engine.ey.r.appspot.com");
-            }
-        };
-    }*/
 
     @Autowired
     VolunteerKPIService volunteerKPIService;
     @Autowired
     LeadVolunteerKPIService leadVolunteerKPIService;
+    @Autowired
+    VolunteerService volunteerService;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -46,8 +43,17 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
 
     }
 
-//    @Bean
-//    public Function<Void,VolunteerKPIService>test() {
-//        volunteerKPIService.generateKPIsForAll();
-//    }
+    @Bean
+    public void volunteerKPIGeneration(){
+        leadVolunteerKPIService.generateKPIsForAll();
+    }
+
+    @Bean
+    public void test(){
+
+        VolunteerDTO volunteerDTO=new VolunteerDTO();
+        volunteerDTO.setId(2);
+        volunteerService.archive(volunteerDTO);
+    }
+
 }
