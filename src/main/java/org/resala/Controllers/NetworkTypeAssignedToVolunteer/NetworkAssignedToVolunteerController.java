@@ -20,10 +20,8 @@ public class NetworkAssignedToVolunteerController {
     @RequestMapping(value = "/getNetworkAssignedToVolunteer/{eventId}"  , method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + StaticNames.getNetworkTypeAssignedToVolunteer + "')")
     public ResponseEntity<Object> getAssignedCalls(@PathVariable int eventId){
-        int branchId = IssTokenService.getBranchId();
-        System.out.println("branch id "+branchId);
         return ResponseEntity.ok(new Response(networkAssignedToVolunteersService.getNetworkTypeAssignedToVolunteer
-                (eventId,branchId), HttpStatus.OK.value()));
+                (eventId), HttpStatus.OK.value()));
     }
 
     @RequestMapping(value = "/assignNetworkAssignedToVolunteer"  , method = RequestMethod.POST)

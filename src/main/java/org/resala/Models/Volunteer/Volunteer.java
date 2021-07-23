@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table
@@ -139,6 +138,7 @@ public class Volunteer implements Serializable {
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     //@JsonIdentityReference(alwaysAsId = true)
     private Role role;
+
 
 
 

@@ -106,6 +106,8 @@ public interface StaticNames {
     String eventIsNotActive="Event is deleted or completed";
     String phoneNumberFound = "Phone Number Found Before";
     String attendedEvent="Attend already assigned ";
+    String eventShouldContainsTheBranch="This branch is not in the event brnaches list";
+    String networkTypeAssignedToVolunteer="This network type is already assigned to volunteer";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
 //    String adminType="Admin";

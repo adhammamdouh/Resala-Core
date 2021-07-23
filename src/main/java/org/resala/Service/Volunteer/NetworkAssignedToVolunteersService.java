@@ -19,6 +19,7 @@ import org.resala.Service.Call.CallsService;
 import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Event.EventService;
+import org.resala.Service.IssTokenService;
 import org.resala.StaticNames;
 import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.resala.dto.Volunteer.NetworkAssignedToVolunteersDTO;
@@ -89,25 +90,22 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
 
 
 
-    public List<NetworkTypeAssignedToVolunteerProjection> getNetworkTypeAssignedToVolunteer(int eventId, int branchId){
-        Branch branch=branchService.getById(branchId);
+    public List<NetworkTypeAssignedToVolunteerProjection> getNetworkTypeAssignedToVolunteer(int eventId){
+        int branchId= IssTokenService.getBranchId();
         Event event=eventService.getById(eventId);
 
         if(!eventService.checkEventStatus(event))
             throw new ConstraintViolationException(StaticNames.eventIsNotActive);
 
-        return networkAssignedToVolunteersRepo.getAllByEvent_IdAndBranch_Id(event.getId(),branch.getId(),NetworkTypeAssignedToVolunteerProjection.class);
+        return networkAssignedToVolunteersRepo.getAllByEvent_IdAndBranch_Id(event.getId(),branchId,NetworkTypeAssignedToVolunteerProjection.class);
 
     }
 
-    public NetworkAssignedToVolunteers getByBranchAndEventAndVolunteer(int branchId,int eventId,int volunteerId){
+    public Optional<NetworkAssignedToVolunteers> getByBranchAndEventAndNetwork(int branchId,int eventId,int networkId){
         Optional<NetworkAssignedToVolunteers> optional =
-                networkAssignedToVolunteersRepo.getByEvent_IdAndBranch_IdAndVolunteer_Id
-                        (eventId,branchId,volunteerId);
-        if(!optional.isPresent()){
-            throw new MyEntityNotFoundException("network assigned to volunteer "+StaticNames.notFound);
-        }
-        return optional.get();
+                networkAssignedToVolunteersRepo.getByEvent_IdAndBranch_IdAndNetworkType_Id
+                        (eventId,branchId,networkId);
+        return optional;
     }
 
     public ResponseEntity<Object> saveAndUpdate(VolunteerToCallsDTO volunteerToCallsDTO, int branchId){
@@ -115,6 +113,10 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
 
         Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
         Branch branch = branchService.getById(branchId);
+
+        if(!event.getBranches().contains(branch)){
+            throw new ConstraintViolationException(StaticNames.eventShouldContainsTheBranch);
+        }
 
         if(!eventService.checkEventStatus(event))
             throw new ConstraintViolationException(StaticNames.eventIsNotActive);
@@ -133,12 +135,16 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
                 Volunteer volunteer = volunteerService.getById(dto.getVolunteer().getId());
 
 
-                NetworkAssignedToVolunteers networkAssignedToVolunteers;
-                try {
-                    networkAssignedToVolunteers = getByBranchAndEventAndVolunteer(branch.getId(), event.getId(), volunteer.getId());
-                } catch (MyEntityNotFoundException ex) {
-                    networkAssignedToVolunteers = new NetworkAssignedToVolunteers();
-                }
+                Optional<NetworkAssignedToVolunteers> optionalNetworkAssignedToVolunteers;
+
+                optionalNetworkAssignedToVolunteers = getByBranchAndEventAndNetwork(branch.getId(), event.getId(), networkType.getId());
+
+                if(optionalNetworkAssignedToVolunteers.isPresent())
+                    throw new MyEntityFoundBeforeException(StaticNames.networkTypeAssignedToVolunteer);
+
+                NetworkAssignedToVolunteers networkAssignedToVolunteers = new NetworkAssignedToVolunteers();
+
+
                 networkAssignedToVolunteers.setBranch(branch);
                 networkAssignedToVolunteers.setEvent(event);
                 networkAssignedToVolunteers.setVolunteer(volunteer);
