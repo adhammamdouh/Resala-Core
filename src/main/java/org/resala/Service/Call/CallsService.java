@@ -13,6 +13,7 @@ import org.resala.Models.Event.Attendance.AttendanceStatus;
 import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.NetworkAssignedToVolunteers;
 import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Projections.Calls.CallsPublicInfoProjection;
 import org.resala.Repository.Call.CallsRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Event.Attendance.AttendanceStatusService;
@@ -30,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CallsService {
@@ -65,6 +67,11 @@ public class CallsService {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         return modelMapper;
+    }
+    public  <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
+        return entityList.stream()
+                .map(entity -> modelMapper().map(entity, outCLass))
+                .collect(Collectors.toList());
     }
 
 
@@ -198,7 +205,7 @@ public class CallsService {
         return calls;
     }
 
-    public List<Calls> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
+    public List<CallsPublicInfoProjection> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
         Volunteer volunteer = volunteerService.getById(networkAssignedToVolunteersDTO.getVolunteer().getId());
         Event event = eventService.getById(networkAssignedToVolunteersDTO.getEvent().getId());
 
@@ -215,11 +222,11 @@ public class CallsService {
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
             for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
             callsRepo.saveAll(calls);
-            return calls;
+            return mapAll(calls,CallsPublicInfoProjection.class);
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
-            return callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), Calls.class);
+            return callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class);
         }
 
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
@@ -227,7 +234,7 @@ public class CallsService {
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
             for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
             callsRepo.saveAll(calls);
-            return calls;
+            return mapAll(calls,CallsPublicInfoProjection.class);
         }
         throw new RuntimeException(StaticNames.cantGetEventCalls);
     }

@@ -1,6 +1,7 @@
 package org.resala.Projections.Calls;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.resala.Models.Call.CallResult;
 import org.resala.Models.Call.CallType;
 import org.resala.Models.Call.NetworkType;
 import org.resala.Projections.Volunteer.VolunteerCallsInfoProjection;
@@ -24,6 +25,10 @@ public interface CallsPublicInfoProjection {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date getNotAttendUnEditableBefore();
+
+    CallResult getInvitationCallResult();
+    CallResult getFeedBackCallResult();
+    CallResult getNotAttendCallResult();
 
     VolunteerCallsInfoProjection getReceiver();
 
