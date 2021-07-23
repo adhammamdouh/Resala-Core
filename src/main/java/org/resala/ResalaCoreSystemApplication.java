@@ -44,12 +44,12 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     }
 
     @Bean
-    public void volunteerKPIGeneration(){
+    public void leadVolunteerKPIGeneration1(){
         leadVolunteerKPIService.generateKPIsForAll();
     }
 
     @Bean
-    public void test(){
+    public void testing(){
 
         VolunteerDTO volunteerDTO=new VolunteerDTO();
         volunteerDTO.setId(2);
