@@ -212,8 +212,8 @@ public class CallsService {
 
         if(!eventService.checkEventStatus(event)) {
             if (event.getEventStatus().equals(StaticNames.completedState))
-                return ResponseEntity.ok(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
-                        IssTokenService.getBranchId(), event.getId()),CallsPublicInfoProjectionWithCaller.class));
+                return ResponseEntity.ok(new Response(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
+                        IssTokenService.getBranchId(), event.getId()),CallsPublicInfoProjectionWithCaller.class),HttpStatus.OK.value()));
             else throw new RuntimeException(StaticNames.cantGetEventCalls);
         }
 
@@ -227,11 +227,11 @@ public class CallsService {
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
             for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
             callsRepo.saveAll(calls);
-            return ResponseEntity.ok(mapAll(calls,CallsPublicInfoProjection.class));
+            return ResponseEntity.ok(new Response(mapAll(calls,CallsPublicInfoProjection.class),HttpStatus.OK.value()));
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
-            return ResponseEntity.ok(callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class));
+            return ResponseEntity.ok(new Response(callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class),HttpStatus.OK.value()));
         }
 
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
@@ -239,7 +239,7 @@ public class CallsService {
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
             for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.notAttend));
             callsRepo.saveAll(calls);
-            return ResponseEntity.ok(mapAll(calls,CallsPublicInfoProjection.class));
+            return ResponseEntity.ok(new Response(mapAll(calls,CallsPublicInfoProjection.class),HttpStatus.OK.value()));
         }
         throw new RuntimeException(StaticNames.cantGetEventCalls);
     }
