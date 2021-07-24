@@ -3,7 +3,6 @@ package org.resala.Service.Call;
 import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.ConstraintViolationException;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
-import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
 import org.resala.Models.Branch;
 import org.resala.Models.Call.CallResult;
@@ -147,7 +146,7 @@ public class CallsService {
         try {
             currentCaller = itr.next();
         } catch (Exception e) {
-            throw new MyEntityNotFoundException(StaticNames.thereIsNoCallsToBalance);
+            return;
         }
 
         for (Calls call : calls) {
@@ -214,14 +213,14 @@ public class CallsService {
             if (event.getEventStatus().equals(StaticNames.completedState))
                 return ResponseEntity.ok(new Response(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
                         IssTokenService.getBranchId(), event.getId()),CallsPublicInfoProjectionWithCaller.class),HttpStatus.OK.value()));
-            else throw new RuntimeException(StaticNames.cantGetEventCalls);
+            else throw new ConstraintViolationException(StaticNames.cantGetEventCalls);
         }
 
         Date currentDate = new Date(System.currentTimeMillis());
 
         if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
             if (!volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
-                throw new RuntimeException(StaticNames.cantGetFeedBackCalls);
+                throw new ConstraintViolationException(StaticNames.cantGetFeedBackCalls);
             }
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
@@ -241,7 +240,7 @@ public class CallsService {
             callsRepo.saveAll(calls);
             return ResponseEntity.ok(new Response(mapAll(calls,CallsPublicInfoProjection.class),HttpStatus.OK.value()));
         }
-        throw new RuntimeException(StaticNames.cantGetEventCalls);
+        throw new ConstraintViolationException(StaticNames.cantGetEventCalls);
     }
 
 
@@ -281,7 +280,7 @@ public class CallsService {
         }
 
         else {
-            throw new RuntimeException(StaticNames.cantSubmitNow);
+            throw new ConstraintViolationException(StaticNames.cantSubmitNow);
         }
 
         callsRepo.save(call);

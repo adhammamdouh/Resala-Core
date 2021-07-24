@@ -3,7 +3,7 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "java",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "MAIN_CLASS": "org.resala.ResalaCoreSystemApplication"
+    "MAIN_CLASS": "main.java.org.resala.ResalaCoreSystemApplication"
   },
   "ConnectionStrings": {
     "SqlConnectionString": "server=reseala-sdb-server.mysql.database.azure.com;user=rooot;passsword=MgywqbupyJnnx1nj;"
