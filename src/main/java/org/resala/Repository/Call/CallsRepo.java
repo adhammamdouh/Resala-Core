@@ -19,7 +19,7 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
 
     List<Calls> findAllByBranch_IdAndEvent_id(int branchId, int eventId);
     @Query("SELECT c FROM Calls as c INNER JOIN event_attendance as e " +
-            "WHERE e.volunteer.id=c.receiver.id" +
+            "WHERE e.volunteer.id=c.receiver.id AND c.branch.id = e.branch.id "+
             " and e.attendanceStatus = :attendanceStatus and c.event.id= :eventId")
     <T>List<T> findAllByAttendanceStatusAndEvent_Id(@Param("attendanceStatus")
                AttendanceStatus attendanceStatus,@Param("eventId") int eventId);

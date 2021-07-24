@@ -14,6 +14,7 @@ import org.resala.Models.Event.Event;
 import org.resala.Models.Volunteer.NetworkAssignedToVolunteers;
 import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Projections.Calls.CallsPublicInfoProjection;
+import org.resala.Projections.Calls.CallsPublicInfoProjectionWithCaller;
 import org.resala.Repository.Call.CallsRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Event.Attendance.AttendanceStatusService;
@@ -205,36 +206,40 @@ public class CallsService {
         return calls;
     }
 
-    public List<CallsPublicInfoProjection> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
+    public ResponseEntity<Object> getAssignedCalls(NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO) {
         Volunteer volunteer = volunteerService.getById(networkAssignedToVolunteersDTO.getVolunteer().getId());
         Event event = eventService.getById(networkAssignedToVolunteersDTO.getEvent().getId());
 
-        if(!eventService.checkEventStatus(event))
-            throw new ConstraintViolationException(StaticNames.eventIsNotActive);
+        if(!eventService.checkEventStatus(event)) {
+            if (event.getEventStatus().equals(StaticNames.completedState))
+                return ResponseEntity.ok(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
+                        IssTokenService.getBranchId(), event.getId()),CallsPublicInfoProjectionWithCaller.class));
+            else throw new RuntimeException(StaticNames.cantGetEventCalls);
+        }
 
         Date currentDate = new Date(System.currentTimeMillis());
 
         if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
-            if (volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
+            if (!volunteer.getRole().getName().equals(StaticNames.TeamLeader)) {
                 throw new RuntimeException(StaticNames.cantGetFeedBackCalls);
             }
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
             for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
             callsRepo.saveAll(calls);
-            return mapAll(calls,CallsPublicInfoProjection.class);
+            return ResponseEntity.ok(mapAll(calls,CallsPublicInfoProjection.class));
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
-            return callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class);
+            return ResponseEntity.ok(callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class));
         }
 
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.notAttendedTheEvent);
             List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
-            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
+            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.notAttend));
             callsRepo.saveAll(calls);
-            return mapAll(calls,CallsPublicInfoProjection.class);
+            return ResponseEntity.ok(mapAll(calls,CallsPublicInfoProjection.class));
         }
         throw new RuntimeException(StaticNames.cantGetEventCalls);
     }

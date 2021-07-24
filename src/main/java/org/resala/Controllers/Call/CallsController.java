@@ -26,7 +26,7 @@ public class CallsController {
     @RequestMapping(value = "/getAssignedCalls",method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+StaticNames.getAssignedCalls+"')")
     public ResponseEntity<Object> getEventAssignCalls(@RequestBody NetworkAssignedToVolunteersDTO dto){
-        return ResponseEntity.ok(callsService.getAssignedCalls(dto));
+        return callsService.getAssignedCalls(dto);
     }
 
 
