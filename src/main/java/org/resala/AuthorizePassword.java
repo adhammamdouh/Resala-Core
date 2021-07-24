@@ -15,8 +15,8 @@ public class AuthorizePassword {
     }
     public static void main(String[] args) {
 
-        for (int i=1;i<=49;++i)
-            System.out.println("insert into privilege_action (privilege_id,action_id) values (5,"+i+");");
+//        for (int i=1;i<=49;++i)
+//            System.out.println("insert into privilege_action (privilege_id,action_id) values (3,"+i+");");
         /*
         System.out.println(StaticNames.gender.MALE);
 //        encoder.matches()
