@@ -22,7 +22,7 @@ public class ServicesHandler extends
 
     @FunctionName("testing")
     public void test(
-            @TimerTrigger(name = "req1234567",schedule = "0 0-59 * * * *") String timerInfo,
+            @TimerTrigger(name = "req1",schedule = "0 0-59 * * * *") String timerInfo,
             final ExecutionContext context, Provider provider){
 
         context.getLogger().info("deleting volunteer "+timerInfo+" msg ");
