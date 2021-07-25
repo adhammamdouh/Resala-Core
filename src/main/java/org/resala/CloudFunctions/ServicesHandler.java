@@ -1,8 +1,11 @@
 package org.resala.CloudFunctions;
 
 import com.microsoft.azure.functions.ExecutionContext;
+import com.microsoft.azure.functions.HttpMethod;
+import com.microsoft.azure.functions.HttpRequestMessage;
+import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
-import com.microsoft.azure.functions.annotation.TimerTrigger;
+import com.microsoft.azure.functions.annotation.HttpTrigger;
 import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 
 public class ServicesHandler extends
@@ -19,12 +22,12 @@ public class ServicesHandler extends
 //    }
 
     @FunctionName("testing")
-    public void test(
-            @TimerTrigger(name = "req12",schedule = "0 0-59 * * * *") String timerInfo,
-            final ExecutionContext context){
+    public String test(
+            @HttpTrigger(name = "req123",methods = {HttpMethod.GET,
+                    HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Object> request,
+            ExecutionContext context) {
 
-        context.getLogger().info("deleting volunteer "+timerInfo+" msg ");
-
+        return handleRequest(request.getBody().toString(), context);
     }
 
 }
