@@ -1,8 +1,6 @@
 package org.resala;
 
-import org.resala.Models.Volunteer.Volunteer;
 import org.resala.Service.KPI.LeadVolunteerKPIService;
-import org.resala.Service.KPI.VolunteerKPIService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import javax.transaction.Transactional;
 import java.util.function.Function;
 
 @SpringBootApplication
@@ -35,19 +32,14 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
 
     @Bean
     public Function<String,String> leadVolunteerKPIGeneration1(){
-        return timerInfo ->{
-            leadVolunteerKPIService.generateKPIsForAll();
-            return "";
-        };
+        return timerInfo -> leadVolunteerKPIService.generateKPIsForAll().getBody().toString();
     }
 
     @Bean
     public Function<String,String> testing(){
-        return timerInfo ->{
-            VolunteerDTO volunteerDTO=new VolunteerDTO();
-            volunteerDTO.setId(2);
-            return volunteerService.archive(volunteerDTO).getBody().toString();
-        };
+        VolunteerDTO volunteerDTO=new VolunteerDTO();
+        volunteerDTO.setId(2);
+        return timerInfo -> volunteerService.archive(volunteerDTO).getBody().toString();
     }
 
 }
