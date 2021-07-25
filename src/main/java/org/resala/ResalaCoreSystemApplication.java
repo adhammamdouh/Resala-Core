@@ -36,7 +36,7 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
 //    }
 
     @Bean
-    public Function<VolunteerService,String> testing(){
+    public Function<String,String> testing(){
         VolunteerDTO volunteerDTO=new VolunteerDTO();
         volunteerDTO.setId(2);
         return timerInfo -> volunteerService.archive(volunteerDTO).getBody().toString();
