@@ -20,10 +20,10 @@ public class ServicesHandler extends
 
     @FunctionName("testing")
     public void test(
-            @TimerTrigger(name = "req123456",schedule = "0 0-59 * * * *") String timerInfo,
+            @TimerTrigger(name = "req1234567",schedule = "0 0-59 * * * *") String timerInfo,
             final ExecutionContext context){
 
-        context.getLogger().info("generating lead volunteer kpi "+timerInfo);
+        context.getLogger().info("deleting volunteer "+timerInfo+" msg ");
 
     }
 
