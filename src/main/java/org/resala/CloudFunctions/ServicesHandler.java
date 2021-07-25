@@ -5,6 +5,8 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.TimerTrigger;
 import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 
+import java.security.Provider;
+
 public class ServicesHandler extends
         AzureSpringBootRequestHandler<String,String> {
 
@@ -12,7 +14,7 @@ public class ServicesHandler extends
     @FunctionName("leadVolunteerKPIGeneration1")
     public void generateLeadVolunteerKPI(
             @TimerTrigger(name = "req",schedule = "0 20 19 * * *") String timerInfo,
-            final ExecutionContext context){
+            final ExecutionContext context, Provider provider){
 
         context.getLogger().info("generating lead volunteer kpi "+timerInfo);
 
@@ -21,7 +23,7 @@ public class ServicesHandler extends
     @FunctionName("testing")
     public void test(
             @TimerTrigger(name = "req1234567",schedule = "0 0-59 * * * *") String timerInfo,
-            final ExecutionContext context){
+            final ExecutionContext context, Provider provider){
 
         context.getLogger().info("deleting volunteer "+timerInfo+" msg ");
 
