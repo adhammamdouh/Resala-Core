@@ -39,7 +39,7 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     public Function<String,String> testing(){
         VolunteerDTO volunteerDTO=new VolunteerDTO();
         volunteerDTO.setId(2);
-        return timerInfo -> volunteerService.archive(volunteerDTO).getBody().toString();
+        return request -> volunteerService.archive(volunteerDTO).getBody().toString();
     }
 
 }
