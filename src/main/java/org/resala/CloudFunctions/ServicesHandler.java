@@ -9,15 +9,15 @@ import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHa
 public class ServicesHandler extends
         AzureSpringBootRequestHandler<VolunteerService, String> {
 
-
-    @FunctionName("leadVolunteerKPIGeneration1")
-    public void generateLeadVolunteerKPI(
-            @TimerTrigger(name = "req",schedule = "0 20 19 * * *") String timerInfo,
-            final ExecutionContext context){
-
-        context.getLogger().info("generating lead volunteer kpi "+timerInfo);
-
-    }
+//
+//    @FunctionName("leadVolunteerKPIGeneration1")
+//    public void generateLeadVolunteerKPI(
+//            @TimerTrigger(name = "req",schedule = "0 20 19 * * *") String timerInfo,
+//            final ExecutionContext context){
+//
+//        context.getLogger().info("generating lead volunteer kpi "+timerInfo);
+//
+//    }
 
     @FunctionName("testing")
     public void test(

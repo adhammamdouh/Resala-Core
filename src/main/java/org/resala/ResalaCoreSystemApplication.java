@@ -30,10 +30,10 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
     }
 
-    @Bean
-    public Function<String,String> leadVolunteerKPIGeneration1(){
-        return timerInfo -> leadVolunteerKPIService.generateKPIsForAll().getBody().toString();
-    }
+//    @Bean
+//    public Function<String,String> leadVolunteerKPIGeneration1(){
+//        return timerInfo -> leadVolunteerKPIService.generateKPIsForAll().getBody().toString();
+//    }
 
     @Bean
     public Function<VolunteerService,String> testing(){
