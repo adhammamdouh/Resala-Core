@@ -1,6 +1,7 @@
 package org.resala.Service.KPI;
 
 import org.resala.Exceptions.MyEntityNotFoundException;
+import org.resala.Models.Auth.Response;
 import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Models.Volunteer.LeadVolunteer;
 import org.resala.Repository.KPI.LeadVolunteerKPIRepo;
@@ -9,6 +10,8 @@ import org.resala.Service.Event.Attendance.EventAttendanceService;
 import org.resala.Service.Volunteer.LeadVolunteerService;
 import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +29,12 @@ public class LeadVolunteerKPIService {
     CallsService callsService;
 
 
-    public void generateKPIsForAll() {
+    public ResponseEntity<Object> generateKPIsForAll() {
         List<LeadVolunteer> leadVolunteers = leadVolunteerService.getAll(LeadVolunteer.class);
         for (LeadVolunteer leadVolunteer : leadVolunteers) {
             update(leadVolunteer);
         }
+        return ResponseEntity.ok(new Response("KPIs Generated Successfully", HttpStatus.OK.value()));
     }
 
     public void update(LeadVolunteer leadVolunteer) {

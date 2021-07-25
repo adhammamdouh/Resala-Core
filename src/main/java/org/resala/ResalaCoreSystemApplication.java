@@ -57,8 +57,7 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
         return timerInfo ->{
             VolunteerDTO volunteerDTO=new VolunteerDTO();
             volunteerDTO.setId(2);
-            volunteerService.archive(volunteerDTO);
-            return "";
+            return volunteerService.archive(volunteerDTO).getBody().toString();
         };
     }
 
