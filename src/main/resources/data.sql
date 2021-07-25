@@ -14,7 +14,31 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 set @sql=NULL;
 
+SET @sql = (SELECT IF(
+    (SELECT COUNT(INDEX_NAME)
+        FROM INFORMATION_SCHEMA.statistics  WHERE table_name = 'user_privileges' and INDEX_NAME='PRIMARY'
+    ) <> 0,
+    "SELECT 0",
+    "alter table user_privileges add PRIMARY KEY (user_id,privilege_id);"
+));
 
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+set @sql=NULL;
+
+SET @sql = (SELECT IF(
+    (SELECT COUNT(INDEX_NAME)
+        FROM INFORMATION_SCHEMA.statistics  WHERE table_name = 'privilege_action' and INDEX_NAME='PRIMARY'
+    ) <> 0,
+    "SELECT 0",
+    "alter table privilege_action add PRIMARY KEY (privilege_id,action_id);"
+));
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+set @sql=NULL;
 
 INSERT ignore INTO `organization` (`id`, `name`,`domain_name`) VALUES ('1', 'Resala','@resala.org');
 
@@ -209,8 +233,21 @@ INSERT ignore INTO shirt (`id`, `name`) VALUES ('3', 'عايز');
 
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('1', 'Volunteer');
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Cloud');
-
+INSERT ignore INTO user_type (`id`, `name`) VALUES ('3', 'LeadVolunteer');
 
 INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin@resala.org','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','1');
 
---INSERT ignore INTO `admin`  VALUES ('1', '1','1','1');
+INSERT ignore INTO `address` (`address_id`, `apartment_number`, `building_number`, `region_name`, `street_name`, `capital_id`) VALUES ('1', '1', '1', 'admin', 'admin', '1');
+
+INSERT ignore INTO `volunteer` (`id`, `birth_date`, `faculty`, `first_name`, `gender`, `join_date`, `last_name`, `mid_name`, `mini_camp`, `national_id`, `nick_name`, `phone_number`, `university`, `address_id`, `branch_id`, `education_level_id`, `network_type_id`, `organization_id`, `role_id`, `shirt_id`, `user_id`, `volunteer_status_id`) VALUES ('1', '1999-08-23', 'FCI', 'عبدالرحمن', '1', '2021-03-12', 'محمد', 'اسماعيل', '0', '2558844663311', 'admin', '01011111111', 'Cairo', '1', '3', '1', '2', '1', '7', '1', '1', '1');
+INSERT ignore INTO `lead_volunteer` (`camp_48`, `doctor_meeting`, `dreams`, `graduated`, `graduation_date`, `graduation_number`, `national_id_url`, `omra`, `personal_image_url`, `personal_objective`, `resala_objective`, `self_skills`, `volunteer_id`, `committe_id`) VALUES ('2', '1', 'FCI', '1', '2020-10-12', '2', '2558844663311', '2020-10-12', '15b', '15', '200VVQ', '47', '1', '2');
+
+
+INSERT ignore INTO `user_privileges` values (1,7);
+
+INSERT ignore INTO `privilege_action` values (7,5);
+INSERT ignore INTO `privilege_action` values (7,36);
+INSERT ignore INTO `privilege_action` values (7,43);
+INSERT ignore INTO `privilege_action` values (7,44);
+INSERT ignore INTO `privilege_action` values (7,45);
+INSERT ignore INTO `privilege_action` values (7,46);

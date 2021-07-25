@@ -15,7 +15,6 @@ import org.resala.Security.Jwt.JwtUtil;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.Service.Volunteer.*;
 import org.resala.StaticNames;
-import org.resala.dto.BranchDTO;
 import org.resala.dto.Privilege.PrivilegeDTO;
 import org.resala.dto.UserLoginDTO;
 import org.resala.dto.Volunteer.UserDTO;
@@ -31,7 +30,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,7 +79,6 @@ public class UserService {
     public User getUser(String username) {
         return userRepository.findByUserName(username);
     }
-//    public bo
 
     public ResponseEntity<Object> createVolunteerUser(List<VolunteerDTO> volunteerDTOS) {
         BCryptPasswordEncoder encoder = getPwEncoder();
@@ -89,15 +86,18 @@ public class UserService {
         for (int i = 0; i < volunteerDTOS.size(); i++) {
             try {
                 VolunteerDTO dto = volunteerDTOS.get(i);
-                Volunteer volunteer=volunteerService.getById(dto.getId());
-                if(volunteer.getUser()!=null)
+                Volunteer volunteer = volunteerService.getById(dto.getId());
+                if (volunteer.getUser() != null)
                     throw new MyEntityFoundBeforeException("This volunteer as already has account");
                 User user = modelMapper().map(dto.getUser(), User.class);
-                user.setUserType(userTypeService.getByName(StaticNames.volunteerType));
+                if(leadVolunteerService.checkFound(volunteer))
+                    user.setUserType(userTypeService.getByName(StaticNames.leadVolunteerType));
+                else
+                    user.setUserType(userTypeService.getByName(StaticNames.volunteerType));
                 checkConstraintViolations(user);
                 String domain = getDomain(user.getUserName());
                 Organization organization = organizationService.getByDomainName(domain);
-                if (organization.getId() != IssTokenService.getOrganizationId())
+                if (organization.getId() != TokenService.getOrganizationId())
                     throw new BadCredentialsException("Can't create user for this organization");
                 if (getUser(user.getUserName()) != null)
                     throw new MyEntityFoundBeforeException("User Name is already exist");
@@ -137,34 +137,38 @@ public class UserService {
         String token;
         UserStatus userStatus;
         Map<String, Object> map = new HashMap<>();
-
-        switch (user.getUserType().getName()) {
-            case StaticNames.volunteerType:
-                Volunteer volunteer = volunteerService.getVolunteerByUserId(user.getId());
-                try {
-                    LeadVolunteer leadVolunteer = leadVolunteerService.getByVolunteer(volunteer);
-                    map.put("info", leadVolunteer);
-                } catch (MyEntityNotFoundException e) {
-                    map.put("info", volunteer);
-                }
-                token = jwtUtil.generateToken(volunteer.getOrganization().getId(), volunteer.getBranch().getId(), authentication);
-                userStatus = volunteer.getVolunteerStatus();
-                break;
-            case StaticNames.cloudType:
-                token = jwtUtil.generateToken(organization.getId(), 0, authentication);
-                Cloud cloud = cloudService.findById(user.getId());
-                userStatus = cloud.getUserStatus();
-                map.put("info", cloud);
-                break;
-            default:
-
-                throw new BadCredentialsException("Wrong User Name Or Password");
+        Map<String, Object> claims = new HashMap<>();
+        String userTypeName=user.getUserType().getName();
+        if(userTypeName.equals(StaticNames.leadVolunteerType) || userTypeName.equals(StaticNames.volunteerType)){
+            Volunteer volunteer = volunteerService.getVolunteerByUserId(user.getId());
+            if(userTypeName.equals(StaticNames.leadVolunteerType)){
+                LeadVolunteer leadVolunteer = leadVolunteerService.getByVolunteer(volunteer);
+                claims.put(TokenService.myCommitteeId, leadVolunteer.getCommittee().getId());
+            }
+            claims.put(TokenService.type, user.getUserType().getName());
+            claims.put(TokenService.firstName, volunteer.getFirstName());
+            claims.put(TokenService.midName, volunteer.getMidName());
+            claims.put(TokenService.lastName, volunteer.getLastName());
+            claims.put(TokenService.roleName, volunteer.getRole().getName());
+            claims.put(TokenService.myBranchId, volunteer.getBranch().getId());
+            claims.put(TokenService.myOrganizationId, volunteer.getOrganization().getId());
+            claims.put(TokenService.userId, user.getId());
+            token = jwtUtil.generateToken(claims, authentication);
+            userStatus = volunteer.getVolunteerStatus();
+        }else if(userTypeName.equals(StaticNames.cloudType)){
+            claims.put(TokenService.myBranchId, 0);
+            claims.put(TokenService.myOrganizationId, organization.getId());
+            claims.put(TokenService.userId, user.getId());
+            claims.put(TokenService.type, "Cloud");
+            token = jwtUtil.generateToken(claims, authentication);
+            Cloud cloud = cloudService.findById(user.getId());
+            userStatus = cloud.getUserStatus();
+        }else{
+            throw new BadCredentialsException("Wrong User Name Or Password");
         }
         if (userStatus.getName().equals(StaticNames.archivedState))
             throw new ActiveStateException("This Volunteer State is " + userStatus.getName());
-
         map.put("token", token);
-        map.put("user", user);
         return map;
     }
 
@@ -193,7 +197,7 @@ public class UserService {
                 User user = getById(dto.getId());
                 String userDomain = getDomain(user.getUserName());
                 Organization organization = organizationService.getByDomainName(userDomain);
-                if (organization.getId() != IssTokenService.getOrganizationId())
+                if (organization.getId() != TokenService.getOrganizationId())
                     throw new BadCredentialsException("Can't Assign Privileges for this user");
                 List<Integer> privilegesIds = dto.getPrivileges().stream().map(PrivilegeDTO::getId).collect(Collectors.toList());
                 List<Privilege> privileges = privilegeService.findByIds(privilegesIds);

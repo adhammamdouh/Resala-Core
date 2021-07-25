@@ -6,8 +6,7 @@ import org.resala.Models.KPI.LeadVolunteerKPI;
 import org.resala.Projections.Volunteer.VolunteerProjection;
 
 import java.util.Date;
-//@Projection(name = "leadVolunteerProjection", types = { LeadVolunteer.class })
-//@EntityView(LeadVolunteer.class)
+
 public interface LeadVolunteerProjection extends VolunteerProjection{
 
     String getPersonalImageUrl();

@@ -26,7 +26,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "user_name", nullable = false,unique = true)
+    @Column(name = "user_name", nullable = false, unique = true)
     @NotEmpty(message = "Please enter UserName")
     @DomainUserName
     private String userName;
@@ -40,11 +40,6 @@ public class User implements Serializable {
     @NotNull(message = "User Type Can't be null")
     UserType userType;
 
-    /*@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "org_id", nullable = false)
-    @NotNull(message = "Organization Can't be null")
-    Organization organization;*/
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_privileges",
@@ -53,15 +48,4 @@ public class User implements Serializable {
     )
     private List<Privilege> privileges;
 
-   /* @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JsonBackReference
-    Volunteer volunteer;
-
-    @OneToOne(targetEntity = Cloud.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JsonBackReference
-    Cloud cloud;
-
-    @OneToOne(targetEntity = Admin.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JsonBackReference
-    Admin admin;*/
 }

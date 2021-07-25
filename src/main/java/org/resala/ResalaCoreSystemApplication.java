@@ -17,16 +17,12 @@ import java.util.function.Function;
 
 @SpringBootApplication
 @EnableJpaRepositories("org.resala.Repository")
-//@EnableTransactionManagement
 public class ResalaCoreSystemApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(ResalaCoreSystemApplication.class, args);
     }
 
-
-    @Autowired
-    VolunteerKPIService volunteerKPIService;
     @Autowired
     VolunteerService volunteerService;
     @Autowired
@@ -35,13 +31,6 @@ public class ResalaCoreSystemApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //volunteerKPIService.generateKPIsForAll();
-//        leadVolunteerKPIService.generateKPIsForAll();
-    }
-
-    @Transactional
-    public void showAddress(Volunteer volunteer) {
-
     }
 
     @Bean

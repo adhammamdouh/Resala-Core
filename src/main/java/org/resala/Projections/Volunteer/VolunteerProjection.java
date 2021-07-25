@@ -25,10 +25,8 @@ public interface VolunteerProjection {
 
     String getUniversity();
 
-    //@Value("#{target.firstName}")
     String getFirstName();
 
-    //@Value("#{target.lastName}")
     String getLastName();
 
     String getMidName();

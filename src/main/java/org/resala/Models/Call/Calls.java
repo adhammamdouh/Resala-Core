@@ -110,8 +110,6 @@ public class Calls {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-//    @JsonIdentityReference(alwaysAsId = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     Branch branch;
 

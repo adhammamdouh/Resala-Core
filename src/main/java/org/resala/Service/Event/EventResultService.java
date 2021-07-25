@@ -45,10 +45,9 @@ public class EventResultService {
         for (Branch branch : event.getBranches()) {
             EventResult eventResult = new EventResult();
             double responsePercentage = callsService.getResponsePercentageByEventAndBranch(event, branch);
-            double attendancePercentage = eventAttendanceService.getAttendancePercentageByEventAndBranch(event, branch);///////
+            double attendancePercentage = eventAttendanceService.getAttendancePercentageByEventAndBranch(event, branch);
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
             int percentCount = eventAttendanceService.countAllByEventAndBranch(event, branch, attendanceStatus);
-            ///need attracting
             double attractingPercentage = callsService.getAttractingPercentage(event, branch);
             int callsCount = callsService.countAllCalledByEventAndBranch(event, branch);
             CallResult callResult = callResultService.getByName(StaticNames.callEnsure);

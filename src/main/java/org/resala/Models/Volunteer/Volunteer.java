@@ -27,10 +27,7 @@ import java.util.Date;
 @Table
 @Getter
 @Setter
-/*@NamedQueries({
-        //@NamedQuery(name = "Volunteer.findById", query = "SELECT w FROM Volunteer w WHERE w.id = :id"),
-        @NamedQuery(name = "Volunteer.findByBranch", query = "SELECT v FROM Volunteer v WHERE v.branch.id = :branch_id")
-})*/
+
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Volunteer implements Serializable {
     @Column
@@ -55,7 +52,8 @@ public class Volunteer implements Serializable {
     @NotEmpty(message = "Please enter University")
     String university;
 
-    @Column(name = "comments")
+    @Column(name = "comments", columnDefinition = "text")
+    @Lob
     String comments;
 
     @Column(name = "national_id")
@@ -80,13 +78,11 @@ public class Volunteer implements Serializable {
     String phoneNumber;
 
     @Column(name = "join_date")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Please Enter Join Date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date joinDate;
     @Column(name = "birth_date")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Please Enter Birth Date")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -111,7 +107,7 @@ public class Volunteer implements Serializable {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "education_level_id",nullable = false)
+    @JoinColumn(name = "education_level_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotNull(message = "Please Enter education level")
@@ -133,14 +129,7 @@ public class Volunteer implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    //@JsonIdentityReference(alwaysAsId = true)
     private Role role;
-
-
-
 
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

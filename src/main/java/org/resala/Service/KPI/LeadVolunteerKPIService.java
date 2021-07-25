@@ -47,16 +47,13 @@ public class LeadVolunteerKPIService {
         int presentCount = eventAttendanceService.countPresentForCaller(leadVolunteer, StaticNames.attendedTheEvent);
         int callCount = callsService.countByCallerAndCalled(leadVolunteer);
         int callEnsureCount = callsService.countByCallerAndCallResult(leadVolunteer, StaticNames.callEnsure);
-        /*System.out.println(presentCount);
-        System.out.println(callCount);
-        System.out.println(callEnsureCount);*/
         leadVolunteerKPI.setLeadVolunteer(leadVolunteer);
         leadVolunteerKPI.setPresentCount(presentCount);
         leadVolunteerKPI.setCallsCount(callCount);
         leadVolunteerKPI.setEnsureCount(callEnsureCount);
         leadVolunteerKPIRepo.save(leadVolunteerKPI);
-        if (leadVolunteer.getLeadVolunteerKPI()==null){
-            leadVolunteerService.setNewKPI(leadVolunteer,getByLeadVolunteer(leadVolunteer));
+        if (leadVolunteer.getLeadVolunteerKPI() == null) {
+            leadVolunteerService.setNewKPI(leadVolunteer, getByLeadVolunteer(leadVolunteer));
         }
     }
 

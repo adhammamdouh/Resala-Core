@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 public class UserController {
 
-    /*@Autowired
-    @Qualifier("myUserDetailsService")
-    UserDetailsService userDetailsService;*/
+
     @Autowired
     UserService userService;
 

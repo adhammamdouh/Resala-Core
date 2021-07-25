@@ -16,7 +16,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class BranchService implements CommonCRUDService<BranchDTO>, CommonService<Branch>  {
+public class BranchService implements CommonCRUDService<BranchDTO>, CommonService<Branch> {
     @Autowired
     BranchRepo branchRepo;
 
@@ -29,32 +29,27 @@ public class BranchService implements CommonCRUDService<BranchDTO>, CommonServic
 
     @Override
     public Branch getById(int id) {
-        Optional<Branch> optionalBranch = branchRepo.findByIdAndOrganization_Id(id,IssTokenService.getOrganizationId());
+        Optional<Branch> optionalBranch = branchRepo.findByIdAndOrganization_Id(id, TokenService.getOrganizationId());
         if (!optionalBranch.isPresent())
-            throw new MyEntityNotFoundException("Branch "+ StaticNames.notFound);
+            throw new MyEntityNotFoundException("Branch " + StaticNames.notFound);
         return optionalBranch.get();
     }
 
     @Override
     public List<Branch> getAll() {
-        int orgId=IssTokenService.getOrganizationId();
+        int orgId = TokenService.getOrganizationId();
         return branchRepo.findAllByOrganization_Id(orgId);
     }
 
     public List<Branch> getBranchByIds(List<Integer> ids) {
-        List<Branch> branches = branchRepo.findAllByIdInAndOrganization_Id(ids,IssTokenService.getOrganizationId());
+        List<Branch> branches = branchRepo.findAllByIdInAndOrganization_Id(ids, TokenService.getOrganizationId());
         if (branches.size() != ids.size()) {
             ids.removeAll(branches.stream().map(Branch::getId).collect(toList()));
             throw new MyEntityNotFoundException("Branches with id's " + ids + " does not exist");
         }
         return branches;
     }
-    /*public Branch getBranchByUserName(String userName){
-        Optional<Branch>optionalBranch=branchRepo.findByVolunteers_User_UserName(userName);
-        if (optionalBranch.isEmpty())
-            throw new MyEntityNotFoundException("UserName "+StaticNames.notFound);
-        return optionalBranch.get();
-    }*/
+
 
     @Override
     public ResponseEntity<Object> create(List<BranchDTO> dto) {

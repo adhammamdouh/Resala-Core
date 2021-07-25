@@ -17,7 +17,7 @@ import org.resala.Projections.LeadVolunteer.LeadVolunteerPublicInfoProjection;
 import org.resala.Repository.Volunteer.LeadVolunteerRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Commiittee.CommitteeService;
-import org.resala.Service.IssTokenService;
+import org.resala.Service.TokenService;
 import org.resala.Service.Privilege.PrivilegeService;
 import org.resala.Service.UserService;
 import org.resala.StaticNames;
@@ -85,7 +85,7 @@ public class LeadVolunteerService {
     }
 
     public <T> List<T> getAll(Class<T> projection) {
-        return leadVolunteerRepo.findAllByOrganization_Id(projection, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByOrganization_Id(projection, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteer> getAllForKPI() {
@@ -96,31 +96,31 @@ public class LeadVolunteerService {
     public List<LeadVolunteerProjection> getAllByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         UserStatus volunteerStatus = userStatusService.getById(stateId);
-        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         UserStatus volunteerStatus = userStatusService.getById(stateId);
-        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranchAndState(branch, volunteerStatus, LeadVolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getAllByState(int stateId) {
         UserStatus volunteerStatus = userStatusService.getById(stateId);
-        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getAllByStatePublicInfo(int stateId) {
         UserStatus volunteerStatus = userStatusService.getById(stateId);
-        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findByVolunteerStatusAndOrganization_Id(volunteerStatus, LeadVolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerProjection> getLeadVolunteersProjectionByBranch(int branchId) {
-        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<LeadVolunteerPublicInfoProjection> getLeadVolunteersPublicInfoByBranch(int branchId) {
-        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return leadVolunteerRepo.findAllByBranch_IdAndOrganization_Id(branchId, LeadVolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
     public boolean checkFound(Volunteer volunteer) {
@@ -147,7 +147,7 @@ public class LeadVolunteerService {
         Role role1 = roleService.getRoleByName(StaticNames.TeamLeader);
         Role role2 = roleService.getRoleByName(StaticNames.TeamMember);
         UserStatus userStatus=userStatusService.getByName(StaticNames.activeState);
-        return leadVolunteerRepo.findMyCommitteeTeam(LeadVolunteerPublicInfoProjection.class, branch, committee, IssTokenService.getOrganizationId(),userStatus, role1, role2);
+        return leadVolunteerRepo.findMyCommitteeTeam(LeadVolunteerPublicInfoProjection.class, branch, committee, TokenService.getOrganizationId(),userStatus, role1, role2);
     }
 
 

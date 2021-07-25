@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHelper.class);
 
-    /*@ExceptionHandler(value = {UsernameNotFoundException.class})
-    public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException ex) {
-        LOGGER.error(ex.getMessage());
-        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "User Name Not Found"), HttpStatus.NOT_FOUND);
-    }*/
+
 
     @ExceptionHandler(value = {NeedToConfirmException.class})
     public ResponseEntity<Object> handleNeedToConfirmException(NeedToConfirmException ex) {
@@ -73,32 +69,5 @@ public class ExceptionHelper {
         LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
-    /*@ExceptionHandler(value = {HttpClientErrorException.Unauthorized.class})
-    public ResponseEntity<Object> handleUserForbiddenException(UsernameNotFoundException ex) {
-        LOGGER.error("Forbidden: ", ex.getMessage());
-        return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase()), HttpStatus.FORBIDDEN);
-    }*/
-    /*@ExceptionHandler(value = {InvalidInputException.class})
-    public ResponseEntity<Object> handleInvalidInputException(InvalidInputException ex) {
-        LOGGER.error("Invalid Input Exception: ", ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler(value = {HttpClientErrorException.Unauthorized.class})
-    public ResponseEntity<Object> handleUnauthorizedException(HttpClientErrorException.Unauthorized ex) {
-        LOGGER.error("Unauthorized Exception: ", ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(value = {BusinessException.class})
-    public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-        LOGGER.error("Business Exception: ", ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Object> handleException(Exception ex) {
-        LOGGER.error("Exception: ", ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
 }

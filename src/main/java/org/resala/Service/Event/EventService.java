@@ -57,7 +57,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
                 List<Branch> branches = branchService.getBranchByIds(
                         dto.getBranches().stream().map(BranchDTO::getId).collect(Collectors.toList())
                 );
-                Organization organization=organizationService.getById(IssTokenService.getOrganizationId());
+                Organization organization = organizationService.getById(TokenService.getOrganizationId());
                 Event event = modelMapper().map(dto, Event.class);
                 event.setId(0);
                 event.setBranches(branches);
@@ -78,7 +78,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
             }
 
         }
-        if(failed.size()==0)
+        if (failed.size() == 0)
             return ResponseEntity.ok(new Response(StaticNames.addedSuccessfully, HttpStatus.OK.value()));
         else
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), failed), HttpStatus.BAD_REQUEST);
@@ -127,7 +127,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     @Override
     public Event getById(int id) {
-        Optional<Event> optionalEvent = eventRepo.findByIdAndOrganization_id(id,IssTokenService.getOrganizationId());
+        Optional<Event> optionalEvent = eventRepo.findByIdAndOrganization_id(id, TokenService.getOrganizationId());
         if (!optionalEvent.isPresent())
             throw new MyEntityNotFoundException("Event " + StaticNames.notFound);
         return optionalEvent.get();
@@ -135,61 +135,61 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     @Override
     public List<Event> getAll() {
-        return eventRepo.findAllByOrganization_Id(IssTokenService.getOrganizationId());
+        return eventRepo.findAllByOrganization_Id(TokenService.getOrganizationId());
     }
 
     public List<Event> getEventsByBranchId(int branchId) {
-        Branch branch=branchService.getById(branchId);
-        return eventRepo.findAllByBranches_idAndOrganization_Id(branchId, IssTokenService.getOrganizationId());
+        Branch branch = branchService.getById(branchId);
+        return eventRepo.findAllByBranches_idAndOrganization_Id(branchId, TokenService.getOrganizationId());
     }
 
     public List<Event> getAllEventsByStateName(String stateName) {
-        return eventRepo.findAllByEventStatus_nameAndOrganization_Id(stateName, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatus_nameAndOrganization_Id(stateName, TokenService.getOrganizationId());
     }
 
     public List<Event> getAllEventsByStateId(int id) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(id);
-        return eventRepo.findAllByEventStatusAndOrganization_Id(eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatusAndOrganization_Id(eventStatus, TokenService.getOrganizationId());
     }
 
     public List<Event> getAllEventsByShareableAndEventState(boolean shareable, int eventStateId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
-        return eventRepo.findAllByShareableAndEventStatusAndOrganization_Id(shareable, eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByShareableAndEventStatusAndOrganization_Id(shareable, eventStatus, TokenService.getOrganizationId());
     }
 
     public List<Event> getAllEventsByShareableAndBranchIdAndEventStateId(boolean shareable, int branchId, int eventStateId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(eventStateId);
-        return eventRepo.findAllByShareableAndEventStatusAndAndBranches_idAndOrganization_Id(shareable, eventStatus, branchId, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByShareableAndEventStatusAndAndBranches_idAndOrganization_Id(shareable, eventStatus, branchId, TokenService.getOrganizationId());
     }
 
     public List<Event> getAllByStateIdAndBranchId(int stateId, int branchId) {
         EventStatus eventStatus = eventStatusService.getEventStatusById(stateId);
-        return eventRepo.findAllByBranches_idAndEventStatusAndOrganization_Id(branchId, eventStatus, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByBranches_idAndEventStatusAndOrganization_Id(branchId, eventStatus, TokenService.getOrganizationId());
     }
 
 
     public void checkConstraintViolations(Event event) {
         CheckConstraintService.checkConstraintViolations(event, Event.class);
-        if (event.isHasCalls() && (event.getInvitationStartTime() == null || event.getFeedBackStartTime() == null||event.getNotAttendStartTime() == null ))
+        if (event.getFromDate().after(event.getToDate()))
+            throw new ConstraintViolationException(StaticNames.eventStartShouldBeforeEventEnd);
+        if (event.isHasCalls() && (event.getInvitationStartTime() == null || event.getFeedBackStartTime() == null || event.getNotAttendStartTime() == null))
             throw new ConstraintViolationException(StaticNames.callDataIsNotCompleted);
-        else if(event.isHasCalls()) {
-            if (event.getInvitationStartTime().before(event.getFromDate()))
+        else if (event.isHasCalls()) {
+            if (event.getInvitationStartTime().after(event.getFromDate()))
                 throw new ConstraintViolationException(StaticNames.eventInvitationCallsStartDate);
 
             if (event.getInvitationEndTime().after(event.getFeedBackStartTime()) || event.getInvitationEndTime().before(event.getInvitationStartTime()))
                 throw new ConstraintViolationException(StaticNames.eventInvitationEndCalls);
 
-            if (event.getFeedBackStartTime().after(event.getNotAttendStartTime()) )
+            if (event.getFeedBackStartTime().after(event.getNotAttendStartTime()) || event.getFeedBackStartTime().before(event.getToDate()))
                 throw new ConstraintViolationException(StaticNames.eventFeedBackStartDate);
 
             if (event.getFeedBackEndTime().after(event.getNotAttendStartTime()) || event.getFeedBackEndTime().before(event.getFeedBackStartTime()))
                 throw new ConstraintViolationException(StaticNames.eventFeedBackEndDate);
 
-            if (event.getNotAttendStartTime().after(event.getToDate()))
-                throw new ConstraintViolationException(StaticNames.eventNotAttendStartCalls);
-
-            if (event.getNotAttendEndTime().after(event.getToDate()) || event.getNotAttendEndTime().before(event.getNotAttendStartTime()))
+            if (event.getNotAttendEndTime().before(event.getNotAttendStartTime()))
                 throw new ConstraintViolationException(StaticNames.eventNotAttendEndCalls);
+
 
         }
     }
@@ -197,12 +197,11 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
 
     public List<Event> getAllByStatusAndResult(String eventStatusName, EventResult eventResult) {
         EventStatus eventStatus = eventStatusService.getEventStatusByName(eventStatusName);
-        return eventRepo.findAllByEventStatusAndEventResultAndOrganization_Id(eventStatus, eventResult, IssTokenService.getOrganizationId());
+        return eventRepo.findAllByEventStatusAndEventResultAndOrganization_Id(eventStatus, eventResult, TokenService.getOrganizationId());
     }
 
-    public boolean checkEventStatus(Event event){
-//        System.out.println(event.getEventStatus().getName());
-        if(event.getEventStatus().getName().equals(StaticNames.activeState))
+    public boolean checkEventStatus(Event event) {
+        if (event.getEventStatus().getName().equals(StaticNames.activeState))
             return true;
         return false;
     }

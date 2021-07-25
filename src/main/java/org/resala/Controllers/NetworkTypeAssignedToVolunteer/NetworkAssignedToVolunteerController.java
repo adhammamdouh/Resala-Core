@@ -1,7 +1,7 @@
 package org.resala.Controllers.NetworkTypeAssignedToVolunteer;
 
 import org.resala.Models.Auth.Response;
-import org.resala.Service.IssTokenService;
+import org.resala.Service.TokenService;
 import org.resala.Service.Volunteer.NetworkAssignedToVolunteersService;
 import org.resala.StaticNames;
 import org.resala.dto.Call.VolunteerToCallsDTO;
@@ -27,7 +27,7 @@ public class NetworkAssignedToVolunteerController {
     @RequestMapping(value = "/assignNetworkAssignedToVolunteer"  , method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.getNetworkTypeAssignedToVolunteer + "')")
     public ResponseEntity<Object> assignedCalls(@RequestBody VolunteerToCallsDTO dto){
-        int branchId = IssTokenService.getBranchId();
+        int branchId = TokenService.getBranchId();
         return networkAssignedToVolunteersService.saveAndUpdate(dto,branchId);
     }
 

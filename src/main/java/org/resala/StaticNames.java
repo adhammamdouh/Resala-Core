@@ -107,10 +107,10 @@ public interface StaticNames {
     String phoneNumberFound = "Phone Number Found Before";
     String attendedEvent="Attend already assigned ";
     String eventShouldContainsTheBranch="This branch is not in the event brnaches list";
-//    String networkTypeAssignedToVolunteer="This network type is already assigned to volunteer";
+    String eventStartShouldBeforeEventEnd ="Event start time should be before event end time";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
-//    String adminType="Admin";
+    String leadVolunteerType ="LeadVolunteer";
     String cloudType="Cloud";
     //----------------------------------------------------------------------------------------------------------------------
     String etisalat="ETISALAT";

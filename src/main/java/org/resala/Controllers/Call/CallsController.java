@@ -16,7 +16,7 @@ public class CallsController {
     CallsService callsService;
 
 
-    @RequestMapping(value = "/confirmAssignedCalls/{balanced}" , method = RequestMethod.POST)/////
+    @RequestMapping(value = "/confirmAssignedCalls/{balanced}" , method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + StaticNames.assignCalls + "')")
     public ResponseEntity<Object> confirmAssignCalls(@PathVariable boolean balanced, @RequestBody NetworkAssignedToVolunteersDTO networkAssignedToVolunteersDTO){
 

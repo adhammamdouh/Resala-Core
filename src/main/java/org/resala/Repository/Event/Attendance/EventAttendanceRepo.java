@@ -19,7 +19,6 @@ public interface EventAttendanceRepo extends JpaRepository<EventAttendance, Inte
     EventAttendance findByEvent_IdAndVolunteer_IdAndBranch_Id(int eventId,int volunteerId,int branchId);
     int countAllByVolunteerAndAttendanceStatus(Volunteer volunteer, AttendanceStatus attendanceStatus);
     int countAllByEventAndEvent_BranchesAndAttendanceStatus(Event event, Branch branch,AttendanceStatus attendanceStatus);
-//    int countAllByAttendanceStatusAndVolunteer_CallerCalls_CallerA(AttendanceStatus attendanceStatus,Volunteer caller);
     @Query("SELECT count(ea) FROM event_attendance As ea Join fetch Calls As c on " +
             "ea.event.id = c.event.id and ea.volunteer.id = c.receiver.id  where " +
             "c.caller= :caller and ea.attendanceStatus= :attendanceStatus "+

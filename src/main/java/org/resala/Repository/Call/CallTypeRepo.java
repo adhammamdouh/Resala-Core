@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CallTypeRepo extends JpaRepository<CallType,Integer> {
-    //public Optional<CallType> findAllById(int id);
     public Optional<CallType> findByName(String name);
 }

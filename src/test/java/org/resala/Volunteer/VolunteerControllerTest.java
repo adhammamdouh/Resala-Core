@@ -2,6 +2,7 @@ package org.resala.Volunteer;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 import org.resala.AbstractTest;
 import org.resala.Models.Volunteer.Volunteer;
+import org.resala.Service.TokenService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +50,11 @@ public class VolunteerControllerTest extends AbstractTest {
     public void t1_add() throws Exception {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(StaticNames.createVolunteer));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
+        authorities.add(new SimpleGrantedAuthority(StaticNames.getAllVolunteers));
+        Map<String,Object> claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
         String json = "[{\"age\":\"21\",\"gender\":\"1\",\"address\":{\"capital\":{\"id\":\"1\"},\"streetName\":\"151b\",\"regionName\":\"xx3\",\"buildingNumber\":\"15\",\"apartmentNumber\":\"47\"},\"branch\":{\"id\":\"3\"},\"shirt\":{\"id\":\"1\"},\"faculty\":\"FCI\",\"nationalId\":\"2558844663311\",\"university\":\"Cairo\",\"firstName\":\"okasha\",\"midName\":\"okasha\",\"lastName\":\"okasha\",\"nickName\":\"okasha\",\"phoneNumber\":\"01529180900\",\"joinDate\":\"2020-15-12\",\"birthDate\":\"1999-08-23\",\"miniCamp\":\"false\",\"educationLevel\":{\"id\":1}}]";
         mvc.perform(MockMvcRequestBuilders.get("/volunteer/add").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)
@@ -71,6 +79,14 @@ public class VolunteerControllerTest extends AbstractTest {
                 .content(json)
                 .accept(getMediaTypeHeader())
                 .contentType(getMediaTypeHeader())).andExpect(status().isOk());
+
+        mvcResult=mvc.perform(MockMvcRequestBuilders.get("/volunteer/getAll").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .accept(getMediaTypeHeader())
+                .contentType(getMediaTypeHeader())).andExpect(status().isOk()).andReturn();
+       /* obj = new JSONObject(mvcResult.getResponse().getContentAsString());
+        JSONArray jsonArray =obj.getJSONArray("message");
+        assertEquals(jsonArray.length(),3);*/
+
     }
 
     @Test
@@ -81,7 +97,10 @@ public class VolunteerControllerTest extends AbstractTest {
         authorities.add(new SimpleGrantedAuthority(StaticNames.acceptToArchiveVolunteer));
         authorities.add(new SimpleGrantedAuthority(StaticNames.declineToArchiveVolunteer));
         authorities.add(new SimpleGrantedAuthority(StaticNames.createVolunteer));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
+        Map<String,Object>claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
         String json = "[{\"age\":\"21\",\"gender\":\"1\",\"address\":{\"capital\":{\"id\":\"1\"},\"streetName\":\"151b\",\"regionName\":\"xx3\",\"buildingNumber\":\"15\",\"apartmentNumber\":\"47\"},\"branch\":{\"id\":\"3\"},\"shirt\":{\"id\":\"1\"},\"faculty\":\"FCI\",\"nationalId\":\"2558844663311\",\"university\":\"Cairo\",\"firstName\":\"okasha\",\"midName\":\"okasha\",\"lastName\":\"okasha\",\"nickName\":\"okasha\",\"phoneNumber\":\"01529990900\",\"joinDate\":\"2020-15-12\",\"birthDate\":\"1999-08-23\",\"miniCamp\":\"false\",\"educationLevel\":{\"id\":1}}]";
         mvc.perform(MockMvcRequestBuilders.post("/volunteer/add").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)
@@ -126,7 +145,10 @@ public class VolunteerControllerTest extends AbstractTest {
     public void t3_getAllVolunteers() throws Exception {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_GET_ALL_VOLUNTEERS"));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
+        Map<String,Object>claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/volunteer/getAll").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk()).andReturn();
         JSONObject obj = new JSONObject(mvcResult.getResponse().getContentAsString());
@@ -146,7 +168,10 @@ public class VolunteerControllerTest extends AbstractTest {
     public void t4_getAllVolunteersPublicInfo() throws Exception {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_GET_ALL_VOLUNTEERS_PUBLIC_INFO"));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
+        Map<String,Object>claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/volunteer/getAll").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk()).andReturn();
         JSONObject obj = new JSONObject(mvcResult.getResponse().getContentAsString());

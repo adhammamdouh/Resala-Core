@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Role> {
     @Autowired
     RoleRepo roleRepo;
+
     @Override
     public ResponseEntity<Object> create(List<RoleDTO> dto) {
         return null;
@@ -34,9 +36,9 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
 
     @Override
     public Role getById(int id) {
-        Optional<Role> roleOptional=roleRepo.findById(id);
-        if(!roleOptional.isPresent())
-            throw  new MyEntityNotFoundException(id+" Role "+ StaticNames.notFound);
+        Optional<Role> roleOptional = roleRepo.findById(id);
+        if (!roleOptional.isPresent())
+            throw new MyEntityNotFoundException(id + " Role " + StaticNames.notFound);
         return roleOptional.get();
     }
 
@@ -45,23 +47,10 @@ public class RoleService implements CommonCRUDService<RoleDTO>, CommonService<Ro
         return null;
     }
 
-    public Role getRoleByName(String name){
-        Optional<Role> roleOptional=roleRepo.findByName(name);
-        if(!roleOptional.isPresent())
-            throw  new MyEntityNotFoundException(name+" Role "+ StaticNames.notFound);
+    public Role getRoleByName(String name) {
+        Optional<Role> roleOptional = roleRepo.findByName(name);
+        if (!roleOptional.isPresent())
+            throw new MyEntityNotFoundException(name + " Role " + StaticNames.notFound);
         return roleOptional.get();
-    }
-    /*public Role getRoleByUserName(String userName){
-        Optional<Role> roleOptional=roleRepo.findByVolunteers_User_userName(userName);
-        if(!roleOptional.isPresent())
-            throw  new MyEntityNotFoundException("User Name "+ StaticNames.notFound);
-        return roleOptional.get();
-    }*/
-
-    public Role findByVolunteers_User_userName(String userName){
-        return roleRepo.findByVolunteers_User_userName(userName);
-        /*if(!roleOptional.isPresent())
-            throw new MyEntityNotFoundException("user name " + StaticNames.notFound);
-        return roleOptional.get();*/
     }
 }

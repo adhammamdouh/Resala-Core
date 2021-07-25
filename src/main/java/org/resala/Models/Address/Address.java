@@ -19,9 +19,7 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "volunteer_id")
-    Volunteer volunteer;*/
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "capital_id")
     @NotNull(message = "Please enter Capital")

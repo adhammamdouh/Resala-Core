@@ -7,6 +7,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.resala.AbstractTest;
+import org.resala.Service.TokenService;
 import org.resala.StaticNames;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,7 +17,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,8 +36,17 @@ public class EventControllerTest extends AbstractTest {
     public void t1_add() throws Exception {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(StaticNames.addEvent));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
-        String json = "[{\"name\":\"كوبو 2\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-15 12:52\",\"invitationEndTime\":\"2021-07-15 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]},{\"name\":\"aaa\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-15 12:52\",\"invitationEndTime\":\"2021-07-15 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]}]";
+        Map<String,Object>claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
+        System.out.println(token);
+        String json = "[{\"name\":\"كوبو 2\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-10 12:52\",\"invitationEndTime\":\"2021-07-12 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]},{\"name\":\"aaa\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-15 12:52\",\"invitationEndTime\":\"2021-07-15 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]}]";
+        mvc.perform(MockMvcRequestBuilders.post("/event/addEvent").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .content(json)
+                .accept(getMediaTypeHeader())
+                .contentType(getMediaTypeHeader())).andExpect(status().isBadRequest());
+        json="[{\"name\":\"عرفات\",\"fromDate\":\"2021-07-10 7:00\",\"toDate\":\"2021-07-20 15:30\",\"invitationStartTime\":\"2021-07-5 16:52\",\"invitationEndTime\":\"2021-07-9 1:52\",\"feedBackStartTime\":\"2021-07-21 13:52\",\"feedBackEndTime\":\"2021-07-22 14:00\",\"notAttendStartTime\":\"2021-07-23 15:52\",\"notAttendEndTime\":\"2021-07-24 16:00\",\"script\":\"3la allah\",\"description\":\"قافلة مياه و بناء و اسقف و براعم و مسنين\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]},{\"name\":\"2عرفات\",\"fromDate\":\"2021-07-11 7:00\",\"toDate\":\"2021-07-21 15:30\",\"invitationStartTime\":\"2021-07-6 16:52\",\"invitationEndTime\":\"2021-07-10 1:52\",\"feedBackStartTime\":\"2021-07-22 13:52\",\"feedBackEndTime\":\"2021-07-23 14:00\",\"notAttendStartTime\":\"2021-07-24 15:52\",\"notAttendEndTime\":\"2021-07-25 16:00\",\"script\":\"3la allah\",\"description\":\"قافلة مياه و بناء و اسقف و براعم و مسنين\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]}]";
         mvc.perform(MockMvcRequestBuilders.post("/event/addEvent").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)
                 .accept(getMediaTypeHeader())
@@ -46,7 +58,10 @@ public class EventControllerTest extends AbstractTest {
         authorities.add(new SimpleGrantedAuthority(StaticNames.getAllEventsByState));
         authorities.add(new SimpleGrantedAuthority(StaticNames.completeEvent));
         authorities.add(new SimpleGrantedAuthority(StaticNames.archiveEvent));
-        String token = jwtUtil.createTokenForTest(1, 1, authorities);
+        Map<String,Object>claims=new HashMap<>();
+        claims.put(TokenService.myBranchId,1);
+        claims.put(TokenService.myOrganizationId,1);
+        String token = jwtUtil.createTokenForTest(claims, authorities);
         String json = "{\"id\":1}";
         mvc.perform(MockMvcRequestBuilders.put("/event/completeEvent").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)

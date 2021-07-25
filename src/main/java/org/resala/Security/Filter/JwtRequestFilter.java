@@ -1,14 +1,10 @@
 package org.resala.Security.Filter;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-//import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import io.jsonwebtoken.Claims;
 import org.resala.Models.Auth.MyJacksonObjMapper;
 import org.resala.Models.Auth.Response;
 import org.resala.Security.Jwt.JwtUtil;
@@ -58,6 +54,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String id = null;
+        Claims claims=null;
         String jwt;
         List<String> actions;
         Collection<GrantedAuthority> grantedAuth = new ArrayList<>();
@@ -78,7 +75,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             username = jwtUtil.extractUserName(jwt);
             id = jwtUtil.extractId(jwt);
             actions = jwtUtil.extractAuthorities(jwt);
-
+            claims= jwtUtil.getClaims(jwt);
             for (String action : actions) {
                 grantedAuth.add(new SimpleGrantedAuthority(action.trim()));
             }
@@ -91,7 +88,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             username, id, grantedAuth);
 
             usernamePasswordAuthenticationToken
-                    .setDetails(usernamePasswordAuthenticationToken);
+                    .setDetails(claims);
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
         chain.doFilter(request, response);

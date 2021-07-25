@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.resala.Exceptions.JwtTokenMalformedException;
 import org.resala.Exceptions.JwtTokenMissingException;
 import org.resala.Models.MyUserDetails;
+import org.resala.Service.TokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,35 +22,32 @@ public class JwtUtil {
     private String SECRET_CODE = "DevOutLoudTeam111";
     /// feb ,aug
 
-    public String generateToken(int organizationId, int branchId, Authentication authentication) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, organizationId, branchId, authentication);
+    public String generateToken(Map<String, Object> claims, Authentication authentication) {
+        return createToken(claims, authentication);
     }
-    public String createTokenForTest(int organizationId, int branchId,List<SimpleGrantedAuthority> authorities){
+
+    public String createTokenForTest(Map<String, Object> claims, List<SimpleGrantedAuthority> authorities) {
         int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
                 LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
         int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
                 Calendar.AUGUST : Calendar.FEBRUARY;
-        return Jwts.builder().setClaims(new HashMap<>())
+        return Jwts.builder().setClaims(claims)
                 .setSubject("test")
                 .setAudience(authorities.toString())
-                .setIssuer(organizationId + "," + branchId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(year, month, 1))
                 .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
     }
-    private String createToken(Map<String, Object> claims, int organizationId, int branchId, Authentication authentication) {
+
+    private String createToken(Map<String, Object> claims, Authentication authentication) {
         int year = (LocalDate.now().getMonthValue() >= Calendar.AUGUST) ?
                 LocalDate.now().getYear() + 1 : LocalDate.now().getYear();
         int month = (LocalDate.now().getMonthValue() >= Calendar.FEBRUARY && LocalDate.now().getMonthValue() < Calendar.AUGUST) ?
                 Calendar.AUGUST : Calendar.FEBRUARY;
-       /* TokenInfo tokenInfo= new TokenInfo(
-                branchId,authentication.getName(),authentication.getAuthorities(),
-                new Date(year, month, 1),new Date(System.currentTimeMillis()));*/
+
         return Jwts.builder().setClaims(claims)
                 .setSubject(authentication.getName())
                 .setAudience(authentication.getAuthorities().toString())
-                .setIssuer(organizationId + "," + branchId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(year, month, 1))
                 .signWith(SignatureAlgorithm.HS256, SECRET_CODE).compact();
@@ -59,9 +57,9 @@ public class JwtUtil {
         try {
             String userName = extractUserName(token);
             List<String> authorities = extractAuthorities(token);
-            String myPlace = extractId(token);
+            Claims claims = getClaims(token);
             Date expirationDate = extractExpirationDate(token);
-            if (userName == null || myPlace == null || myPlace.isEmpty() || myPlace.split(",").length != 2 || authorities == null || expirationDate.before(new Date()))
+            if (userName == null || claims.get(TokenService.myOrganizationId) == null || authorities == null || expirationDate.before(new Date()))
                 throw new JwtTokenMalformedException("Invalid JWT signature or JWT Token has expired");
         } catch (SignatureException e) {
             throw new JwtTokenMalformedException("Invalid JWT signature");
@@ -76,10 +74,7 @@ public class JwtUtil {
         }
     }
 
-    /*public String extractUserName(String token) {
-        String details=extractUserDetails(token);
-        return details;
-    }*/
+
     public Date extractExpirationDate(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -92,10 +87,10 @@ public class JwtUtil {
         return extractClaim(token, Claims::getIssuer);
     }
 
+    public Claims getClaims(String token) {
+        return extractAllClaims(token);
+    }
 
-    /*private String extractAuthorities(String token) {
-        return
-    }*/
 
     public List<String> extractAuthorities(String token) {
         String details = extractClaim(token, Claims::getAudience);
@@ -107,6 +102,7 @@ public class JwtUtil {
 
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }

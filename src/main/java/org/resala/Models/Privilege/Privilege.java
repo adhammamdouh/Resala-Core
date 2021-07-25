@@ -37,7 +37,6 @@ public class Privilege {
             joinColumns = {@JoinColumn(name = "privilege_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "action_id", nullable = false)}
     )
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Action> actions;
 
 

@@ -19,7 +19,7 @@ import org.resala.Service.Call.CallsService;
 import org.resala.Service.Call.NetworkTypeService;
 import org.resala.Service.CommonService;
 import org.resala.Service.Event.EventService;
-import org.resala.Service.IssTokenService;
+import org.resala.Service.TokenService;
 import org.resala.StaticNames;
 import org.resala.dto.Call.VolunteerToCallsDTO;
 import org.resala.dto.Volunteer.NetworkAssignedToVolunteersDTO;
@@ -91,7 +91,7 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
 
 
     public List<NetworkTypeAssignedToVolunteerProjection> getNetworkTypeAssignedToVolunteer(int eventId){
-        int branchId= IssTokenService.getBranchId();
+        int branchId= TokenService.getBranchId();
         Event event=eventService.getById(eventId);
 
         if(!eventService.checkEventStatus(event))

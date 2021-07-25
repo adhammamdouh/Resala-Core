@@ -18,5 +18,4 @@ import java.util.List;
 @Getter
 @Setter
 public class CloudDTO extends UserDTO {
-//    UserStatusDTO userTypeDTO;
 }

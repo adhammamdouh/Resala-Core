@@ -23,11 +23,6 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
         Response response1=new Response(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
 
-        /*Map<String, Object> data = new HashMap<>();
-        data.put("timestamp", new Date());
-        data.put("status",HttpStatus.FORBIDDEN.value());
-        data.put("message", "Access Denied");
-        data.put("path", request.getRequestURL().toString());*/
 
         OutputStream out = response.getOutputStream();
         com.fasterxml.jackson.databind.ObjectMapper mapper = new ObjectMapper();

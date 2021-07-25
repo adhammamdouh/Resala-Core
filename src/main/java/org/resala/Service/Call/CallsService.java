@@ -18,7 +18,7 @@ import org.resala.Repository.Call.CallsRepo;
 import org.resala.Service.BranchService;
 import org.resala.Service.Event.Attendance.AttendanceStatusService;
 import org.resala.Service.Event.EventService;
-import org.resala.Service.IssTokenService;
+import org.resala.Service.TokenService;
 import org.resala.Service.Volunteer.NetworkAssignedToVolunteersService;
 import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.StaticNames;
@@ -68,7 +68,8 @@ public class CallsService {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         return modelMapper;
     }
-    public  <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
+
+    public <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
         return entityList.stream()
                 .map(entity -> modelMapper().map(entity, outCLass))
                 .collect(Collectors.toList());
@@ -77,12 +78,12 @@ public class CallsService {
 
     public ResponseEntity<Object> confirmAssignedCalls(boolean balanced, NetworkAssignedToVolunteersDTO dto) {
 
-        int branchId = IssTokenService.getBranchId();
+        int branchId = TokenService.getBranchId();
 
         Event event = eventService.getById(dto.getEvent().getId());
         Branch branch = branchService.getById(branchId);
 
-        if(!eventService.checkEventStatus(event))
+        if (!eventService.checkEventStatus(event))
             throw new ConstraintViolationException(StaticNames.eventIsNotActive);
 
         if (callsRepo.countAllByEventAndBranch(event, branch) > 0) {
@@ -92,7 +93,7 @@ public class CallsService {
         List<NetworkAssignedToVolunteers> networkAssignedToVolunteers =
                 networkAssignedToVolunteersService.getByEventIdAndBranchId(event.getId(), branch.getId());
 
-        if(networkAssignedToVolunteers == null || networkAssignedToVolunteers.size()==0){
+        if (networkAssignedToVolunteers == null || networkAssignedToVolunteers.size() == 0) {
             throw new MyEntityFoundBeforeException(StaticNames.thereIsNoAssignedCallsToConfirm);
         }
 
@@ -177,8 +178,6 @@ public class CallsService {
                                      Map<Volunteer, Integer> map) {
         List<Calls> calls = new ArrayList<>();
         int receiverCount = receivers.size();
-//        int callsPerCaller = (receiverCount + (callers.size() - 1)) / callers.size();
-//        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
 
         for (int receiverIdx = 0; receiverIdx < receiverCount; ++receiverIdx) {
 
@@ -209,10 +208,10 @@ public class CallsService {
         Volunteer volunteer = volunteerService.getById(networkAssignedToVolunteersDTO.getVolunteer().getId());
         Event event = eventService.getById(networkAssignedToVolunteersDTO.getEvent().getId());
 
-        if(!eventService.checkEventStatus(event)) {
+        if (!eventService.checkEventStatus(event)) {
             if (event.getEventStatus().equals(StaticNames.completedState))
                 return ResponseEntity.ok(new Response(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
-                        IssTokenService.getBranchId(), event.getId()),CallsPublicInfoProjectionWithCaller.class),HttpStatus.OK.value()));
+                        TokenService.getBranchId(), event.getId()), CallsPublicInfoProjectionWithCaller.class), HttpStatus.OK.value()));
             else throw new ConstraintViolationException(StaticNames.cantGetEventCalls);
         }
 
@@ -223,22 +222,34 @@ public class CallsService {
                 throw new ConstraintViolationException(StaticNames.cantGetFeedBackCalls);
             }
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
-            List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
-            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
-            callsRepo.saveAll(calls);
-            return ResponseEntity.ok(new Response(mapAll(calls,CallsPublicInfoProjection.class),HttpStatus.OK.value()));
+            List<Calls> calls;
+            try {
+                calls = callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus, event.getId());
+                for (Calls call : calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.feedBack));
+                callsRepo.saveAll(calls);
+            } catch (Exception e) {
+                calls = new ArrayList<>();
+            }
+
+            return ResponseEntity.ok(new Response(mapAll(calls, CallsPublicInfoProjection.class), HttpStatus.OK.value()));
         }
 
         if (currentDate.after(event.getInvitationStartTime()) && currentDate.before((event.getInvitationEndTime()))) {
-            return ResponseEntity.ok(new Response(callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class),HttpStatus.OK.value()));
+            return ResponseEntity.ok(new Response(callsRepo.findAllByCaller_IdAndEvent_Id(volunteer.getId(), event.getId(), CallsPublicInfoProjection.class), HttpStatus.OK.value()));
         }
 
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
             AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.notAttendedTheEvent);
-            List<Calls>calls= callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus,event.getId());
-            for(Calls call:calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.notAttend));
-            callsRepo.saveAll(calls);
-            return ResponseEntity.ok(new Response(mapAll(calls,CallsPublicInfoProjection.class),HttpStatus.OK.value()));
+            List<Calls> calls;
+            try {
+                calls = callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus, event.getId());
+                for (Calls call : calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.notAttend));
+                callsRepo.saveAll(calls);
+            } catch (Exception e) {
+                calls = new ArrayList<>();
+            }
+
+            return ResponseEntity.ok(new Response(mapAll(calls, CallsPublicInfoProjection.class), HttpStatus.OK.value()));
         }
         throw new ConstraintViolationException(StaticNames.cantGetEventCalls);
     }
@@ -255,7 +266,7 @@ public class CallsService {
 
         Event event = call.getEvent();
 
-        if(!eventService.checkEventStatus(event))
+        if (!eventService.checkEventStatus(event))
             throw new ConstraintViolationException(StaticNames.eventIsNotActive);
 
         Date currentDate = new Date(System.currentTimeMillis());
@@ -265,21 +276,15 @@ public class CallsService {
             call.setInvitationComment(comment);
             call.setInvitationTime(currentDate);
             call.setInvitationCallResult(callResult);
-        }
-
-        else if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
+        } else if (currentDate.after(event.getFeedBackStartTime()) && currentDate.before((event.getFeedBackEndTime()))) {
             call.setFeedBackComment(comment);
             call.setFeedBackTime(currentDate);
             call.setFeedBackCallResult(callResult);
-        }
-
-        else if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
+        } else if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
             call.setNotAttendComment(comment);
             call.setNotAttendTime(currentDate);
             call.setNotAttendCallResult(callResult);
-        }
-
-        else {
+        } else {
             throw new ConstraintViolationException(StaticNames.cantSubmitNow);
         }
 

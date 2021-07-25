@@ -18,16 +18,16 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
     List<Calls> findAllByBranch_Id(int id);
 
     List<Calls> findAllByBranch_IdAndEvent_id(int branchId, int eventId);
-    @Query("SELECT c FROM Calls as c INNER JOIN event_attendance as e " +
-            "WHERE e.volunteer.id=c.receiver.id AND c.branch.id = e.branch.id "+
+
+    @Query("SELECT c FROM Calls as c JOIN FETCH event_attendance as e " +
+            "WHERE e.volunteer.id=c.receiver.id AND c.branch.id = e.branch.id " +
             " and e.attendanceStatus = :attendanceStatus and c.event.id= :eventId")
-    <T>List<T> findAllByAttendanceStatusAndEvent_Id(@Param("attendanceStatus")
-               AttendanceStatus attendanceStatus,@Param("eventId") int eventId);
+    <T> List<T> findAllByAttendanceStatusAndEvent_Id(@Param("attendanceStatus")
+                                                             AttendanceStatus attendanceStatus, @Param("eventId") int eventId);
 
     <T> List<T> findAllByCaller_IdAndEvent_Id
-            (int volunteerId,int eventIdn, Class<T> projection);
+            (int volunteerId, int eventIdn, Class<T> projection);
 
-    //public List<Calls> findByIds(List<Integer> callsId);
     Calls findById(int id);
 
     int countAllByReceiverAndInvitationCallResultNot(Volunteer volunteer, CallResult callResult);
@@ -41,6 +41,8 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
     int countAllByCallerAndInvitationCallResult(Volunteer caller, CallResult callResult);
 
     int countAllByEventAndBranch(Event event, Branch branch);
+
     int countAllByEventAndBranchAndInvitationCallResult(Event event, Branch branch, CallResult callResult);
+
     int countAllByEventAndBranchAndInvitationCallResultNotAndInvitationCallResultNot(Event event, Branch branch, CallResult callResult1, CallResult callResult2);
 }

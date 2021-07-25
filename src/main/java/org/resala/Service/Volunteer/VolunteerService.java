@@ -59,7 +59,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     @Autowired
     UserTypeService userTypeService;
 
-    //@Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -67,15 +66,14 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public boolean checkPhoneExist(String phone) {
-        return volunteerRepo.existsByPhoneNumberAndOrganization_Id(phone, IssTokenService.getOrganizationId());
+        return volunteerRepo.existsByPhoneNumberAndOrganization_Id(phone, TokenService.getOrganizationId());
     }
 
     public Volunteer getVolForCreation(VolunteerDTO dto, Role role) {
         dto.checkNull();
         Branch branch = branchService.getById(dto.getBranch().getId());
-        Organization organization = organizationService.getById(IssTokenService.getOrganizationId());
+        Organization organization = organizationService.getById(TokenService.getOrganizationId());
         Capital capital = capitalService.getById(dto.getAddress().getCapital().getId());
-//        Role role = roleService.getRoleByName(roleName);
         UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.activeState);
         Shirt shirt = shirtService.getById(dto.getShirt().getId());
         String phoneNumber = dto.getPhoneNumber();
@@ -158,10 +156,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     public ResponseEntity<Object> update(VolunteerDTO newDto) {
         newDto.checkNull();
         Volunteer volunteer = getById(newDto.getId());
-        /*if(newObj.getAddress().getId()!=volunteer.getAddress().getId()){
-            throw new ConstraintViolationException("You can't change your address id");
-        }*/
-
         Branch branch = branchService.getById(newDto.getBranch().getId());
         Capital capital = capitalService.getById(newDto.getAddress().getCapital().getId());
         Shirt shirt = shirtService.getById(newDto.getShirt().getId());
@@ -172,7 +166,6 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
         newVolunteer.getAddress().setId(volunteer.getAddress().getId());
         newVolunteer.getAddress().setCapital(capital);
         newVolunteer.setRole(volunteer.getRole());
-//        newVolunteer.setPrivileges(volunteer.getPrivileges());
         newVolunteer.setShirt(shirt);
         newVolunteer.setVolunteerStatus(volunteer.getVolunteerStatus());
         checkConstraintViolations(newVolunteer);
@@ -183,7 +176,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public Volunteer getById(int id) {
-        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByIdAndOrganization_Id(id, IssTokenService.getOrganizationId());
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByIdAndOrganization_Id(id, TokenService.getOrganizationId());
         if (!optionalVolunteer.isPresent())
             throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
         return optionalVolunteer.get();
@@ -213,49 +206,35 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public List<VolunteerProjection> getAll() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByOrganization_Id(VolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfo() {
-        return volunteerRepo.findAllByOrganization_Id(VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByOrganization_Id(VolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
 
     public List<VolunteerProjection> getAllByState(int stateId) {
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getAllPublicInfoByState(int stateId) {
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndOrganization_Id(volunteerStatus, VolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
-
-    /*public List<Volunteer> getAllArchived() {
-        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState, Volunteer.class);
-    }
-
-    public List<VolunteerPublicInfoProjection> getAllArchivedPublicInfo() {
-        return volunteerRepo.findAllByVolunteerStatus_name(StaticNames.archivedState, VolunteerPublicInfoProjection.class);
-    }
-
-
-    public List<Volunteer> getVolunteersByBranch(int branchId) {
-        branchService.getById(branchId);
-        return volunteerRepo.findByBranch_id(branchId, Volunteer.class);
-    }*/
 
     public List<Volunteer> getVolunteersByBranchAndNetworkType(Branch branch, NetworkType networkType) {
         Role role = roleService.getRoleByName(StaticNames.normalVolunteer);
         UserStatus userStatus = volunteerStatusService.getByName(StaticNames.activeState);
         return volunteerRepo.findAllByRoleAndBranchAndNetworkTypeAndVolunteerStatusAndOrganization_Id
-                (role, branch, networkType, userStatus, IssTokenService.getOrganizationId());
+                (role, branch, networkType, userStatus, TokenService.getOrganizationId());
 
     }
 
     public Volunteer getVolunteerByPhoneNumber(VolunteerDTO dto) {
-        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByPhoneNumberAndOrganization_Id(dto.getPhoneNumber(), IssTokenService.getOrganizationId());
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByPhoneNumberAndOrganization_Id(dto.getPhoneNumber(), TokenService.getOrganizationId());
         if (optionalVolunteer.isPresent()) {
             return optionalVolunteer.get();
         }
@@ -265,24 +244,24 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public List<VolunteerProjection> getVolunteersProjectionByBranch(int branchId) {
         branchService.getById(branchId);
-        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByBranch(int branchId) {
         branchService.getById(branchId);
-        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findByBranch_idAndOrganization_Id(branchId, VolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
     public List<VolunteerProjection> getVolunteersByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerProjection.class, TokenService.getOrganizationId());
     }
 
     public List<VolunteerPublicInfoProjection> getVolunteersPublicInfoByStateAndBranch(int stateId, int branchId) {
         Branch branch = branchService.getById(branchId);
         UserStatus volunteerStatus = volunteerStatusService.getById(stateId);
-        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerPublicInfoProjection.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.findAllByVolunteerStatusAndBranchAndOrganization_Id(volunteerStatus, branch, VolunteerPublicInfoProjection.class, TokenService.getOrganizationId());
     }
 
 
@@ -294,7 +273,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
     }
 
     public List<Volunteer> getAllNormal() {
-        return volunteerRepo.getAllNormal(Volunteer.class, IssTokenService.getOrganizationId());
+        return volunteerRepo.getAllNormal(Volunteer.class, TokenService.getOrganizationId());
     }
 
     public void setNewKPI(Volunteer volunteer, VolunteerKPI kpi) {

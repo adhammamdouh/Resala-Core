@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.resala.Exceptions.MyEntityFoundBeforeException;
 import org.resala.Exceptions.MyEntityNotFoundException;
 import org.resala.Models.Auth.Response;
-import org.resala.Models.Branch;
 import org.resala.Models.Privilege.Action;
 import org.resala.Models.Privilege.Privilege;
 import org.resala.Pair;
@@ -55,7 +54,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
                 }
                 privilege.setId(0);
                 checkConstraintViolations(privilege);
-                privilege.setOrganization(organizationService.getById(IssTokenService.getOrganizationId()));
+                privilege.setOrganization(organizationService.getById(TokenService.getOrganizationId()));
 
                 privilege.setActions(new ArrayList<>());
                 setActionsAndSave(failed, i, privilege, dto);
@@ -96,7 +95,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
 
     @Override
     public Privilege getById(int id) {
-        Optional<Privilege> optional = privilegeRepo.findByIdAndOrganization_Id(id, IssTokenService.getOrganizationId());
+        Optional<Privilege> optional = privilegeRepo.findByIdAndOrganization_Id(id, TokenService.getOrganizationId());
         if (!optional.isPresent())
             throw new MyEntityNotFoundException(id + " Privilege Not Found");
         return optional.get();
@@ -108,7 +107,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     }
 
     public Privilege getPrivilegeByName(String name) {
-        Optional<Privilege> optionalPrivilege = privilegeRepo.findByNameAndOrganization_Id(name, IssTokenService.getOrganizationId());
+        Optional<Privilege> optionalPrivilege = privilegeRepo.findByNameAndOrganization_Id(name, TokenService.getOrganizationId());
         if (!optionalPrivilege.isPresent())
             throw new MyEntityNotFoundException(name + " Privilege Not Found");
         return optionalPrivilege.get();
@@ -136,7 +135,7 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
     }
 
     public List<Privilege> findByIds(List<Integer> ids) {
-        List<Privilege> privileges = privilegeRepo.findAllByIdInAndOrganization_Id(ids, IssTokenService.getOrganizationId());
+        List<Privilege> privileges = privilegeRepo.findAllByIdInAndOrganization_Id(ids, TokenService.getOrganizationId());
         if (privileges.size() != ids.size()) {
             ids.removeAll(privileges.stream().map(Privilege::getId).collect(toList()));
             throw new MyEntityNotFoundException("Privilege with id's " + ids + " does not exist");
