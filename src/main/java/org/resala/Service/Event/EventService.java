@@ -201,6 +201,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
     }
 
     public boolean checkEventStatus(Event event){
+//        System.out.println(event.getEventStatus().getName());
         if(event.getEventStatus().getName().equals(StaticNames.activeState))
             return true;
         return false;

@@ -20,7 +20,7 @@
         <functionAppName>Cloud-funcs2</functionAppName>
         <functionAppRegion>South Africa North</functionAppRegion>
         <functionResourceGroup>rg-app-ResalaCoreSystem-210717203109</functionResourceGroup>
-        <stagingDirectory>main.java.org.resala.ResalaCoreSystemApplication/azure-functions/Cloud-funcs2</stagingDirectory>
+        <stagingDirectory>src.main.java.org.resala.ResalaCoreSystemApplication/azure-functions/Cloud-funcs2</stagingDirectory>
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
 
