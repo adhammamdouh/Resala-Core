@@ -154,6 +154,7 @@ public class UserService {
             claims.put(TokenService.myBranchId, volunteer.getBranch().getId());
             claims.put(TokenService.myOrganizationId, volunteer.getOrganization().getId());
             claims.put(TokenService.userId, user.getId());
+            claims.put(TokenService.volunteerId, volunteer.getId());
             token = jwtUtil.generateToken(claims, authentication);
             userStatus = volunteer.getVolunteerStatus();
         }else if(userTypeName.equals(StaticNames.cloudType)){
