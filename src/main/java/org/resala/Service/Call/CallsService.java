@@ -209,9 +209,9 @@ public class CallsService {
         Event event = eventService.getById(networkAssignedToVolunteersDTO.getEvent().getId());
 
         if (!eventService.checkEventStatus(event)) {
-            if (event.getEventStatus().equals(StaticNames.completedState))
-                return ResponseEntity.ok(new Response(mapAll(callsRepo.findAllByBranch_IdAndEvent_id(
-                        TokenService.getBranchId(), event.getId()), CallsPublicInfoProjectionWithCaller.class), HttpStatus.OK.value()));
+            if (event.getEventStatus().getName().equals(StaticNames.completedState))
+                return ResponseEntity.ok(new Response(callsRepo.findAllByBranch_IdAndEvent_id(
+                        TokenService.getBranchId(), event.getId(),CallsPublicInfoProjectionWithCaller.class), HttpStatus.OK.value()));
             else throw new ConstraintViolationException(StaticNames.cantGetEventCalls);
         }
 
@@ -239,10 +239,10 @@ public class CallsService {
         }
 
         if (currentDate.after(event.getNotAttendStartTime()) && currentDate.before((event.getNotAttendEndTime()))) {
-            AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.notAttendedTheEvent);
+            AttendanceStatus attendanceStatus = attendanceStatusService.getByName(StaticNames.attendedTheEvent);
             List<Calls> calls;
             try {
-                calls = callsRepo.findAllByAttendanceStatusAndEvent_Id(attendanceStatus, event.getId());
+                calls = callsRepo.findAllByNotAttendanceStatusAndEvent_Id(attendanceStatus, event.getId());
                 for (Calls call : calls) call.setCallType(callTypeService.getCallTypeByName(StaticNames.notAttend));
                 callsRepo.saveAll(calls);
             } catch (Exception e) {

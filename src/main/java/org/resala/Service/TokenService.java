@@ -16,6 +16,7 @@ public class TokenService {
     public static final String lastName="last_name";
 
     public static final String roleName="role_name";
+    public static final String myCommitteeName="myCommitteeName";
 
 
     public static int getBranchId() {

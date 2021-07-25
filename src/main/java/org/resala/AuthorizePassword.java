@@ -16,7 +16,7 @@ public class AuthorizePassword {
     public static void main(String[] args) {
 
         for (int i=1;i<=50;++i)
-            System.out.println("insert into privilege_action (privilege_id,action_id) values (7,"+i+");");
+            System.out.println("insert ignore into privilege_action (privilege_id,action_id) values (7,"+i+");");
 
         System.out.println(validate("Resala@resala.cccc"));
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

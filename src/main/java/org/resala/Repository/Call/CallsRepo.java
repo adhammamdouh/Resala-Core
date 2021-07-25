@@ -17,12 +17,18 @@ import java.util.List;
 public interface CallsRepo extends JpaRepository<Calls, Integer> {
     List<Calls> findAllByBranch_Id(int id);
 
-    List<Calls> findAllByBranch_IdAndEvent_id(int branchId, int eventId);
+    <T>List<T> findAllByBranch_IdAndEvent_id(int branchId, int eventId,Class<T> projection);
 
     @Query("SELECT c FROM Calls as c JOIN FETCH event_attendance as e " +
             "WHERE e.volunteer.id=c.receiver.id AND c.branch.id = e.branch.id " +
             " and e.attendanceStatus = :attendanceStatus and c.event.id= :eventId")
     <T> List<T> findAllByAttendanceStatusAndEvent_Id(@Param("attendanceStatus")
+                                                             AttendanceStatus attendanceStatus, @Param("eventId") int eventId);
+
+    @Query("SELECT c FROM Calls as c JOIN FETCH event_attendance as e " +
+            "WHERE e.volunteer.id=c.receiver.id AND c.branch.id = e.branch.id " +
+            " and e.attendanceStatus <> :attendanceStatus and c.event.id= :eventId")
+    <T> List<T> findAllByNotAttendanceStatusAndEvent_Id(@Param("attendanceStatus")
                                                              AttendanceStatus attendanceStatus, @Param("eventId") int eventId);
 
     <T> List<T> findAllByCaller_IdAndEvent_Id

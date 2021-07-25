@@ -144,6 +144,7 @@ public class UserService {
             if(userTypeName.equals(StaticNames.leadVolunteerType)){
                 LeadVolunteer leadVolunteer = leadVolunteerService.getByVolunteer(volunteer);
                 claims.put(TokenService.myCommitteeId, leadVolunteer.getCommittee().getId());
+                claims.put(TokenService.myCommitteeName, leadVolunteer.getCommittee().getName());
             }
             claims.put(TokenService.type, user.getUserType().getName());
             claims.put(TokenService.firstName, volunteer.getFirstName());
