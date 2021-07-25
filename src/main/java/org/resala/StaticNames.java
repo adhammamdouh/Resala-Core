@@ -108,6 +108,7 @@ public interface StaticNames {
     String attendedEvent="Attend already assigned ";
     String eventShouldContainsTheBranch="This branch is not in the event brnaches list";
     String eventStartShouldBeforeEventEnd ="Event start time should be before event end time";
+    String networkTypeDuplicate="Network type can't be assigned for more than one";
     //----------------------------------------------------------------------------------------------------------------------
     String volunteerType="Volunteer";
     String leadVolunteerType ="LeadVolunteer";
