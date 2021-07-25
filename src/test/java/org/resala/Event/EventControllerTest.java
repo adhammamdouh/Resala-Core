@@ -40,7 +40,6 @@ public class EventControllerTest extends AbstractTest {
         claims.put(TokenService.myBranchId,1);
         claims.put(TokenService.myOrganizationId,1);
         String token = jwtUtil.createTokenForTest(claims, authorities);
-        System.out.println(token);
         String json = "[{\"name\":\"كوبو 2\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-10 12:52\",\"invitationEndTime\":\"2021-07-12 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]},{\"name\":\"aaa\",\"fromDate\":\"2021-07-13 12:52\",\"toDate\":\"2021-12-20 12:52\",\"invitationStartTime\":\"2021-07-15 12:52\",\"invitationEndTime\":\"2021-07-15 13:00\",\"feedBackStartTime\":\"2021-07-15 13:52\",\"feedBackEndTime\":\"2021-07-15 14:00\",\"notAttendStartTime\":\"2021-07-15 15:52\",\"notAttendEndTime\":\"2021-07-15 16:00\",\"script\":\"3la allah\",\"description\":\"qq ww ee\",\"hasCalls\":\"true\",\"shareable\":\"true\",\"branches\":[{\"id\":1},{\"id\":2}]}]";
         mvc.perform(MockMvcRequestBuilders.post("/event/addEvent").header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .content(json)
