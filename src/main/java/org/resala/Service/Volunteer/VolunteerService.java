@@ -135,7 +135,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     @Override
     public ResponseEntity<Object> archive(VolunteerDTO dto) {
-        Volunteer volunteer = getById(dto.getId());
+        Volunteer volunteer = getByIdForTest(dto.getId());
         if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToArchiveState))
             throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
         UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.archivedState);
@@ -184,6 +184,13 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     public Volunteer getById(int id) {
         Optional<Volunteer> optionalVolunteer = volunteerRepo.findByIdAndOrganization_Id(id, IssTokenService.getOrganizationId());
+        if (!optionalVolunteer.isPresent())
+            throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
+        return optionalVolunteer.get();
+    }
+
+    public Volunteer getByIdForTest(int id) {
+        Optional<Volunteer> optionalVolunteer = volunteerRepo.findByIdAndOrganization_Id(id, 1);
         if (!optionalVolunteer.isPresent())
             throw new MyEntityNotFoundException("Volunteer " + StaticNames.notFound);
         return optionalVolunteer.get();
