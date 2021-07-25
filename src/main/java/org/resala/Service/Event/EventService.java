@@ -173,7 +173,7 @@ public class EventService implements CommonCRUDService<EventDTO>, CommonService<
         if (event.isHasCalls() && (event.getInvitationStartTime() == null || event.getFeedBackStartTime() == null||event.getNotAttendStartTime() == null ))
             throw new ConstraintViolationException(StaticNames.callDataIsNotCompleted);
         else if(event.isHasCalls()) {
-            if (event.getInvitationStartTime().before(event.getFromDate()))
+            if (event.getInvitationStartTime().before(event.getToDate()))
                 throw new ConstraintViolationException(StaticNames.eventInvitationCallsStartDate);
 
             if (event.getInvitationEndTime().after(event.getFeedBackStartTime()) || event.getInvitationEndTime().before(event.getInvitationStartTime()))
