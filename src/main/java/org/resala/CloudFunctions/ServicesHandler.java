@@ -7,11 +7,10 @@ import org.resala.Service.Volunteer.VolunteerService;
 import org.resala.dto.Volunteer.VolunteerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
-import org.springframework.stereotype.Service;
 
-@Service
 public class ServicesHandler extends
         AzureSpringBootRequestHandler<String,String> {
+
     @Autowired
     VolunteerService volunteerService;
 
