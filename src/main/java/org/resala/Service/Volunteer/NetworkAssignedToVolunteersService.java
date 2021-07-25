@@ -110,7 +110,13 @@ public class NetworkAssignedToVolunteersService implements CommonService<Network
 
     public ResponseEntity<Object> saveAndUpdate(VolunteerToCallsDTO volunteerToCallsDTO, int branchId){
         List<Pair<Integer,String>> failed= new ArrayList<>();
-
+        List<Integer>ids=new ArrayList<>();
+        for(int i=0;i<volunteerToCallsDTO.getNetworkAssignedToVolunteers().size();i++){
+            int netId=volunteerToCallsDTO.getNetworkAssignedToVolunteers().get(i).getNetworkType().getId();
+            if(ids.contains(netId))
+                throw new ConstraintViolationException(StaticNames.networkTypeDuplicate);
+            ids.add(netId);
+        }
         Event event = eventService.getById(volunteerToCallsDTO.getEvent().getId());
         Branch branch = branchService.getById(branchId);
 

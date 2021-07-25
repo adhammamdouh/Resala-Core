@@ -235,7 +235,7 @@ INSERT ignore INTO user_type (`id`, `name`) VALUES ('1', 'Volunteer');
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('2', 'Cloud');
 INSERT ignore INTO user_type (`id`, `name`) VALUES ('3', 'LeadVolunteer');
 
-INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin@resala.org','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','1');
+INSERT ignore INTO `user` (`id`, `user_name`,`password`,`user_type_id`) VALUES ('1', 'admin@resala.org','$2a$10$ndi/m2LvXj5NsT/OgY/sQ.1fAb4N4sPAy85tdLqe9AXrqJrmi/nGS','3');
 
 INSERT ignore INTO `address` (`address_id`, `apartment_number`, `building_number`, `region_name`, `street_name`, `capital_id`) VALUES ('1', '1', '1', 'admin', 'admin', '1');
 
