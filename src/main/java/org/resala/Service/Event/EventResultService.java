@@ -50,8 +50,7 @@ public class EventResultService {
             int percentCount = eventAttendanceService.countAllByEventAndBranch(event, branch, attendanceStatus);
             double attractingPercentage = callsService.getAttractingPercentage(event, branch);
             int callsCount = callsService.countAllCalledByEventAndBranch(event, branch);
-            CallResult callResult = callResultService.getByName(StaticNames.callEnsure);
-            double ensurePercentage = callsService.countAllByEventAndBranchAndCallResult(event, branch, callResult);
+            double ensurePercentage = callsService.getEnsurePercentage(event, branch);
             eventResult.setResponsePercentage(responsePercentage);
             eventResult.setAttendancePercentage(attendancePercentage);
             eventResult.setAttractingPercentage(attractingPercentage);

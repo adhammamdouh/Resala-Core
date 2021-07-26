@@ -36,19 +36,24 @@ public interface CallsRepo extends JpaRepository<Calls, Integer> {
 
     Calls findById(int id);
 
-    int countAllByReceiverAndInvitationCallResultNot(Volunteer volunteer, CallResult callResult);
+    int countAllByReceiver(Volunteer volunteer);
 
-    int countAllByReceiverAndInvitationCallResultNotAndInvitationCallResultNot(Volunteer volunteer, CallResult callResult, CallResult callResult2);
+    default int getVolResponseCount(Volunteer volunteer, CallResult callResult, CallResult callResult2,CallResult callResult3,CallResult callResult4){
+        return countAllByReceiverAndInvitationCallResultOrInvitationCallResultOrInvitationCallResultOrInvitationCallResult(volunteer,callResult,callResult2,callResult3,callResult4);
+    }
+    int countAllByReceiverAndInvitationCallResultOrInvitationCallResultOrInvitationCallResultOrInvitationCallResult(Volunteer volunteer, CallResult callResult, CallResult callResult2, CallResult callResult3, CallResult callResult4);
 
     int countAllByReceiverAndInvitationCallResult(Volunteer receiver, CallResult callResult);
 
-    int countAllByCallerAndInvitationCallResultNot(Volunteer volunteer, CallResult callResult);
+    int countAllByCaller(Volunteer volunteer);
 
     int countAllByCallerAndInvitationCallResult(Volunteer caller, CallResult callResult);
 
     int countAllByEventAndBranch(Event event, Branch branch);
 
     int countAllByEventAndBranchAndInvitationCallResult(Event event, Branch branch, CallResult callResult);
-
-    int countAllByEventAndBranchAndInvitationCallResultNotAndInvitationCallResultNot(Event event, Branch branch, CallResult callResult1, CallResult callResult2);
+    default int getAllCalled(Event event, Branch branch, CallResult callResult1, CallResult callResult2,CallResult callResult3,CallResult callResult4){
+        return countAllByEventAndBranchAndInvitationCallResultNotAndInvitationCallResultNotAndInvitationCallResultNotAndInvitationCallResultNot(event,branch,callResult1,callResult2,callResult3,callResult4);
+    }
+    int countAllByEventAndBranchAndInvitationCallResultNotAndInvitationCallResultNotAndInvitationCallResultNotAndInvitationCallResultNot(Event event, Branch branch, CallResult callResult1, CallResult callResult2,CallResult callResult3,CallResult callResult4);
 }

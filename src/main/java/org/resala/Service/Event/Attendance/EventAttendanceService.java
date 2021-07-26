@@ -90,10 +90,15 @@ public class EventAttendanceService {
     }
 
     public int countPresentForCaller(Volunteer caller, String attendanceStatusName) {
+
+
         AttendanceStatus attendanceStatus = attendanceStatusService.getByName(attendanceStatusName);
-        CallResult callResult1=callResultService.getByName(StaticNames.didNotAnswer);
-        CallResult callResult2=callResultService.getByName(StaticNames.didNotAnswer);
-        return eventAttendanceRepo.countPresentForLead(caller, attendanceStatus,callResult1,callResult2);
+        CallResult callResult1 = callResultService.getByName(StaticNames.callEnsure);
+        CallResult callResult2 = callResultService.getByName(StaticNames.probably);
+        CallResult callResult3 = callResultService.getByName(StaticNames.firstTimeCall);
+        CallResult callResult4 = callResultService.getByName(StaticNames.refused);
+
+        return eventAttendanceRepo.countPresentForLead(caller, attendanceStatus,callResult1,callResult2,callResult3,callResult4);
     }
 
 

@@ -293,9 +293,9 @@ public class CallsService {
         return ResponseEntity.ok(new Response(StaticNames.submittedSuccessfully, HttpStatus.OK.value()));
     }
 
-    public int countByReceiverAndCalled(Volunteer receiver) {
-        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByReceiverAndInvitationCallResultNot(receiver, callResult);
+    public int countHowManyTimedBeReceiver(Volunteer receiver) {
+//        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
+        return callsRepo.countAllByReceiver(receiver);
     }
 
     public int countByReceiverAndCallResult(Volunteer receiver, String callResultName) {
@@ -304,15 +304,17 @@ public class CallsService {
     }
 
     public int countAllResponseByReceiver(Volunteer receiver) {
-        CallResult callResult = callResultService.getByName(StaticNames.didNotAnswer);
-        CallResult callResult2 = callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByReceiverAndInvitationCallResultNotAndInvitationCallResultNot(receiver, callResult, callResult2);
+        CallResult callResult = callResultService.getByName(StaticNames.callEnsure);
+        CallResult callResult2 = callResultService.getByName(StaticNames.probably);
+        CallResult callResult3 = callResultService.getByName(StaticNames.firstTimeCall);
+        CallResult callResult4 = callResultService.getByName(StaticNames.refused);
+
+        return callsRepo.getVolResponseCount(receiver, callResult, callResult2,callResult3,callResult4);
     }
 
 
     public int countByCallerAndCalled(Volunteer caller) {
-        CallResult callResult = callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByCallerAndInvitationCallResultNot(caller, callResult);
+        return callsRepo.countAllByCaller(caller);
     }
 
     public int countByCallerAndCallResult(Volunteer caller, String callResultName) {
@@ -332,14 +334,22 @@ public class CallsService {
     }
 
     public int countAllCalledByEventAndBranch(Event event, Branch branch) {
-        CallResult callResult1 = callResultService.getByName(StaticNames.didNotAnswer);
-        CallResult callResult2 = callResultService.getByName(StaticNames.doesNotCalled);
-        return callsRepo.countAllByEventAndBranchAndInvitationCallResultNotAndInvitationCallResultNot(event, branch, callResult1, callResult2);
+        CallResult callResult = callResultService.getByName(StaticNames.didNotAnswer);
+        CallResult callResult2 = callResultService.getByName(StaticNames.wrongNumber);
+        CallResult callResult3 = callResultService.getByName(StaticNames.closed);
+        CallResult callResult4 = callResultService.getByName(StaticNames.notAvailable);
+        return callsRepo.getAllCalled(event, branch, callResult, callResult2,callResult3,callResult4);
     }
 
     public int countAllByEventAndBranchAndCallResult(Event event, Branch branch, CallResult callResult) {
 
         return callsRepo.countAllByEventAndBranchAndInvitationCallResult(event, branch, callResult);
+    }
+
+    public double getEnsurePercentage(Event event, Branch branch) {
+        CallResult callResult = callResultService.getByName(StaticNames.callEnsure);
+        return countAllByEventAndBranchAndCallResult(event, branch, callResult) /
+                ((double) countAllByEventAndBranch(event, branch) + 1.0);
     }
 
     public double getAttractingPercentage(Event event, Branch branch) {

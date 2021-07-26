@@ -133,7 +133,7 @@ public class VolunteerService implements CommonCRUDService<VolunteerDTO> {
 
     @Override
     public ResponseEntity<Object> archive(VolunteerDTO dto) {
-        Volunteer volunteer = getByIdForTest(dto.getId());
+        Volunteer volunteer = getById(dto.getId());
         if (!volunteer.getVolunteerStatus().getName().equals(StaticNames.requestedToArchiveState))
             throw new ActiveStateException("This Volunteer State is " + volunteer.getVolunteerStatus().getName());
         UserStatus volunteerStatus = volunteerStatusService.getByName(StaticNames.archivedState);

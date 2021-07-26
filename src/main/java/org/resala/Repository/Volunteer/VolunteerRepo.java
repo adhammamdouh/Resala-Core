@@ -36,7 +36,7 @@ public interface VolunteerRepo extends JpaRepository<Volunteer, Integer> {
 
     //-------------------------------------------------------
 
-    @Query(value = "SELECT v from Volunteer AS v left join LeadVolunteer l where l.id is null ")
+    @Query(value = "SELECT v from Volunteer AS v left join LeadVolunteer l on l.id = v.id where l.id is null ")
     <T> List<T> getAllNormal(Class<T> projection, int orgId);
 
 

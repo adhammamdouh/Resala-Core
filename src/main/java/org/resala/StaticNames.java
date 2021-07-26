@@ -127,10 +127,13 @@ public interface StaticNames {
     String notAttendedTheEvent="لم يحضر";
     //----------------------------------------------------------------------------------------------------------------------
     String callEnsure="اكد";
-    String callNotEnsure="لم يؤكد";
     String didNotAnswer="لم يرد";
-    String doesNotCalled="لم يتم الاتصال بعد";
     String firstTimeCall="اول مره";
+    String probably="احتمال";
+    String refused="رفض";
+    String wrongNumber="الرقم غلط";
+    String closed="مغلق";
+    String notAvailable="غير متاح";
     //----------------------------------------------------------------------------------------------------------------------
     String hasTShirt ="عنده";
     String hasNoTShirt ="معندوش";

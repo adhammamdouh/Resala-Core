@@ -35,7 +35,7 @@ public class VolunteerKPIService {
             volunteerKPI=new VolunteerKPI();
         }
         int presentCount=eventAttendanceService.countVolunteerAttendance(volunteer,StaticNames.attendedTheEvent);
-        int callCount=callsService.countByReceiverAndCalled(volunteer);
+        int callCount=callsService.countHowManyTimedBeReceiver(volunteer);
         int callEnsureCount=callsService.countByReceiverAndCallResult(volunteer,StaticNames.callEnsure);
         int callResponseCount=callsService.countAllResponseByReceiver(volunteer);
         volunteerKPI.setVolunteer(volunteer);

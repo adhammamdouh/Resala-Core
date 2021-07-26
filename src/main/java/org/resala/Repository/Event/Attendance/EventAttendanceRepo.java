@@ -22,7 +22,11 @@ public interface EventAttendanceRepo extends JpaRepository<EventAttendance, Inte
     @Query("SELECT count(ea) FROM event_attendance As ea Join fetch Calls As c on " +
             "ea.event.id = c.event.id and ea.volunteer.id = c.receiver.id  where " +
             "c.caller= :caller and ea.attendanceStatus= :attendanceStatus "+
-            "and c.invitationCallResult <> :callResult1 and c.invitationCallResult <> :callResult2")
+            "and (c.invitationCallResult = :callResult1 or c.invitationCallResult = :callResult2 or c.invitationCallResult = :callResult3 " +
+            "or c.invitationCallResult = :callResult4)")
     int countPresentForLead(@Param("caller")Volunteer caller, @Param("attendanceStatus")AttendanceStatus attendanceStatus,
-                            @Param("callResult1")CallResult callResult1,@Param("callResult2")CallResult callResult2);
+                            @Param("callResult1")CallResult callResult1,
+                            @Param("callResult2")CallResult callResult2,
+                            @Param("callResult3")CallResult callResult3,
+                            @Param("callResult4")CallResult callResult4);
 }
