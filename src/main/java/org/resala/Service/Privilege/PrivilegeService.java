@@ -74,7 +74,8 @@ public class PrivilegeService implements CommonCRUDService<PrivilegeDTO>, Common
                 try {
                     ActionDTO actionDTO = dto.getActions().get(j);
                     Action action = actionService.getById(actionDTO.getId());
-                    privilege.getActions().add(action);
+                    if(!privilegeRepo.findAllByIdAndActions_id(privilege.getId(),action.getId()).isPresent())
+                        privilege.getActions().add(action);
                 } catch (Exception e) {
                     failed.add(new Pair<>(i + "." + j, e.getMessage()));
                 }

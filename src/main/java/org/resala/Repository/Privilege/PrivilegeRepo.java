@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface PrivilegeRepo extends JpaRepository<Privilege,Integer> {
     Optional<Privilege>findByNameAndOrganization_Id(String name,int orgId);
     Optional<Privilege>findByIdAndOrganization_Id(int id,int orgId);
-
     List<Privilege> findAllByIdInAndOrganization_Id(List<Integer> ids, int organizationId);
+    Optional<Privilege>findAllByIdAndActions_id(int privilegeId,int actionId);
 }

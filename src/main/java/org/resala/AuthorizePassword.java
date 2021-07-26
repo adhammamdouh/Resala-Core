@@ -33,10 +33,13 @@ public class AuthorizePassword {
         System.out.println(encoder.encode(pass));*/
 
         String token = login();
+        System.out.println(token);
         String res=generateLeadKPI(token);
         System.out.println(res);
-        /*String xx=generateLeadKPI(token);
-        System.out.println(xx);*/
+        res = generateVolunteerKPI(token);
+        System.out.println(res);
+        res=generateEventResultKPI(token);
+        System.out.println(res);
 
 
     }
@@ -63,31 +66,21 @@ public class AuthorizePassword {
 
 
     private static String generateLeadKPI(String token) throws IOException {
-        /*URL url = new URL("https://resala-core.azurewebsites.net/leadVolunteerKPI/generateKPIs");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("Authorization", "Bearer " + token);
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestMethod("POST");
-        con.setDoOutput(true);
-
-
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            return br.readLine();
-        }*/
-
-
-
-
         URL url = new URL("https://resala-core.azurewebsites.net/leadVolunteerKPI/generateKPIs");
+        return common(token, url);
+    }
+
+    private static String common(String token, URL url) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
         conn.setRequestProperty("Authorization","Bearer "+token);
-
         conn.setRequestProperty("Content-Type", "application/json; utf-8");
         conn.setRequestMethod("POST");
-
-
+        conn.setDoOutput(true);
+        String json = "";
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = json.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String output;
 
@@ -95,10 +88,17 @@ public class AuthorizePassword {
         while ((output = in.readLine()) != null) {
             response.append(output);
         }
-
         in.close();
-        // printing result from response
-        System.out.println("Response:-" + response.toString());
         return response.toString();
+    }
+
+    private static String generateVolunteerKPI(String token) throws IOException {
+        URL url = new URL("https://resala-core.azurewebsites.net/volunteerKPI/generateKPIs");
+        return common(token, url);
+    }
+
+    private static String generateEventResultKPI(String token) throws IOException {
+        URL url = new URL("https://resala-core.azurewebsites.net/eventResult/generateKPIs");
+        return common(token, url);
     }
 }
